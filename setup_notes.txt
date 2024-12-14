@@ -1,0 +1,13 @@
+# Create virtual environment
+python3 -m venv env
+
+# Activate new environment
+source env/bin/activate
+which python3
+
+# list installed python dependencies/packages
+pip freeze > requirements.txt
+
+# Install python dependencies
+pip install -r requirements.txt
+
