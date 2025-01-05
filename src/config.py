@@ -9,10 +9,13 @@ DATA_IN_DIR = BASE_DIR / "data_in"
 DATA_OUT_DIR = BASE_DIR / "data_out"
 LOG_DIR = BASE_DIR / "logs"
 
-# File paths
-#NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
+# External paths
+EXTERNAL_CWE_TOP25_DIR = BASE_DIR.parent / "cwe_top25"
+TARGET_CVES_CSV = EXTERNAL_CWE_TOP25_DIR / "data_in" / "top25-mitre-mapping-analysis-2023-public.csv"
 
-NVD_JSONL_FILE = "tmp/cve.json"
+# File paths
+NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
+#NVD_JSONL_FILE = "tmp/cve.json"
 
 # Logging configuration
 LOG_CONFIG = {

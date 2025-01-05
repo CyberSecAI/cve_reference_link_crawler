@@ -2,27 +2,51 @@
 
 import json
 from pathlib import Path
-from typing import Dict, List, Set, Iterator
+from typing import Dict, List, Set, Optional, Iterator
 from .utils.file_utils import ensure_directory
 from .utils.logging_utils import setup_logging
+from .utils.cve_filter import load_target_cves
 from config import LOG_CONFIG
 
 class CVEProcessor:
-    def __init__(self, input_file: str, output_dir: str):
+    def __init__(self, input_file: str, output_dir: str, target_cves: Optional[Set[str]] = None):
         """
         Initialize the CVE processor
         
         Args:
             input_file: Path to input JSON file
             output_dir: Path to output directory
+            target_cves: Optional set of CVE IDs to process
         """
         self.input_file = Path(input_file)
         self.output_dir = Path(output_dir)
+        self.target_cves = target_cves
         self.logger = setup_logging(
             log_dir=LOG_CONFIG["dir"],
             log_level=LOG_CONFIG["level"],
             module_name=__name__
         )
+        
+        if target_cves:
+            self.logger.info(f"Initialized with {len(target_cves)} target CVEs")
+
+    def read_json_content(self) -> Iterator[Dict]:
+        """
+        Read and parse JSON content from file
+        
+        Yields:
+            Dict: Each CVE entry from the JSON file
+        """
+        try:
+            with open(self.input_file, 'r') as f:
+                content = f.read()
+                # Handle array of JSON objects
+                data = json.loads(f"[{content}]")
+                for entry in data:
+                    if 'cve' in entry:
+                        yield entry
+        except Exception as e:
+            self.logger.error(f"Error reading JSON file: {e}")
         
     def create_output_directories(self, cve_id: str) -> Path:
         """
@@ -66,28 +90,20 @@ class CVEProcessor:
             for url in sorted(urls):
                 f.write(f"{url}\n")
         self.logger.info(f"Saved {len(urls)} URLs to {links_file}")
-
-    def read_json_content(self) -> Iterator[Dict]:
+    
+    def should_process_cve(self, cve_id: str) -> bool:
         """
-        Read and parse JSON content from file
+        Check if CVE should be processed based on target list
         
-        Yields:
-            Dict: Each CVE entry from the JSON file
+        Args:
+            cve_id: CVE ID to check
+            
+        Returns:
+            bool: True if CVE should be processed
         """
-        try:
-            self.logger.debug(f"Reading JSON file: {self.input_file}")
-            with open(self.input_file, 'r') as f:
-                content = f.read()
-                # Handle array of JSON objects by wrapping in array if needed
-                if not content.strip().startswith('['):
-                    content = f"[{content}]"
-                data = json.loads(content)
-                
-                for entry in data:
-                    if 'cve' in entry:
-                        yield entry
-        except Exception as e:
-            self.logger.error(f"Error reading JSON file: {e}")
+        if self.target_cves is None:
+            return True
+        return cve_id in self.target_cves
                 
     def process_file(self) -> None:
         """Process the JSON file and create output files"""
@@ -97,6 +113,7 @@ class CVEProcessor:
         self.logger.info(f"Starting to process file: {self.input_file}")
         
         processed_count = 0
+        skipped_count = 0
         error_count = 0
         
         # Process each CVE entry
@@ -105,13 +122,17 @@ class CVEProcessor:
                 # Extract CVE data
                 cve_data = entry.get('cve')
                 if not cve_data:
-                    self.logger.warning("No CVE data found in entry")
                     continue
                     
                 # Get CVE ID
                 cve_id = cve_data.get('id')
                 if not cve_id:
-                    self.logger.warning("No CVE ID found in entry")
+                    continue
+                
+                # Check if we should process this CVE
+                if not self.should_process_cve(cve_id):
+                    skipped_count += 1
+                    self.logger.debug(f"Skipping {cve_id} (not in target list)")
                     continue
                     
                 # Get references
@@ -132,4 +153,9 @@ class CVEProcessor:
                 self.logger.error(f"Error processing entry: {e}")
                 error_count += 1
         
-        self.logger.info(f"Processing completed. Successfully processed {processed_count} entries with {error_count} errors.")
+        self.logger.info(
+            f"Processing completed. "
+            f"Processed: {processed_count}, "
+            f"Skipped: {skipped_count}, "
+            f"Errors: {error_count}"
+        )
