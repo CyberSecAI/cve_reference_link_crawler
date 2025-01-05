@@ -6,39 +6,71 @@ import requests
 from urllib.parse import urlparse
 import hashlib
 from datetime import datetime
-import logging
 from bs4 import BeautifulSoup
 import PyPDF2
 import io
 from typing import Optional, Dict
 from markitdown import MarkItDown
+from tqdm import tqdm
 from .utils.file_utils import ensure_directory
+from .utils.logging_utils import setup_logging
+from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS
 
 class ContentCrawler:
     def __init__(self, output_dir: str):
-        """
-        Initialize the content crawler
-        
-        Args:
-            output_dir: Base output directory path
-        """
+        """Initialize the content crawler"""
         self.output_dir = Path(output_dir)
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        })
+        self.session.headers.update(CRAWLER_SETTINGS["headers"])
         
-        # Setup logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.FileHandler('crawler.log'),
-                logging.StreamHandler()
-            ]
+        self.logger = setup_logging(
+            log_dir=LOG_CONFIG["dir"],
+            log_level=LOG_CONFIG["level"],
+            module_name=__name__
         )
-        self.logger = logging.getLogger(__name__)
         self.md_converter = MarkItDown()
+
+    def should_ignore_url(self, url: str) -> bool:
+        """
+        Check if URL should be ignored based on ignore list
+        
+        Args:
+            url: URL to check
+            
+        Returns:
+            bool: True if URL should be ignored
+        """
+        parsed_url = urlparse(url)
+        hostname = parsed_url.netloc.lower()
+        
+        # Remove 'www.' prefix if present for comparison
+        if hostname.startswith('www.'):
+            hostname = hostname[4:]
+            
+        for ignored in IGNORED_URLS:
+            ignored = ignored.lower()
+            if ignored.startswith('www.'):
+                ignored = ignored[4:]
+            if ignored in hostname:
+                self.logger.info(f"Ignoring URL {url} (matches ignore pattern: {ignored})")
+                return True
+        return False
+
+    def is_cve_processed(self, cve_id: str) -> bool:
+        """
+        Check if CVE has already been processed
+        
+        Args:
+            cve_id: CVE ID to check
+            
+        Returns:
+            bool: True if CVE has already been processed
+        """
+        text_dir = self.output_dir / cve_id / "text"
+        # Check if text directory exists and is not empty
+        if text_dir.exists() and any(text_dir.iterdir()):
+            return True
+        return False
 
     def _generate_filename(self, url: str, content_type: str) -> str:
         """Generate a unique filename based on URL and timestamp"""
@@ -163,31 +195,37 @@ class ContentCrawler:
         return success
 
     def process_cve_urls(self, cve_id: str) -> None:
-        """
-        Process all URLs for a given CVE ID
-        
-        Args:
-            cve_id: CVE ID to process
-        """
+        """Process all URLs for a given CVE with progress bar"""
+        # Check if already processed
+        if self.is_cve_processed(cve_id):
+            self.logger.info(f"Skipping {cve_id} - already processed")
+            return
+            
         self.logger.info(f"Starting to process URLs for {cve_id}")
         
         links_file = self.output_dir / cve_id / "links.txt"
         if not links_file.exists():
             self.logger.error(f"No links.txt found for {cve_id}")
             return
-            
+        
         try:
             with open(links_file, 'r') as f:
                 urls = [line.strip() for line in f if line.strip()]
-                
+            
             self.logger.info(f"Found {len(urls)} URLs to process for {cve_id}")
             
-            for url in urls:
-                success = self.process_url(url, cve_id)
-                if not success:
-                    self.logger.warning(f"Failed to process {url} for {cve_id}")
-                    
-            self.logger.info(f"Completed processing URLs for {cve_id}")
+            success_count = 0
+            with tqdm(total=len(urls), desc=f"Processing {cve_id}", unit="url") as pbar:
+                for url in urls:
+                    if self.process_url(url, cve_id):
+                        success_count += 1
+                    pbar.update(1)
+            
+            self.logger.info(f"Completed processing {cve_id}: {success_count}/{len(urls)} URLs successful")
             
         except Exception as e:
             self.logger.error(f"Error processing URLs for {cve_id}: {str(e)}")
+
+
+
+

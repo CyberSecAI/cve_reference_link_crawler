@@ -2,6 +2,9 @@ env
 data_in/nvd.jsonl
 tmp
 logs
+crawler.log
+data_out/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

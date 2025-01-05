@@ -19,7 +19,8 @@ NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
 
 # Logging configuration
 LOG_CONFIG = {
-    "level": logging.INFO,
+    #"level": logging.INFO,
+    "level": logging.DEBUG, 
     "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     "dir": LOG_DIR
 }
@@ -34,10 +35,16 @@ CRAWLER_SETTINGS = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.5",
         "Accept-Encoding": "gzip, deflate",
+        "DNT": "1",
         "Connection": "keep-alive",
-        "Upgrade-Insecure-Requests": "1"
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1"
     }
 }
+
 
 # URLs to ignore (will not be crawled)
 IGNORED_URLS = [

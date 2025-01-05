@@ -38,15 +38,48 @@ class CVEProcessor:
             Dict: Each CVE entry from the JSON file
         """
         try:
+            self.logger.info(f"Reading JSON file: {self.input_file}")
+            
+            if not self.input_file.exists():
+                self.logger.error(f"Input file does not exist: {self.input_file}")
+                return
+                
             with open(self.input_file, 'r') as f:
-                content = f.read()
-                # Handle array of JSON objects
-                data = json.loads(f"[{content}]")
-                for entry in data:
-                    if 'cve' in entry:
-                        yield entry
+                # Read first character to determine format
+                first_char = f.read(1)
+                f.seek(0)  # Reset file pointer
+                
+                if first_char == '[':
+                    # File is a JSON array
+                    self.logger.debug("Processing as JSON array")
+                    data = json.load(f)
+                    for entry in data:
+                        if isinstance(entry, dict) and 'cve' in entry:
+                            yield entry
+                        else:
+                            self.logger.debug(f"Skipping invalid entry: {str(entry)[:100]}...")
+                else:
+                    # File is JSONL format
+                    self.logger.debug("Processing as JSONL")
+                    for line_num, line in enumerate(f, 1):
+                        try:
+                            if not line.strip():
+                                continue
+                            
+                            entry = json.loads(line.strip())
+                            if isinstance(entry, dict) and 'cve' in entry:
+                                yield entry
+                            else:
+                                self.logger.debug(f"Line {line_num}: Invalid entry format")
+                                
+                        except json.JSONDecodeError as e:
+                            self.logger.error(f"JSON decode error at line {line_num}: {e}")
+                            self.logger.debug(f"Problematic line: {line[:200]}...")
+                            continue
+                            
         except Exception as e:
-            self.logger.error(f"Error reading JSON file: {e}")
+            self.logger.error(f"Error reading JSON file: {e}", exc_info=True)
+            
         
     def create_output_directories(self, cve_id: str) -> Path:
         """
@@ -106,8 +139,7 @@ class CVEProcessor:
         return cve_id in self.target_cves
                 
     def process_file(self) -> None:
-        """Process the JSON file and create output files"""
-        # Create base output directory
+        """Process as before but with better error handling"""
         ensure_directory(self.output_dir)
         
         self.logger.info(f"Starting to process file: {self.input_file}")
@@ -115,44 +147,53 @@ class CVEProcessor:
         processed_count = 0
         skipped_count = 0
         error_count = 0
+        found_cves = set()
         
-        # Process each CVE entry
-        for entry in self.read_json_content():
-            try:
-                # Extract CVE data
-                cve_data = entry.get('cve')
-                if not cve_data:
-                    continue
+        try:
+            # Process each CVE entry
+            for entry in self.read_json_content():
+                try:
+                    cve_data = entry.get('cve')
+                    if not cve_data:
+                        continue
+                        
+                    cve_id = cve_data.get('id')
+                    if not cve_id:
+                        continue
                     
-                # Get CVE ID
-                cve_id = cve_data.get('id')
-                if not cve_id:
-                    continue
-                
-                # Check if we should process this CVE
-                if not self.should_process_cve(cve_id):
-                    skipped_count += 1
-                    self.logger.debug(f"Skipping {cve_id} (not in target list)")
-                    continue
+                    self.logger.debug(f"Found CVE ID: {cve_id}")
+                    found_cves.add(cve_id)
                     
-                # Get references
-                references = cve_data.get('references', [])
-                if not references:
-                    self.logger.info(f"No references found for {cve_id}")
-                    continue
-                
-                # Create directory and save URLs
-                self.logger.info(f"Processing {cve_id}")
-                cve_dir = self.create_output_directories(cve_id)
-                urls = self.extract_urls(references)
-                self.save_urls(urls, cve_dir)
-                self.logger.info(f"Successfully processed {cve_id} with {len(urls)} URLs")
-                processed_count += 1
-                
-            except Exception as e:
-                self.logger.error(f"Error processing entry: {e}")
-                error_count += 1
-        
+                    if not self.should_process_cve(cve_id):
+                        skipped_count += 1
+                        self.logger.debug(f"Skipping {cve_id} (not in target list)")
+                        continue
+                        
+                    references = cve_data.get('references', [])
+                    if not references:
+                        self.logger.info(f"No references found for {cve_id}")
+                        continue
+                    
+                    self.logger.info(f"Processing {cve_id}")
+                    cve_dir = self.create_output_directories(cve_id)
+                    urls = self.extract_urls(references)
+                    self.save_urls(urls, cve_dir)
+                    self.logger.info(f"Successfully processed {cve_id} with {len(urls)} URLs")
+                    processed_count += 1
+                    
+                except Exception as e:
+                    self.logger.error(f"Error processing entry: {e}")
+                    error_count += 1
+            
+            # Log statistics about found CVEs
+            self.logger.info(f"Found {len(found_cves)} total CVEs in input file")
+            if self.target_cves:
+                found_targets = found_cves.intersection(self.target_cves)
+                self.logger.info(f"Found {len(found_targets)} target CVEs out of {len(self.target_cves)} targets")
+            
+        except Exception as e:
+            self.logger.error(f"Error in process_file: {e}", exc_info=True)
+            
         self.logger.info(
             f"Processing completed. "
             f"Processed: {processed_count}, "
