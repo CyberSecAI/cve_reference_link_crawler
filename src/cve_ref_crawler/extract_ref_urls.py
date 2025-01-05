@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Iterator
 from .utils.file_utils import ensure_directory
 from .utils.logging_utils import setup_logging
 from config import LOG_CONFIG
@@ -13,7 +13,7 @@ class CVEProcessor:
         Initialize the CVE processor
         
         Args:
-            input_file: Path to input JSONL file
+            input_file: Path to input JSON file
             output_dir: Path to output directory
         """
         self.input_file = Path(input_file)
@@ -66,47 +66,70 @@ class CVEProcessor:
             for url in sorted(urls):
                 f.write(f"{url}\n")
         self.logger.info(f"Saved {len(urls)} URLs to {links_file}")
+
+    def read_json_content(self) -> Iterator[Dict]:
+        """
+        Read and parse JSON content from file
+        
+        Yields:
+            Dict: Each CVE entry from the JSON file
+        """
+        try:
+            self.logger.debug(f"Reading JSON file: {self.input_file}")
+            with open(self.input_file, 'r') as f:
+                content = f.read()
+                # Handle array of JSON objects by wrapping in array if needed
+                if not content.strip().startswith('['):
+                    content = f"[{content}]"
+                data = json.loads(content)
+                
+                for entry in data:
+                    if 'cve' in entry:
+                        yield entry
+        except Exception as e:
+            self.logger.error(f"Error reading JSON file: {e}")
                 
     def process_file(self) -> None:
-        """Process the JSONL file and create output files"""
+        """Process the JSON file and create output files"""
         # Create base output directory
         ensure_directory(self.output_dir)
         
         self.logger.info(f"Starting to process file: {self.input_file}")
         
-        # Process file line by line
-        with open(self.input_file, 'r') as f:
-            for line_num, line in enumerate(f, 1):
-                try:
-                    # Parse JSON entry
-                    entry = json.loads(line.strip())
+        processed_count = 0
+        error_count = 0
+        
+        # Process each CVE entry
+        for entry in self.read_json_content():
+            try:
+                # Extract CVE data
+                cve_data = entry.get('cve')
+                if not cve_data:
+                    self.logger.warning("No CVE data found in entry")
+                    continue
                     
-                    # Extract CVE data
-                    cve_data = entry.get('cve')
-                    if not cve_data:
-                        self.logger.warning(f"No CVE data found in line {line_num}")
-                        continue
-                        
-                    # Get CVE ID
-                    cve_id = cve_data.get('id')
-                    if not cve_id:
-                        self.logger.warning(f"No CVE ID found in line {line_num}")
-                        continue
-                        
-                    # Get references
-                    references = cve_data.get('references', [])
-                    if not references:
-                        self.logger.info(f"No references found for {cve_id}")
-                        continue
+                # Get CVE ID
+                cve_id = cve_data.get('id')
+                if not cve_id:
+                    self.logger.warning("No CVE ID found in entry")
+                    continue
                     
-                    # Create directory and save URLs
-                    self.logger.info(f"Processing {cve_id}")
-                    cve_dir = self.create_output_directories(cve_id)
-                    urls = self.extract_urls(references)
-                    self.save_urls(urls, cve_dir)
-                    self.logger.info(f"Successfully processed {cve_id} with {len(urls)} URLs")
-                    
-                except json.JSONDecodeError as e:
-                    self.logger.error(f"Error decoding JSON at line {line_num}: {e}")
-                except Exception as e:
-                    self.logger.error(f"Error processing line {line_num}: {e}")
+                # Get references
+                references = cve_data.get('references', [])
+                if not references:
+                    self.logger.info(f"No references found for {cve_id}")
+                    continue
+                
+                # Create directory and save URLs
+                self.logger.info(f"Processing {cve_id}")
+                cve_dir = self.create_output_directories(cve_id)
+                urls = self.extract_urls(references)
+                self.save_urls(urls, cve_dir)
+                self.logger.info(f"Successfully processed {cve_id} with {len(urls)} URLs")
+                processed_count += 1
+                
+            except Exception as e:
+                self.logger.error(f"Error processing entry: {e}")
+                error_count += 1
+        
+        self.logger.info(f"Processing completed. Successfully processed {processed_count} entries with {error_count} errors.")

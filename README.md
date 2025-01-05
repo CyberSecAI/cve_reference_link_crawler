@@ -17,3 +17,8 @@ data_out/
     └── text/
         └── converted_content.txt
 ````
+
+
+These were not added, as not much was found:
+Google Cache e.g. https://webcache.googleusercontent.com/search?q=cache%3Ahttp%3A%2F%2Fwww.securityfocus.com%2Fbid%2F97882&sca_esv=d12e58ed6977e94a&ei=cYR6Z__dK6eNhbIPxYz0GA from 
+Wayback Machine
