@@ -33,3 +33,24 @@
 2024-12-14 21:28:22,883 - INFO - Processing: https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/FX6IYZ6XF7B2WE66NFPNI2NHWJFI6VDF/
 2024-12-14 21:28:23,285 - INFO - Content saved to archived_content/lists.fedoraproject.org_e6e25f5f_20241214_212823.html
 2024-12-14 21:28:23,286 - INFO - Content saved to archived_content/lists.fedoraproject.org_773d5a8a_20241214_212823.html
+2025-01-05 13:02:39,375 - INFO - Processing URLs for CVE-2022-32296
+2025-01-05 13:02:39,375 - INFO - Starting to process URLs for CVE-2022-32296
+2025-01-05 13:02:39,375 - INFO - Found 12 URLs to process for CVE-2022-32296
+2025-01-05 13:02:39,375 - INFO - Started processing URL: https://arxiv.org/abs/2209.12993 for CVE-2022-32296
+2025-01-05 13:02:39,463 - INFO - Raw content saved to /home/chris/work/CyberSecAI/cve_single_source_of_truth/data_out/CVE-2022-32296/raw/arxiv.org_ba2f23c3_20250105_130239.html
+2025-01-05 13:02:39,463 - INFO - Converting content from https://arxiv.org/abs/2209.12993
+2025-01-05 13:02:39,534 - INFO - Converted content saved to /home/chris/work/CyberSecAI/cve_single_source_of_truth/data_out/CVE-2022-32296/text/arxiv.org_ba2f23c3_20250105_130239.html
+2025-01-05 13:02:39,535 - INFO - Successfully processed https://arxiv.org/abs/2209.12993
+2025-01-05 13:02:39,535 - INFO - Started processing URL: https://arxiv.org/abs/2209.12993 for CVE-2022-32296
+2025-01-05 13:02:39,546 - INFO - Raw content saved to /home/chris/work/CyberSecAI/cve_single_source_of_truth/data_out/CVE-2022-32296/raw/arxiv.org_ba2f23c3_20250105_130239.html
+2025-01-05 13:02:39,547 - INFO - Converting content from https://arxiv.org/abs/2209.12993
+2025-01-05 13:02:39,617 - INFO - Converted content saved to /home/chris/work/CyberSecAI/cve_single_source_of_truth/data_out/CVE-2022-32296/text/arxiv.org_ba2f23c3_20250105_130239.html
+2025-01-05 13:02:39,617 - INFO - Successfully processed https://arxiv.org/abs/2209.12993
+2025-01-05 13:02:39,617 - INFO - Started processing URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.17.9 for CVE-2022-32296
+2025-01-05 13:02:39,688 - INFO - Raw content saved to /home/chris/work/CyberSecAI/cve_single_source_of_truth/data_out/CVE-2022-32296/raw/cdn.kernel.org_b6ef0b83_20250105_130239.html
+2025-01-05 13:02:39,688 - INFO - Converting content from https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.17.9
+2025-01-05 13:02:41,177 - INFO - Converted content saved to /home/chris/work/CyberSecAI/cve_single_source_of_truth/data_out/CVE-2022-32296/text/cdn.kernel.org_b6ef0b83_20250105_130241.html
+2025-01-05 13:02:41,177 - INFO - Successfully processed https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.17.9
+2025-01-05 13:02:41,177 - INFO - Started processing URL: https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.17.9 for CVE-2022-32296
+2025-01-05 13:02:41,192 - INFO - Raw content saved to /home/chris/work/CyberSecAI/cve_single_source_of_truth/data_out/CVE-2022-32296/raw/cdn.kernel.org_b6ef0b83_20250105_130241.html
+2025-01-05 13:02:41,192 - INFO - Converting content from https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.17.9
