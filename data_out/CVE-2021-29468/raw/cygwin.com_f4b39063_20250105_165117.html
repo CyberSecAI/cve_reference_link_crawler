@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> Security vulnerability in Git for Cygwin
+   </TITLE>
+   <LINK REL="Index" HREF="index.html" >
+   <LINK REL="made" HREF="mailto:adam%40dinwoodie.org?Subject=Re:%20Re%3A%20Security%20vulnerability%20in%20Git%20for%20Cygwin&In-Reply-To=%3CCA%2BkUOa%3DL%3DnZHy6ycQyBQAMPStW8cqF2SKOWrQE3hPh0QVsgv8g%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="010017.html">
+   <LINK REL="Next"  HREF="010019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>Security vulnerability in Git for Cygwin</H1>
+    <B>Adam Dinwoodie</B> 
+    <A HREF="mailto:adam%40dinwoodie.org?Subject=Re:%20Re%3A%20Security%20vulnerability%20in%20Git%20for%20Cygwin&In-Reply-To=%3CCA%2BkUOa%3DL%3DnZHy6ycQyBQAMPStW8cqF2SKOWrQE3hPh0QVsgv8g%40mail.gmail.com%3E"
+       TITLE="Security vulnerability in Git for Cygwin">adam@dinwoodie.org
+       </A><BR>
+    <I>Sat Apr 24 20:28:23 GMT 2021</I>
+    <P><UL>
+        <LI>Previous message (by thread): <A HREF="010017.html">Updated: hdf5-1.10.7-2
+</A></li>
+        <LI>Next message (by thread): <A HREF="010019.html">Updated: python packages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10018">[ date ]</a>
+              <a href="thread.html#10018">[ thread ]</a>
+              <a href="subject.html#10018">[ subject ]</a>
+              <a href="author.html#10018">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi folks,
+
+Version 2.31.1-2 of Git has been uploaded and should be coming soon to
+a mirror near you.
+
+This update addresses CVE-2021-29468, which would cause Git to
+overwrite arbitrary files with attacker-controlled contents when
+checking out content from a malicious repository, and in particular
+would allow an attacker to overwrite Git hooks to execute arbitrary
+code.
+
+This vulnerability is present on all Cygwin Git versions prior to
+v2.31.1-2. Until you have that release, the best mitigation is to not
+clone or check out from any untrusted Git repositories.
+
+There is a small amount of additional information in the GitHub
+Security Advisory at
+<A HREF="https://github.com/me-and/Cygwin-Git/security/advisories/GHSA-rmp3-wq55-f557">https://github.com/me-and/Cygwin-Git/security/advisories/GHSA-rmp3-wq55-f557</A>
+
+If you compile Git on Cygwin yourself, there is currently no upstream
+patch that addresses the vulnerability. Until there is, I would
+recommend applying the preliminary patch at
+<A HREF="https://github.com/me-and/Cygwin-Git/blob/main/check-backslash-safety.patch">https://github.com/me-and/Cygwin-Git/blob/main/check-backslash-safety.patch</A>
+
+I'd like to thank RyotaK (<A HREF="https://github.com/Ry0taK">https://github.com/Ry0taK</A> /
+<A HREF="https://twitter.com/ryotkak">https://twitter.com/ryotkak</A>) for finding and responsibly disclosing
+this vulnerability, and Johannes Schindelin for helping manage the
+response.
+
+Kind regards,
+
+Adam
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message (by thread): <A HREF="010017.html">Updated: hdf5-1.10.7-2
+</A></li>
+	<LI>Next message (by thread): <A HREF="010019.html">Updated: python packages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10018">[ date ]</a>
+              <a href="thread.html#10018">[ thread ]</a>
+              <a href="subject.html#10018">[ subject ]</a>
+              <a href="author.html#10018">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://cygwin.com/mailman/listinfo/cygwin-announce">More information about the Cygwin-announce
+mailing list</a><br>
+</body></html>

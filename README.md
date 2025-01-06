@@ -146,6 +146,11 @@ python src/main.py
 
 ## Notes
 
+### Large Files
+1. A git pre-commit hook is setup to prevent files greater than 20MB being committed: .pre-commit-config.yaml
+2. A bash script can be run manually to move big files to tmp/big_files: big_files.sh
+
+
 ### Archive Sources
 The following archive sources were considered but not implemented due to limited content availability:
 - Google Cache (e.g., https://webcache.googleusercontent.com/search?q=cache:...)
