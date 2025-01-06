@@ -173,6 +173,9 @@ python src/main.py
 1. A git pre-commit hook is setup to prevent files greater than 20MB being committed: .pre-commit-config.yaml
 2. A bash script can be run manually to move big files to tmp/big_files: big_files.sh
 
+### Document to Text tools
+[MarkItDown](https://github.com/microsoft/markitdown) is used here.
+- [Docling](https://github.com/DS4SD/docling) is an alternative.
 
 ### Archive Sources
 The following archive sources were considered but not implemented due to limited content availability:
