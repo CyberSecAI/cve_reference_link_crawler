@@ -122,7 +122,8 @@ python src/main.py
 ### Content Processing
 - Downloads reference content from URLs in CVE data
 - Handles both HTML and PDF content
-- Converts various file formats to text using MarkItDown
+- Converts various file formats to text using MarkItDown.
+  - Some PDFs fail with MarkItDown so fall back to PyPDF2 if MarkItDown fails
 - Preserves both raw and processed content
 
 ### URL Filtering
@@ -161,6 +162,9 @@ The log file indicates what links failed to download.
 5. secomea content is not retrieved https://secomea.com/cybersecurity-advisory/
 6. Qualcomm content is retrieved as blank e.g. https://www.qualcomm.com/company/product-security/bulletins/november-2022-bulletin 
 
+### ToDos
+1. Extract only the vulnerability-related info from `text` dir (to markdown)
+2. If this is done for all published CVEs, then a directory structure per https://github.com/CVEProject/cvelistV5/tree/main/cves would be more appropriate to avoid having all CVEs in one directory.
 
 
 

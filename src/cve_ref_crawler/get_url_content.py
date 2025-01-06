@@ -9,8 +9,9 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import PyPDF2
 import io
-from typing import Optional, Dict
+from typing import Optional, Dict, Tuple
 from markitdown import MarkItDown
+from markitdown._markitdown import FileConversionException
 from tqdm import tqdm
 from .utils.file_utils import ensure_directory
 from .utils.logging_utils import setup_logging
@@ -30,6 +31,47 @@ class ContentCrawler:
         )
         self.md_converter = MarkItDown()
 
+    def _convert_content(self, filepath: Path) -> Tuple[Optional[str], str]:
+        """
+        Convert content using MarkItDown with fallback methods
+        
+        Args:
+            filepath: Path to file to convert
+            
+        Returns:
+            Tuple[Optional[str], str]: (converted content, method used)
+        """
+        # Try MarkItDown first
+        try:
+            result = self.md_converter.convert(str(filepath))
+            return result.text_content, "markitdown"
+        except FileConversionException as e:
+            self.logger.warning(f"MarkItDown conversion failed: {str(e)}")
+        except Exception as e:
+            self.logger.warning(f"Unexpected error in MarkItDown conversion: {str(e)}")
+
+        # Fallback for PDFs using PyPDF2
+        if str(filepath).lower().endswith('.pdf'):
+            try:
+                self.logger.info("Attempting PDF conversion with PyPDF2")
+                with open(filepath, 'rb') as f:
+                    pdf_reader = PyPDF2.PdfReader(f)
+                    text = []
+                    for page in pdf_reader.pages:
+                        try:
+                            text.append(page.extract_text())
+                        except Exception as e:
+                            self.logger.warning(f"Error extracting page text: {str(e)}")
+                            continue
+                    if text:
+                        return "\n".join(text), "pypdf2"
+            except Exception as e:
+                self.logger.warning(f"PyPDF2 conversion failed: {str(e)}")
+
+        # If all methods fail
+        self.logger.error(f"All conversion methods failed for {filepath}")
+        return None, "none"
+        
     def should_ignore_url(self, url: str) -> bool:
         """
         Check if URL should be ignored based on ignore list
@@ -103,6 +145,23 @@ class ContentCrawler:
             self.logger.error(f"Error saving raw content: {str(e)}")
             return None
 
+ 
+
+    def _fetch_url(self, url: str) -> Optional[Dict]:
+        """Fetch content from URL"""
+        try:
+            response = self.session.get(url, timeout=30)
+            response.raise_for_status()
+            
+            content_type = response.headers.get('content-type', '').lower()
+            if 'application/pdf' in content_type:
+                return {'content': response.content, 'type': 'pdf'}
+            return {'content': response.text, 'type': 'html'}
+                
+        except requests.RequestException as e:
+            self.logger.error(f"Error fetching URL {url}: {str(e)}")
+            return None
+
     def _save_converted_content(self, content: str, url: str, cve_id: str) -> Optional[Path]:
         """Save the converted text content"""
         text_dir = self.output_dir / cve_id / "text"
@@ -120,79 +179,54 @@ class ContentCrawler:
             self.logger.error(f"Error saving converted content: {str(e)}")
             return None
 
-    def _convert_content(self, filepath: Path) -> Optional[str]:
-        """Convert content using MarkItDown"""
-        try:
-            result = self.md_converter.convert(str(filepath))
-            return result.text_content
-        except Exception as e:
-            self.logger.error(f"Error converting content: {str(e)}")
-            return None
-
-    def _fetch_url(self, url: str) -> Optional[Dict]:
-        """Fetch content from URL"""
-        try:
-            response = self.session.get(url, timeout=30)
-            response.raise_for_status()
-            
-            content_type = response.headers.get('content-type', '').lower()
-            if 'application/pdf' in content_type:
-                return {'content': response.content, 'type': 'pdf'}
-            return {'content': response.text, 'type': 'html'}
-                
-        except requests.RequestException as e:
-            self.logger.error(f"Error fetching URL {url}: {str(e)}")
-            return None
-
     def process_url(self, url: str, cve_id: str) -> bool:
-        """
-        Process a single URL: fetch, save raw content, and convert
-        
-        Args:
-            url: URL to process
-            cve_id: CVE ID for organizing output
-            
-        Returns:
-            bool: True if processing was successful
-        """
+        """Process a single URL: fetch, save raw content, and convert"""
         self.logger.info(f"Started processing URL: {url} for {cve_id}")
         
-        # Fetch content
-        result = self._fetch_url(url)
-        if not result:
-            self.logger.error(f"Failed to fetch content from {url}")
-            return False
+        try:
+            # Skip if URL should be ignored
+            if self.should_ignore_url(url):
+                self.logger.info(f"Skipping ignored URL: {url}")
+                return True
+
+            # Fetch content using existing _fetch_url method
+            result = self._fetch_url(url)
+            if not result:
+                return False
+
+            # Save raw content
+            raw_filepath = self._save_raw_content(
+                content=result['content'],
+                url=url,
+                cve_id=cve_id,
+                content_type=result['type']
+            )
             
-        # Save raw content
-        raw_filepath = self._save_raw_content(
-            content=result['content'],
-            url=url,
-            cve_id=cve_id,
-            content_type=result['type']
-        )
-        if not raw_filepath:
-            self.logger.error(f"Failed to save raw content from {url}")
-            return False
+            if not raw_filepath:
+                return False
             
-        # Convert and save text content
-        self.logger.info(f"Converting content from {url}")
-        converted_content = self._convert_content(raw_filepath)
-        if not converted_content:
-            self.logger.error(f"Failed to convert content from {url}")
-            return False
+            # Convert content using MarkItDown
+            self.logger.info(f"Converting content from {url}")
+            converted_content, method = self._convert_content(raw_filepath)
             
-        text_filepath = self._save_converted_content(
-            content=converted_content,
-            url=url,
-            cve_id=cve_id
-        )
-        
-        success = text_filepath is not None
-        if success:
-            self.logger.info(f"Successfully processed {url}")
-        else:
-            self.logger.error(f"Failed to save converted content from {url}")
-        return success
+            if not converted_content:
+                self.logger.error(f"Failed to convert content from {url}")
+                return False
+            
+            # Save converted content
+            text_filepath = self._save_converted_content(converted_content, url, cve_id)
+            success = text_filepath is not None
+            
+            if success:
+                self.logger.info(f"Successfully processed {url} using {method}")
+            else:
+                self.logger.error(f"Failed to save converted content from {url}")
+            
+            return success
+            
+        except Exception as e:
+            self.logger.error(f"Error processing URL {url}: {e}")
+            return False
 
     def process_cve_urls(self, cve_id: str) -> None:
         """Process all URLs for a given CVE with progress bar"""
@@ -225,7 +259,3 @@ class ContentCrawler:
             
         except Exception as e:
             self.logger.error(f"Error processing URLs for {cve_id}: {str(e)}")
-
-
-
-

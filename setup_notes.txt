@@ -5,9 +5,23 @@ python3 -m venv env
 source env/bin/activate
 which python3
 
+
+
 # list installed python dependencies/packages
 pip freeze > requirements.txt
 
 # Install python dependencies
 pip install -r requirements.txt
+
+
+
+# Git pre-commit hook to prevent committing large files
+pip install pre-commit
+pre-commit install
+pre-commit run check-added-large-files --all-files # manual test
+
+
+
+# count how many CVE subdirectories contain "text" dir
+find data_out -type d -name "CVE-*" -exec test -d "{}/text" \; -print | wc -l
 
