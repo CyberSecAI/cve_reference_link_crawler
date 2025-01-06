@@ -169,6 +169,42 @@ python src/main.py
 
 ## Notes
 
+### Levels of link following
+The tool only reads documents linked from the CVE; it does not follow links from linked docs i.e. not recursive.
+In some cases, the relevant vulnerability information is not in the linked document e.g.
+- https://nvd.nist.gov/vuln/detail/CVE-2021-0955 contains 1 link (next line)
+  - https://source.android.com/docs/security/bulletin/2021-12-01 (a bulletin that contains links for several CVEs)
+    - https://android.googlesource.com/platform/packages/providers/MediaProvider/+/e81d03db8006fddf6e7c8a8eda1b73743314a214 is the link for CVE-2021-0955 that has the relevant info
+
+
+As part of the refinement of the text to extract only the vulnerability information, an LLM could be prompted to follow the relevant link for a CVE e.g. ChatGPT 4o is provided with
+1. Content of https://source.android.com/docs/security/bulletin/2021-12-01 
+2. Prompt per [prompts/extract_vulnerability_info_follow_links.md](./prompts/extract_vulnerability_info_follow_links.md)
+
+#### ChatGPT 4o Output
+
+**Extracted Vulnerability Information for CVE-2021-0955:**
+
+- **CVE ID**: CVE-2021-0955  
+- **Component Affected**: Android Framework  
+- **Type of Vulnerability**: Elevation of Privilege (EoP)  
+- **Severity**: High  
+- **Updated AOSP Versions**: Android 11  
+- **References**:  
+  [AOSP Change](https://android.googlesource.com/platform/packages/providers/MediaProvider/%2B/e81d03db8006fddf6e7c8a8eda1b73743314a214)  
+  Bug ID: A-192085766  
+
+### **Details:**
+CVE-2021-0955 is an elevation of privilege vulnerability in the Android Framework. The issue allows a local attacker to potentially execute actions with elevated privileges. The attack does not require user interaction or specific privileges.
+
+The vulnerability occurs due to a race condition in the `FuseDaemon` class. It involves the improper management of file handles during the `fuse_reply_write` process, leading to a use-after-free scenario. The issue is addressed by ensuring proper sequence ordering, specifically by recording operations before invoking `fuse_reply_write`.
+
+The fix for this vulnerability is available in the Android Open Source Project (AOSP) and applies to devices running Android 11.
+
+
+
+
+
 ### Large Files
 1. A git pre-commit hook is setup to prevent files greater than 20MB being committed: .pre-commit-config.yaml
 2. A bash script can be run manually to move big files to tmp/big_files: big_files.sh
@@ -194,7 +230,10 @@ The log file indicates what links failed to download.
 6. Qualcomm content is retrieved as blank e.g. https://www.qualcomm.com/company/product-security/bulletins/november-2022-bulletin 
 
 ### ToDos
-1. Extract only the vulnerability-related info from `text` dir (to markdown)
+1. Add .md to text files.
+1. Extract only the vulnerability-related info from `text` dir (to markdown) e.g.
+   1. data_out/CVE-2021-21773/refined/refined.txt for prompts/extract_vulnerability_info.txt (using Claude Sonnet 3.5, or ChatGPT o1. Gemini any model output was too short)
+   2. data_out/CVE-2021-21773/refined/refined_long.txt for prompts/extract_vulnerability_info_long.txt
 2. If this is done for all published CVEs, then a directory structure per https://github.com/CVEProject/cvelistV5/tree/main/cves would be more appropriate to avoid having all CVEs in one directory.
 
 
