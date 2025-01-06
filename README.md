@@ -38,7 +38,7 @@ This tool:
 
 ```
 project_root/
-├── cve_single_source_of_truth/
+├── cve_reference_link_crawler/
 │   ├── src/
 │   │   ├── config.py          # Configuration settings
 │   │   ├── main.py            # Main entry point
