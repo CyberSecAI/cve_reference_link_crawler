@@ -66,6 +66,29 @@ data_out/
         └── converted_content.html
 ```
 
+### Example
+
+https://github.com/CyberSecAI/cve_reference_link_crawler/tree/main/data_out/CVE-2021-3675
+
+**Links**
+
+
+Per https://nvd.nist.gov/vuln/detail/cve-2021-3675, there are 3 unique reference links for CVE-2021-3675:
+
+https://github.com/CyberSecAI/cve_reference_link_crawler/blob/main/data_out/CVE-2021-3675/links.txt
+````
+https://support.hp.com/us-en/document/ish_6411153-6411191-16/hpsbhf03797
+https://support.lenovo.com/us/en/product_security/LEN-68054
+https://synaptics.com/sites/default/files/2022-06/fingerprint-driver-SGX-security-brief-2022-06-14.pdf
+````
+**Raw Content**
+
+https://github.com/CyberSecAI/cve_reference_link_crawler/tree/main/data_out/CVE-2021-3675/raw contains a pdf only indicating that the first 2 links were not crawled successfully.
+
+**Text Content**
+
+https://github.com/CyberSecAI/cve_reference_link_crawler/blob/main/data_out/CVE-2021-3675/text/synaptics.com_1046f482_20250105_231134.html contains the text extracted from the PDF.
+
 ## Prerequisites
 
 1. Python 3.8+
