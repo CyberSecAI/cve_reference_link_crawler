@@ -15,6 +15,7 @@ from markitdown._markitdown import FileConversionException
 from tqdm import tqdm
 from .utils.file_utils import ensure_directory
 from .utils.logging_utils import setup_logging
+from .handlers.googlesource import is_googlesource_url, handle_googlesource_url, parse_googlesource_response
 from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS
 
 class ContentCrawler:
@@ -150,6 +151,22 @@ class ContentCrawler:
     def _fetch_url(self, url: str) -> Optional[Dict]:
         """Fetch content from URL"""
         try:
+            # Handle special cases
+            if is_googlesource_url(url):
+                modified_url = handle_googlesource_url(url)
+                if not modified_url:
+                    self.logger.warning(f"Skipping unsupported googlesource URL: {url}")
+                    return None
+                    
+                response = self.session.get(modified_url, timeout=30)
+                response.raise_for_status()
+                
+                content = parse_googlesource_response(response.text)
+                if content:
+                    return {'content': content, 'type': 'text'}
+                return None
+            
+            # Normal URL handling
             response = self.session.get(url, timeout=30)
             response.raise_for_status()
             
@@ -189,7 +206,7 @@ class ContentCrawler:
                 self.logger.info(f"Skipping ignored URL: {url}")
                 return True
 
-            # Fetch content using existing _fetch_url method
+            # Fetch content
             result = self._fetch_url(url)
             if not result:
                 return False
@@ -205,20 +222,12 @@ class ContentCrawler:
             if not raw_filepath:
                 return False
             
-            # Convert content using MarkItDown
-            self.logger.info(f"Converting content from {url}")
-            converted_content, method = self._convert_content(raw_filepath)
-            
-            if not converted_content:
-                self.logger.error(f"Failed to convert content from {url}")
-                return False
-            
             # Save converted content
-            text_filepath = self._save_converted_content(converted_content, url, cve_id)
+            text_filepath = self._save_converted_content(result['content'], url, cve_id)
             success = text_filepath is not None
             
             if success:
-                self.logger.info(f"Successfully processed {url} using {method}")
+                self.logger.info(f"Successfully processed {url}")
             else:
                 self.logger.error(f"Failed to save converted content from {url}")
             

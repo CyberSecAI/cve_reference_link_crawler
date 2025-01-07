@@ -20,19 +20,82 @@ The links are in, e.g. for CVE-2022-31516:
 
 This tool:
 1. Loads target CVEs from a CSV file
-   1. TARGET_CVES_CSV in config.py is set to top25-mitre-mapping-analysis-2023-public.csv as the list of CVEs to get the references content for.
+   - TARGET_CVES_CSV in config.py is set to top25-mitre-mapping-analysis-2023-public.csv as the list of CVEs to get the references content for.
 2. Processes only the specified CVEs from the NVD JSON data
 3. Downloads and archives reference content for these CVEs
 4. Converts various file formats to text using MarkItDown
 5. Creates a structured archive of both raw and processed content
 
+## Content Processing Workflow
 
-## License
+### Two-Phase Processing
+The tool processes content in two phases to ensure comprehensive coverage:
 
-> [!NOTE]  
->This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
-> - https://creativecommons.org/licenses/by-sa/4.0/
+1. Initial Phase:
+   - Processes all direct URLs from the CVE data
+   - Creates CVE directories with raw and text content
 
+2. Secondary Phase:
+   - Scans generated text files for additional CVE-specific URLs
+   - Downloads and processes these secondary URLs
+   - Maintains the same directory structure for consistency
+
+This two-phase approach is particularly important because relevant vulnerability information is often not in the directly linked document. For example:
+- https://nvd.nist.gov/vuln/detail/CVE-2021-0955 links to
+  - https://source.android.com/docs/security/bulletin/2021-12-01 (a bulletin with multiple CVEs)
+    - Which contains the actual fix: https://android.googlesource.com/platform/packages/providers/MediaProvider/+/e81d03db8006fddf6e7c8a8eda1b73743314a214
+
+### Content Conversion
+The tool uses multiple methods to convert content to readable text:
+
+1. Primary Method: MarkItDown
+   - Handles multiple formats: PDF, Images (with OCR), HTML, CSV, JSON, XML
+   - Provides consistent output format
+
+2. Fallback Methods:
+   - PyPDF2 for PDFs that fail with MarkItDown
+   - Custom handlers for specific sources
+
+### URL Handlers
+
+The tool includes specialized handlers for specific sources:
+
+1. Google Source Handler
+   - Transforms URLs for raw content access
+   - Decodes base64-encoded responses
+   - Formats commit information:
+     ```
+     Original: .../MediaProvider/+/e81d03db8006fddf6e7c8a8eda1b73743314a214
+     Handled: .../MediaProvider/+/e81d03db8006fddf6e7c8a8eda1b73743214?format=TEXT
+     ```
+
+2. CISA URL Handler
+   - Handles post-February 2023 website reorganization
+   - Automatically redirects old URLs:
+     ```
+     Old: www.cisa.gov/uscert/ics/advisories/icsa-22-179-02
+     New: www.cisa.gov/news-events/ics-advisories/icsa-22-179-02
+     ```
+
+### URL Filtering
+The tool maintains a configurable ignore list for:
+1. Known dead domains:
+   - www.securitytracker.com (defunct)
+2. Circular references:
+   - www.cve.org (links back to NVD)
+3. Problematic sources:
+   - Sites requiring authentication
+   - Rate-limited APIs
+   - JavaScript-dependent content
+
+Configure ignored URLs in config.py:
+```python
+IGNORED_URLS = [
+    "www.cve.org",
+    "securitytracker.com",
+    # Add more as needed
+]
+```
 
 ## Project Structure
 
@@ -42,146 +105,161 @@ project_root/
 │   ├── src/
 │   │   ├── config.py          # Configuration settings
 │   │   ├── main.py            # Main entry point
-│   │   └── cve_ref_crawler/   # Core functionality
-│   ├── data_in/               # Input data directory
-│   │   └── nvd.jsonl          # NVD JSON data. 
+│   │   └── cve_ref_crawler/   
+│   │       ├── handlers/      # URL handlers
+│   │       │   ├── googlesource.py
+│   │       │   └── cisa.py
+│   │       └── utils/         # Utility functions
+│   ├── logs/                  # Processing logs
+│   ├── data_in/              
+│   │   └── nvd.jsonl          # NVD JSON data
 │   └── data_out/              # Output directory
+│       └── CVE-YYYY-XXXXX/    # Per-CVE directories
 └── cwe_top25/                 # External CVE list
     └── data_in/
         └── top25-mitre-mapping-analysis-2023-public.csv 
 ```
 
-
 ## Output Structure
 
-For each processed CVE, the tool creates the following structure:
-
+For each CVE, the tool creates:
 ```
 data_out/
-└── CVE-123-12345/
-    ├── links.txt # URLs from the CVE references section
-    ├── raw/                   # Original downloaded content
-    │   └── downloaded_content.html
-    └── text/                  # Converted text content; converted by MarkItDown
-        └── converted_content.html
+└── CVE-YYYY-XXXXX/
+    ├── links.txt              # URLs from CVE references
+    ├── raw/                   # Original content
+    │   ├── site1_hash_timestamp.html
+    │   └── site2_hash_timestamp.pdf
+    └── text/                  # Converted content
+        ├── site1_hash_timestamp.md
+        └── site2_hash_timestamp.md
 ```
 
-### Example
+### Example: CVE-2021-3675
 
-https://github.com/CyberSecAI/cve_reference_link_crawler/tree/main/data_out/CVE-2021-3675
+This example demonstrates typical processing outcomes:
 
-**Links**
+1. Initial Links (from links.txt):
+   ```
+   https://support.hp.com/us-en/document/ish_6411153-6411191-16/hpsbhf03797
+   https://support.lenovo.com/us/en/product_security/LEN-68054
+   https://synaptics.com/.../fingerprint-driver-SGX-security-brief-2022-06-14.pdf
+   ```
 
-
-Per https://nvd.nist.gov/vuln/detail/cve-2021-3675, there are 3 unique reference links for CVE-2021-3675:
-
-https://github.com/CyberSecAI/cve_reference_link_crawler/blob/main/data_out/CVE-2021-3675/links.txt
-````
-https://support.hp.com/us-en/document/ish_6411153-6411191-16/hpsbhf03797
-https://support.lenovo.com/us/en/product_security/LEN-68054
-https://synaptics.com/sites/default/files/2022-06/fingerprint-driver-SGX-security-brief-2022-06-14.pdf
-````
-**Raw Content**
-
-https://github.com/CyberSecAI/cve_reference_link_crawler/tree/main/data_out/CVE-2021-3675/raw contains a pdf only indicating that the first 2 links were not crawled successfully.
-
-**Text Content**
-
-https://github.com/CyberSecAI/cve_reference_link_crawler/blob/main/data_out/CVE-2021-3675/text/synaptics.com_1046f482_20250105_231134.html contains the text extracted from the PDF.
+2. Processing Results:
+   - First two links failed (common for vendor-specific pages)
+   - PDF successfully processed and converted to text
+   - Demonstrates both successful and failed crawling scenarios
 
 ## Prerequisites
 
 1. Python 3.8+
 2. Git
-3. NVD data in JSON format
-4. [MarkItDown](https://github.com/microsoft/markitdown) utility; a utility for converting various files to Markdown (e.g., for indexing, text analysis, etc). It supports: PDF, Images (EXIF metadata and OCR), HTML, Text-based formats (CSV, JSON, XML), ...
+3. NVD data (from http://nvd.handsonhacking.org/nvd.jsonl)
+4. MarkItDown (Microsoft's document conversion utility)
 
 ## Installation
 
-1. Clone the repository:
-```bash
-git clone https://github.com/CyberSecAI/cwe_top25 # Using Top25 as the target list of CVEs
+1. Setup Repository:
+   ```bash
+   # Clone repositories
+   git clone https://github.com/CyberSecAI/cwe_top25
+   git clone [this-repository-url]
+   cd [this-repository-url]
 
-git clone [repository-url]
-cd [repository-url]
+   # Create required directories
+   mkdir -p data_in data_out logs
+   ```
 
+2. Create Python Environment:
+   ```bash
+   python -m venv env
+   source env/bin/activate  # Windows: env\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-```
-
-2. Create and activate a virtual environment:
-```bash
-python -m venv env
-source env/bin/activate  # On Windows: env\Scripts\activate
-```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Download NVD data:
-- For now from http://nvd.handsonhacking.org/nvd.jsonl. 
-  - Will be superseded by https://github.com/CyberSecAI/cve_source_of_truth
-- Place the NVD JSON data in `data_in/nvd.jsonl`
+3. Configure:
+   - Copy NVD data to data_in/nvd.jsonl
+   - Review and modify config.py settings
 
 ## Configuration
 
-Edit `src/config.py` to configure:
-- Input/output directories
-- URLs to ignore during crawling
-- Logging settings
-- Crawler behavior (timeouts, retries, etc.)
+config.py settings:
+```python
+# Directories
+DATA_IN_DIR = Path("data_in")
+DATA_OUT_DIR = Path("data_out")
+LOG_DIR = Path("logs")
 
-## Usage
+# Crawler behavior
+CRAWLER_SETTINGS = {
+    "timeout": 30,
+    "retry_count": 3,
+    "delay": 1,  # seconds between requests
+}
 
-1. Ensure your target CVE list is in the correct location (see Project Structure)
-2. Run the tool:
-```bash
-python src/main.py
+# Logging
+LOG_CONFIG = {
+    "level": logging.INFO,
+    "format": "%(asctime)s - %(levelname)s - %(message)s"
+}
 ```
 
-## Features
+## Error Handling
 
-### Content Processing
-- Downloads reference content from URLs in CVE data
-- Handles both HTML and PDF content
-- Converts various file formats to text using MarkItDown.
-  - Some PDFs fail with MarkItDown so fall back to PyPDF2 if MarkItDown fails
-- Preserves both raw and processed content
+1. Logs Directory:
+   - Located in data_out/logs/
+   - Contains timestamped log files
+   - Includes both success and error information
 
-### URL Filtering
-- Configurable URL ignore list
-- Skips known problematic or inaccessible domains
-- Currently ignored domains include:
-  - www.cve.org as this is just a link back to www.cve.org from NVD.
-  - www.securitytracker.com as this domain no longer exists. 
-  - Lots more link rot... 
+2. Common Errors:
+   - Authentication Required (e.g., HackerOne)
+   - JavaScript-dependent content (e.g., Dell advisories)
+   - Rate limiting (e.g., Qualcomm bulletins)
+   - Domain-specific issues (e.g., Secomea content)
 
-### Selective Processing
-- Processes only CVEs from the target list
-- Skips irrelevant CVEs from NVD data
-- Creates organized directory structure for each processed CVE
+3. Error Resolution:
+   - Check logs/crawler_YYYYMMDD_HHMMSS.log
+   - Consider adding problematic domains to IGNORED_URLS
+   - Review timeout and retry settings
 
-### Logging
-- Detailed logging of all operations
-- Progress tracking and statistics
-- Error handling and reporting
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+### Areas for Improvement
+
+1. Content Processing:
+   - Add Markdown extension to text files
+   - Extract vulnerability-specific information
+   - Support for additional document formats
+
+2. Structure:
+   - Consider CVEProject/cvelistV5-style organization
+   - Improve handling of large files
+
+3. Crawler Enhancement:
+   - Add GitHub pull request diff support
+   - Improve vendor-specific page handling
+   - Add archive.org or Google cache fallback for dead links
+   - robots.txt support
+
+## License
+
+This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+https://creativecommons.org/licenses/by-sa/4.0/
 
 ## Notes
 
-### Levels of link following
-The tool only reads documents linked from the CVE; it does not follow links from linked docs i.e. not recursive.
-In some cases, the relevant vulnerability information is not in the linked document e.g.
-- https://nvd.nist.gov/vuln/detail/CVE-2021-0955 contains 1 link (next line)
-  - https://source.android.com/docs/security/bulletin/2021-12-01 (a bulletin that contains links for several CVEs)
-    - https://android.googlesource.com/platform/packages/providers/MediaProvider/+/e81d03db8006fddf6e7c8a8eda1b73743314a214 is the link for CVE-2021-0955 that has the relevant info
 
 
-As part of the refinement of the text to extract only the vulnerability information, an LLM could be prompted to follow the relevant link for a CVE e.g. ChatGPT 4o is provided with
-1. Content of https://source.android.com/docs/security/bulletin/2021-12-01 
-2. Prompt per [prompts/extract_vulnerability_info_follow_links.md](./prompts/extract_vulnerability_info_follow_links.md)
+### Only the Vulnerability-related info 
+It is possible to extract and summarize only the Vulnerability-related info e.g. using an LLM:
 
-#### ChatGPT 4o Output
+**ChatGPT 4o Output**
 
 **Extracted Vulnerability Information for CVE-2021-0955:**
 
@@ -194,7 +272,7 @@ As part of the refinement of the text to extract only the vulnerability informat
   [AOSP Change](https://android.googlesource.com/platform/packages/providers/MediaProvider/%2B/e81d03db8006fddf6e7c8a8eda1b73743314a214)  
   Bug ID: A-192085766  
 
-### **Details:**
+#### **Details:**
 CVE-2021-0955 is an elevation of privilege vulnerability in the Android Framework. The issue allows a local attacker to potentially execute actions with elevated privileges. The attack does not require user interaction or specific privileges.
 
 The vulnerability occurs due to a race condition in the `FuseDaemon` class. It involves the improper management of file handles during the `fuse_reply_write` process, leading to a use-after-free scenario. The issue is addressed by ensuring proper sequence ordering, specifically by recording operations before invoking `fuse_reply_write`.
@@ -228,6 +306,7 @@ The log file indicates what links failed to download.
 4. Dell advisories content is not retrieved e.g. https://www.dell.com/support/kbdoc/en-us/000198780/dsa-2022-102
 5. secomea content is not retrieved https://secomea.com/cybersecurity-advisory/
 6. Qualcomm content is retrieved as blank e.g. https://www.qualcomm.com/company/product-security/bulletins/november-2022-bulletin 
+
 
 ### ToDos
 1. Add .md to text files.

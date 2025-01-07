@@ -2,7 +2,8 @@ env
 data_in/nvd.jsonl
 tmp
 logs
-
+data_out
+_data_out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
