@@ -113,24 +113,48 @@ The tool includes specialized handlers for specific sources:
      ```
 
 ### URL Filtering
-The tool maintains a configurable ignore list for:
-1. Known dead domains:
-   - www.securitytracker.com (defunct)
-2. Circular references:
-   - www.cve.org (links back to NVD)
-3. Problematic sources:
-   - Sites requiring authentication
-   - Rate-limited APIs
-   - JavaScript-dependent content
+The tool maintains multiple filtering mechanisms:
+
+1. Dead Domains:
+   - Loaded from data_in/dead_domains.csv if present
+   - Format: CSV with Domain,count columns
+   - Example entries:
+     ```csv
+     Domain,count
+     www.securityfocus.com,82853
+     osvdb.org,11271
+     ```
+
+2. robots.txt Compliance:
+   - Respects robots.txt directives
+   - Uses provided User-Agent for checking permissions
+   - Caches robots.txt content for 1 hour to reduce requests
+   - Falls back to allowing access if robots.txt cannot be fetched
+
+3. Configurable Ignore List:
+   - Known problematic domains
+   - Circular references (e.g., www.cve.org)
+   - Sources requiring authentication
 
 Configure ignored URLs in config.py:
 ```python
 IGNORED_URLS = [
     "www.cve.org",
+    "cve.org",
+    "first.org",
+    "nist.gov",
+    "www.securitytracker.com",
     "securitytracker.com",
-    # Add more as needed
+    "exchange.xforce.ibmcloud.com"
 ]
 ```
+
+The tool applies these filters in sequence:
+- Checks against ignored URLs list
+- Verifies domain is not in dead_domains.csv
+- Checks robots.txt permissions before crawling
+
+
 
 ## Project Structure
 
@@ -238,6 +262,19 @@ LOG_CONFIG = {
     "level": logging.INFO,
     "format": "%(asctime)s - %(levelname)s - %(message)s"
 }
+
+
+# Dead domains and robots.txt
+- Place dead_domains.csv in data_in/ directory (optional)
+- robots.txt caching duration can be modified in code (default 1 hour)
+- User-Agent used for robots.txt checks is configured in CRAWLER_SETTINGS:
+```python
+CRAWLER_SETTINGS = {
+    "headers": {
+        "User-Agent": "Mozilla/5.0 ...",
+        # other headers...
+    }
+}
 ```
 
 ## Error Handling
@@ -310,7 +347,6 @@ The log file indicates what links failed to download.
    - Add GitHub pull request diff support
    - Improve vendor-specific page handling
    - Add archive.org or Google cache fallback for dead links
-   - robots.txt support
 
 ## License
 

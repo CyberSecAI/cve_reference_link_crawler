@@ -18,6 +18,62 @@ from .utils.logging_utils import setup_logging
 from .handlers.googlesource import is_googlesource_url, handle_googlesource_url, parse_googlesource_response
 from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS
 
+import urllib.robotparser
+from urllib.parse import urlparse
+from functools import lru_cache
+import time
+
+class RobotsParser:
+    def __init__(self, user_agent):
+        """Initialize robots parser with user agent"""
+        self.user_agent = user_agent
+        self.parsers = {}
+        self.last_checked = {}
+        self.cache_duration = 3600  # Cache robots.txt for 1 hour
+
+    @lru_cache(maxsize=100)
+    def get_base_url(self, url: str) -> str:
+        """Get base URL for robots.txt"""
+        parsed = urlparse(url)
+        return f"{parsed.scheme}://{parsed.netloc}"
+
+    def get_robots_parser(self, url: str) -> urllib.robotparser.RobotFileParser:
+        """Get or create robots parser for a given URL"""
+        base_url = self.get_base_url(url)
+        
+        # Check if we need to refresh the cached parser
+        now = time.time()
+        if base_url in self.parsers:
+            if now - self.last_checked[base_url] > self.cache_duration:
+                del self.parsers[base_url]
+                del self.last_checked[base_url]
+
+        # Create new parser if needed
+        if base_url not in self.parsers:
+            rp = urllib.robotparser.RobotFileParser()
+            rp.set_url(f"{base_url}/robots.txt")
+            try:
+                rp.read()
+                self.parsers[base_url] = rp
+                self.last_checked[base_url] = now
+            except Exception as e:
+                # If robots.txt can't be fetched, assume everything is allowed
+                return None
+
+        return self.parsers.get(base_url)
+
+    def can_fetch(self, url: str) -> bool:
+        """Check if URL can be fetched according to robots.txt"""
+        try:
+            parser = self.get_robots_parser(url)
+            if parser is None:  # No robots.txt available
+                return True
+            return parser.can_fetch(self.user_agent, url)
+        except Exception as e:
+            # On error, assume we can fetch
+            return True
+        
+        
 class ContentCrawler:
     def __init__(self, output_dir: str):
         """Initialize the content crawler"""
@@ -25,12 +81,58 @@ class ContentCrawler:
         self.session = requests.Session()
         self.session.headers.update(CRAWLER_SETTINGS["headers"])
         
+        # Initialize robots parser with our user agent
+        self.robots = RobotsParser(
+            CRAWLER_SETTINGS["headers"]["User-Agent"]
+        )
+        
         self.logger = setup_logging(
             log_dir=LOG_CONFIG["dir"],
             log_level=LOG_CONFIG["level"],
             module_name=__name__
         )
         self.md_converter = MarkItDown()
+        
+        # Load dead domains
+        self.dead_domains = set()
+        self._load_dead_domains()
+
+    def find_cve_specific_urls(self, text_file: Path, target_cve: str) -> set[str]:
+        """
+        Extract URLs that appear on the same line as the target CVE
+        
+        Args:
+            text_file: Path to the text file to analyze
+            target_cve: The specific CVE ID we're interested in
+            
+        Returns:
+            Set of URLs that appear on same line as the CVE
+        """
+        urls = set()
+        
+        try:
+            with open(text_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    # Only process lines containing our target CVE
+                    if target_cve in line:
+                        # Look for googlesource URLs in this line
+                        matches = re.finditer(r'https://[^\s\(\)\[\]<>\"\']+', line)
+                        for match in matches:
+                            url = match.group(0)
+                            # Remove trailing punctuation that might have been caught
+                            url = url.rstrip('.,;')
+                            urls.add(url)
+                            
+            if urls:
+                self.logger.info(f"Found {len(urls)} URLs for {target_cve} in {text_file}")
+            else:
+                self.logger.debug(f"No URLs found for {target_cve} in {text_file}")
+                
+            return urls
+            
+        except Exception as e:
+            self.logger.error(f"Error extracting URLs for {target_cve} from {text_file}: {str(e)}")
+            return set()
 
     def _convert_content(self, filepath: Path) -> Tuple[Optional[str], str]:
         """
@@ -72,10 +174,24 @@ class ContentCrawler:
         # If all methods fail
         self.logger.error(f"All conversion methods failed for {filepath}")
         return None, "none"
-        
+
+    def _load_dead_domains(self):
+        """Load dead domains from CSV if it exists"""
+        try:
+            if Path(DEAD_DOMAINS_CSV).exists():
+                df = pd.read_csv(DEAD_DOMAINS_CSV)
+                if 'Domain' in df.columns:
+                    self.dead_domains = set(df['Domain'].str.lower())
+                    self.logger.info(f"Loaded {len(self.dead_domains)} dead domains from CSV")
+            else:
+                self.logger.debug("Dead domains CSV file not found")
+        except Exception as e:
+            self.logger.error(f"Error loading dead domains CSV: {str(e)}")
+            
+
     def should_ignore_url(self, url: str) -> bool:
         """
-        Check if URL should be ignored based on ignore list
+        Check if URL should be ignored based on rules and robots.txt
         
         Args:
             url: URL to check
@@ -83,6 +199,7 @@ class ContentCrawler:
         Returns:
             bool: True if URL should be ignored
         """
+        # First check existing ignore rules
         parsed_url = urlparse(url)
         hostname = parsed_url.netloc.lower()
         
@@ -90,6 +207,7 @@ class ContentCrawler:
         if hostname.startswith('www.'):
             hostname = hostname[4:]
             
+        # Check against IGNORED_URLS
         for ignored in IGNORED_URLS:
             ignored = ignored.lower()
             if ignored.startswith('www.'):
@@ -97,6 +215,17 @@ class ContentCrawler:
             if ignored in hostname:
                 self.logger.info(f"Ignoring URL {url} (matches ignore pattern: {ignored})")
                 return True
+                
+        # Check against dead domains
+        if hostname in self.dead_domains or f"www.{hostname}" in self.dead_domains:
+            self.logger.info(f"Ignoring URL {url} (matches dead domain)")
+            return True
+            
+        # Check robots.txt
+        if not self.robots.can_fetch(url):
+            self.logger.info(f"Ignoring URL {url} (blocked by robots.txt)")
+            return True
+            
         return False
 
     def is_cve_processed(self, cve_id: str) -> bool:
@@ -151,6 +280,11 @@ class ContentCrawler:
     def _fetch_url(self, url: str) -> Optional[Dict]:
         """Fetch content from URL"""
         try:
+            # First check robots.txt
+            if not self.robots.can_fetch(url):
+                self.logger.warning(f"URL {url} blocked by robots.txt")
+                return None
+                
             # Handle special cases
             if is_googlesource_url(url):
                 modified_url = handle_googlesource_url(url)
@@ -244,7 +378,7 @@ class ContentCrawler:
             return False
 
     def process_cve_urls(self, cve_id: str) -> None:
-        """Process all URLs for a given CVE with progress bar"""
+        """Process URLs found in text files for a specific CVE"""
         # Check if already processed
         if self.is_cve_processed(cve_id):
             self.logger.info(f"Skipping {cve_id} - already processed")
@@ -252,25 +386,29 @@ class ContentCrawler:
             
         self.logger.info(f"Starting to process URLs for {cve_id}")
         
-        links_file = self.output_dir / cve_id / "links.txt"
-        if not links_file.exists():
-            self.logger.error(f"No links.txt found for {cve_id}")
+        # Find all text files from first pass
+        text_dir = self.output_dir / cve_id / "text"
+        if not text_dir.exists():
+            self.logger.error(f"No text directory found for {cve_id}")
             return
+            
+        all_urls = set()
         
-        try:
-            with open(links_file, 'r') as f:
-                urls = [line.strip() for line in f if line.strip()]
+        # Process each text file
+        for text_file in text_dir.glob("*.txt"):
+            urls = self.find_cve_specific_urls(text_file, cve_id)
+            all_urls.update(urls)
+        
+        if not all_urls:
+            self.logger.info(f"No relevant URLs found for {cve_id}")
+            return
             
-            self.logger.info(f"Found {len(urls)} URLs to process for {cve_id}")
-            
-            success_count = 0
-            with tqdm(total=len(urls), desc=f"Processing {cve_id}", unit="url") as pbar:
-                for url in urls:
-                    if self.process_url(url, cve_id):
-                        success_count += 1
-                    pbar.update(1)
-            
-            self.logger.info(f"Completed processing {cve_id}: {success_count}/{len(urls)} URLs successful")
-            
-        except Exception as e:
-            self.logger.error(f"Error processing URLs for {cve_id}: {str(e)}")
+        # Process found URLs
+        success_count = 0
+        with tqdm(total=len(all_urls), desc=f"Processing {cve_id}", unit="url") as pbar:
+            for url in all_urls:
+                if self.process_url(url, cve_id):
+                    success_count += 1
+                pbar.update(1)
+        
+        self.logger.info(f"Completed processing {cve_id}: {success_count}/{len(all_urls)} URLs successful")
