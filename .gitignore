@@ -4,6 +4,7 @@ tmp
 logs
 data_out
 _data_out
+__data_out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -16,6 +16,41 @@ The links are in, e.g. for CVE-2022-31516:
           "url": "https://github.com/github/securitylab/issues/669#issuecomment-1117265726"
 ````
 
+## Problem Space
+
+A significant number of CVE Descriptions do not contain all the necessary vulnerability information and it is instead available in the reference links for that CVE.
+
+However, this data is
+- often no longer present i.e. dead links
+- any format: from text, html, md, pdf, website,....
+- unstructured
+- multi-format i.e. can contain images, animated images, text,
+- single or multi CVE i.e. the link can include details for many CVEs, not just the one of interest
+- in different spoken languages
+
+It would be good to have this reference content available:
+1. persistently (to avoid link rot, or moved content)
+2. in a single format i.e. as text only that can be read by people or machines
+3. in a single language e.g. English.
+4. per single CVE
+5. with only the vulnerability information extracted (not page headers, footers, other CVE info,....)
+
+### Link Rot
+
+[Research by Jerry Gamblin](https://gist.github.com/jgamblin/93c10ce6ebc7a688d60eb2b21f8216b3) shows that (as at mid 2024) there are:
+- 909,391 CVE reference links 
+- ~~13% of all CVE reference links are dead.
+   - **this is a best case %** as this just refers to the associated domain names that no longer exist. 
+   - In other cases, the domain may be active, but the content no longer exists, or no longer exists in the original location or version of the site.
+
+### Generic Links
+
+Some CVE reference links are not specific e.g. https://www.forescout.com/blog/ per https://nvd.nist.gov/vuln/detail/cve-2022-31207 so the content is lost over time as new content is added.
+
+### NVD CVE Enrichment
+> Enrichment efforts begin with reviewing any reference material provided with the CVE record and assigns appropriate reference tags. This helps organize the various data sources to help researchers find the relevant information for their needs. Enrichment efforts also include manual searches of the internet to ensure that any other available and relevant information is used for the enrichment process. NVD enrichment efforts only use publicly available materials in the enrichment process.
+
+
 ## Overview
 
 This tool:
@@ -223,6 +258,36 @@ LOG_CONFIG = {
    - Consider adding problematic domains to IGNORED_URLS
    - Review timeout and retry settings
 
+
+
+
+## Notes
+
+### Large Files
+1. A git pre-commit hook is setup to prevent files greater than 20MB being committed: .pre-commit-config.yaml
+2. A bash script can be run manually to move big files to tmp/big_files: big_files.sh
+
+### Document to Text tools
+[MarkItDown](https://github.com/microsoft/markitdown) is used here.
+- [Docling](https://github.com/DS4SD/docling) is an alternative.
+
+### Archive Sources
+The following archive sources were considered but not implemented due to limited content availability:
+- Google Cache (e.g., https://webcache.googleusercontent.com/search?q=cache:...)
+- Wayback Machine
+
+### Links that were not successfully crawled
+
+The log file indicates what links failed to download.
+
+1. GitHub pulls could add 'files' to get the file diff content e.g. https://github.com/haiwen/seafile-server/pull/520 -> https://github.com/haiwen/seafile-server/pull/520/files
+2. Cisa.gov content is not retrieved e.g. https://www.cisa.gov/uscert/ics/advisories/icsa-22-181-03
+3. HackerOne requires human verification, and signin e.g. https://hackerone.com/reports/1256967
+4. Dell advisories content is not retrieved e.g. https://www.dell.com/support/kbdoc/en-us/000198780/dsa-2022-102
+5. secomea content is not retrieved https://secomea.com/cybersecurity-advisory/
+6. Qualcomm content is retrieved as blank e.g. https://www.qualcomm.com/company/product-security/bulletins/november-2022-bulletin 
+
+
 ## Contributing
 
 1. Fork the repository
@@ -252,9 +317,9 @@ LOG_CONFIG = {
 This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 https://creativecommons.org/licenses/by-sa/4.0/
 
-## Notes
 
 
+## Ideas for Applying LLMs
 
 ### Only the Vulnerability-related info 
 It is possible to extract and summarize only the Vulnerability-related info e.g. using an LLM:
@@ -280,35 +345,46 @@ The vulnerability occurs due to a race condition in the `FuseDaemon` class. It i
 The fix for this vulnerability is available in the Android Open Source Project (AOSP) and applies to devices running Android 11.
 
 
+### Translation
+
+https://nvd.nist.gov/vuln/detail/cve-2022-30707 contains several reference links, 2 of which are in Japanese:
+- https://web-material3.yokogawa.com/1/32780/files/YSAR-22-0006-E.pdf
+- https://web-material3.yokogawa.com/19/32780/files/YSAR-22-0006-J.pdf
+
+This text can be extracted as with all other reference content, **and then translated to English by an LLM**.
+
+**Japanese**
+```markdown
+脆弱性詳細:
+攻撃者が何らかの方法で同製品がインストールされたコンピューターに侵入できた場合、当該コンピュータ
+ーに格納されているアカウント、パスワードを用いて、別の CAMS for HIS が管理するデータが漏洩／改ざ
+んされる可能性があります。また、同アカウント、パスワードを用いて、別の CAMS for HIS に不要なファ
+イルを作成するリソース枯渇攻撃がおこなわれ、最終的に CAMS for HIS の機能を停止させられる可能性が
+あります。
+
+•セキュリティ設計の原則に反した設計(CWE-657)
+CVE: CVE-2022-30707
+CVSS v3 基本値:6.4
+CVSS:3.0/AV:A/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H
+````
+**English**
+````
+Vulnerability Details:
+If an attacker gains access to a computer with the affected product installed, they could use stored account credentials to:
+
+Leak or manipulate data managed by another CAMS for HIS instance.
+Perform resource depletion attacks by creating unnecessary files in another CAMS for HIS instance, potentially leading to a service outage.
+Vulnerability Source:
+
+Non-compliance with security design principles (CWE-657)
+CVE: CVE-2022-30707
+CVSS v3 Base Score: 6.4
+Metrics: CVSS:3.0/AV:A/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H
+````
 
 
 
-### Large Files
-1. A git pre-commit hook is setup to prevent files greater than 20MB being committed: .pre-commit-config.yaml
-2. A bash script can be run manually to move big files to tmp/big_files: big_files.sh
-
-### Document to Text tools
-[MarkItDown](https://github.com/microsoft/markitdown) is used here.
-- [Docling](https://github.com/DS4SD/docling) is an alternative.
-
-### Archive Sources
-The following archive sources were considered but not implemented due to limited content availability:
-- Google Cache (e.g., https://webcache.googleusercontent.com/search?q=cache:...)
-- Wayback Machine
-
-### Links that were not successfully crawled
-
-The log file indicates what links failed to download.
-
-1. GitHub pulls could add 'files' to get the file diff content e.g. https://github.com/haiwen/seafile-server/pull/520 -> https://github.com/haiwen/seafile-server/pull/520/files
-2. Cisa.gov content is not retrieved e.g. https://www.cisa.gov/uscert/ics/advisories/icsa-22-181-03
-3. HackerOne requires human verification, and signin e.g. https://hackerone.com/reports/1256967
-4. Dell advisories content is not retrieved e.g. https://www.dell.com/support/kbdoc/en-us/000198780/dsa-2022-102
-5. secomea content is not retrieved https://secomea.com/cybersecurity-advisory/
-6. Qualcomm content is retrieved as blank e.g. https://www.qualcomm.com/company/product-security/bulletins/november-2022-bulletin 
-
-
-### ToDos
+## ToDos
 1. Add .md to text files.
 1. Extract only the vulnerability-related info from `text` dir (to markdown) e.g.
    1. data_out/CVE-2021-21773/refined/refined.txt for prompts/extract_vulnerability_info.txt (using Claude Sonnet 3.5, or ChatGPT o1. Gemini any model output was too short)

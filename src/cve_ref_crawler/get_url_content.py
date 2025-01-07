@@ -222,12 +222,18 @@ class ContentCrawler:
             if not raw_filepath:
                 return False
             
+            # Convert the content using MarkItDown
+            converted_content, conversion_method = self._convert_content(raw_filepath)
+            if not converted_content:
+                self.logger.error(f"Failed to convert content from {url}")
+                return False
+                
             # Save converted content
-            text_filepath = self._save_converted_content(result['content'], url, cve_id)
+            text_filepath = self._save_converted_content(converted_content, url, cve_id)
             success = text_filepath is not None
             
             if success:
-                self.logger.info(f"Successfully processed {url}")
+                self.logger.info(f"Successfully processed {url} using {conversion_method}")
             else:
                 self.logger.error(f"Failed to save converted content from {url}")
             
