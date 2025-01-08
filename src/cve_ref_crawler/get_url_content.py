@@ -378,37 +378,39 @@ class ContentCrawler:
             return False
 
     def process_cve_urls(self, cve_id: str) -> None:
-        """Process URLs found in text files for a specific CVE"""
+        """Process URLs for a given CVE"""
         # Check if already processed
         if self.is_cve_processed(cve_id):
             self.logger.info(f"Skipping {cve_id} - already processed")
             return
-            
+                
         self.logger.info(f"Starting to process URLs for {cve_id}")
         
-        # Find all text files from first pass
-        text_dir = self.output_dir / cve_id / "text"
-        if not text_dir.exists():
-            self.logger.error(f"No text directory found for {cve_id}")
+        # First pass: Process URLs from links.txt
+        links_file = self.output_dir / cve_id / "links.txt"
+        if not links_file.exists():
+            self.logger.error(f"No links.txt found for {cve_id}")
             return
             
-        all_urls = set()
-        
-        # Process each text file
-        for text_file in text_dir.glob("*.txt"):
-            urls = self.find_cve_specific_urls(text_file, cve_id)
-            all_urls.update(urls)
-        
-        if not all_urls:
-            self.logger.info(f"No relevant URLs found for {cve_id}")
-            return
+        try:
+            with open(links_file, 'r') as f:
+                urls = [line.strip() for line in f if line.strip()]
             
-        # Process found URLs
-        success_count = 0
-        with tqdm(total=len(all_urls), desc=f"Processing {cve_id}", unit="url") as pbar:
-            for url in all_urls:
-                if self.process_url(url, cve_id):
-                    success_count += 1
-                pbar.update(1)
-        
-        self.logger.info(f"Completed processing {cve_id}: {success_count}/{len(all_urls)} URLs successful")
+            if not urls:
+                self.logger.info(f"No URLs found in links.txt for {cve_id}")
+                return
+                
+            self.logger.info(f"Found {len(urls)} URLs to process for {cve_id}")
+            
+            # Process each URL
+            success_count = 0
+            with tqdm(total=len(urls), desc=f"Processing {cve_id}", unit="url") as pbar:
+                for url in urls:
+                    if self.process_url(url, cve_id):
+                        success_count += 1
+                    pbar.update(1)
+            
+            self.logger.info(f"Completed processing {cve_id}: {success_count}/{len(urls)} URLs successful")
+                
+        except Exception as e:
+            self.logger.error(f"Error processing URLs for {cve_id}: {str(e)}")

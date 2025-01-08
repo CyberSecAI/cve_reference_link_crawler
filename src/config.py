@@ -19,7 +19,7 @@ TARGET_CVES_CSV = EXTERNAL_CWE_TOP25_DIR / "data_in" / "top25-mitre-mapping-anal
 NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
 #NVD_JSONL_FILE = "tmp/cve.json"
 
-DEAD_DOMAINS_CSV = DATA_IN_DIR / "dead_domains.csv"  # Add this line
+DEAD_DOMAINS_CSV = DATA_IN_DIR / "dead_domains.csv"  
 
 # Logging configuration
 LOG_CONFIG = {
