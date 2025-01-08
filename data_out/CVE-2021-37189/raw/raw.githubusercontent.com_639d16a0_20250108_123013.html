@@ -1,0 +1,24 @@
+Date: 11-November-2021
+Vendor: Digi International
+Products Affected:
+TransPort DR64: version 5249 and earlier;
+TransPort SR44: all versions;
+TransPort VC74: version 5249 and earlier;
+TransPort WR11, WR11XT, WR21, and WR31: 8.2.1.3 and earlier;
+TransPort WR41: versions 5246 and earlier, and version 8.3.1.2 and earlier, and version 6.1.3.5 and earlier (versions supported
+depend upon hardware revision)
+TransPort WR44 v2: version 8.3.1.2 and earlier
+Note: CVE-2021-37189 is only known to apply to WR11, WR11XT, WR21, WR31, WR41, and WR44 v2 firmware versions prior to 6.0.0.0, however, other models and firmware versions may have the issue.
+
+
+Vulnerabilities Summary:
+
+Unauthenticated Command Injection via ZING. This proprietary protocol allows unauthenticated remote commands with administrator privileges. CVE-2021-35978. CVSS 10.0: (AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H)
+
+Weak Credential Storage. An attacker with credentials, or a malicious insider may retrieve stored credentials and decrypt them, giving access to other user's accounts. CVE-2021-37187. CVSS 4.9 (AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N)
+
+Unprotected Firmware Update. The firmware image relies on a proprietary encryption system which lacks data integrity checking. CVE-2021-37188. CVSS 7.2 (AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H).
+
+HTTP Session Hijacking via Insecure Session Cookie. CVE-2021-37189 CVSS 4.5 (AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N).
+
+For further details, see Dragos VA-2021-11 or contact intel@dragos.com. 

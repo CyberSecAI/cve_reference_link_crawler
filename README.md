@@ -4,16 +4,20 @@ A Python-based tool to extract, download, and process CVE reference content from
 
 This tool focuses on specific CVEs from a target list, downloads their reference content, and converts it to a standardized text format.
 
-The links are in, e.g. for CVE-2022-31516:
+[CVE-2021-4034](https://nvd.nist.gov/vuln/detail/cve-2021-4034) has 11 unique links
+
+https://access.redhat.com/security/vulnerabilities/RHSB-2022-001
+
+The links are in, e.g. for CVE-2021-4034:
 - "References to Advisories, Solutions, and Tools" on https://nvd.nist.gov/vuln/detail/CVE-2022-31516
-- "references" section of nvd.json for CVE-2022-31516
+- "references" section of nvd.json for CVE-2021-4034
 ```json
    "cve": {
-      "id": "CVE-2022-31516",
+      "id": "CVE-2021-4034",
       .....
       "references": [
         {
-          "url": "https://github.com/github/securitylab/issues/669#issuecomment-1117265726"
+          "url": "..."
 ````
 
 ## Problem Space
@@ -277,6 +281,12 @@ CRAWLER_SETTINGS = {
 }
 ```
 
+## Usage
+
+```
+python src/main.py
+```
+
 ## Error Handling
 
 1. Logs Directory:
@@ -423,8 +433,7 @@ Metrics: CVSS:3.0/AV:A/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H
 ## ToDos
 1. Add .md to text files.
 1. Extract only the vulnerability-related info from `text` dir (to markdown) e.g.
-   1. data_out/CVE-2021-21773/refined/refined.txt for prompts/extract_vulnerability_info.txt (using Claude Sonnet 3.5, or ChatGPT o1. Gemini any model output was too short)
-   2. data_out/CVE-2021-21773/refined/refined_long.txt for prompts/extract_vulnerability_info_long.txt
+   1. can be done with an LLM e.g. prompts/extract_vulnerability_info_gemini_2.0.md
 2. If this is done for all published CVEs, then a directory structure per https://github.com/CVEProject/cvelistV5/tree/main/cves would be more appropriate to avoid having all CVEs in one directory.
 
 

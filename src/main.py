@@ -36,14 +36,17 @@ def main():
     logger.info("Initializing content crawler")
     crawler = ContentCrawler(output_dir=DATA_OUT_DIR)
     
-    # Get list of CVE directories to process
+    # Initialize vulnerability_extractor
+    vulnerability_extractor = VulnerabilityExtractor(output_dir=DATA_OUT_DIR)
+
+        # Get list of CVE directories to process
     cve_dirs = [d for d in DATA_OUT_DIR.iterdir() if d.is_dir()]
     
     # Initialize counters for primary processing
     primary_skipped_count = 0
     primary_processed_count = 0
     
-    # Process primary URLs with progress bar
+    # Phase 1: Process primary URLs with progress bar
     logger.info("Phase 1: Processing primary URLs")
     with tqdm(total=len(cve_dirs), desc="Processing primary URLs", unit="cve") as pbar:
         for cve_dir in cve_dirs:
@@ -66,7 +69,7 @@ def main():
             pbar.set_postfix({"skipped": primary_skipped_count, "processed": primary_processed_count})
             pbar.update(1)
     
-    # Process secondary URLs
+    # Phase 2: Process secondary URLs from text content
     logger.info("Phase 2: Processing secondary URLs")
     secondary_processor = SecondaryProcessor(DATA_OUT_DIR)
     secondary_processed_count = 0
@@ -79,6 +82,19 @@ def main():
                 secondary_processor.process_cve_directory(cve_id)
                 secondary_processed_count += 1
             pbar.update(1)
+    
+    # Phase 3: Extract vulnerability information
+    logger.info("Phase 3: Extracting vulnerability information")
+    extractor = VulnerabilityExtractor(DATA_OUT_DIR)
+    
+    success_count = 0
+    for cve_id in tqdm(cve_ids, desc="Extracting vulnerability info"):
+        if extractor.process_cve(cve_id):
+            success_count += 1
+            
+    crawler.finish_processing()
+    
+    logger.info(f"Completed vulnerability extraction. Successful: {success_count}/{len(cve_ids)}")
     
     logger.info(
         f"Completed CVE reference processing:\n"

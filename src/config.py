@@ -29,11 +29,16 @@ LOG_CONFIG = {
     "dir": LOG_DIR
 }
 
-# Crawler settings
 CRAWLER_SETTINGS = {
-    "timeout": 30,
+    "timeout": 30,  # General request timeout
     "retry_count": 3,
     "delay_between_requests": 1,  # seconds
+    "robots_txt": {
+        "fetch_timeout": 10,      # Timeout for fetching robots.txt
+        "rule_check_timeout": 5,  # Timeout for checking rules in robots.txt
+        "cache_duration": 3600,   # How long to cache robots.txt (seconds)
+    },
+    "url_process_timeout": 30,    # Overall timeout for processing a single URL
     "headers": {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",

@@ -2,7 +2,7 @@ env
 data_in/nvd.jsonl
 tmp
 logs
-data_out
+#data_out
 _data_out
 __data_out
 

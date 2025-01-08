@@ -23,19 +23,16 @@ from urllib.parse import urlparse
 from functools import lru_cache
 import time
 
+
 class RobotsParser:
     def __init__(self, user_agent):
         """Initialize robots parser with user agent"""
         self.user_agent = user_agent
         self.parsers = {}
         self.last_checked = {}
-        self.cache_duration = 3600  # Cache robots.txt for 1 hour
-
-    @lru_cache(maxsize=100)
-    def get_base_url(self, url: str) -> str:
-        """Get base URL for robots.txt"""
-        parsed = urlparse(url)
-        return f"{parsed.scheme}://{parsed.netloc}"
+        self.cache_duration = CRAWLER_SETTINGS["robots_txt"]["cache_duration"]
+        self.session = requests.Session()
+        self.session.headers.update({"User-Agent": user_agent})
 
     def get_robots_parser(self, url: str) -> urllib.robotparser.RobotFileParser:
         """Get or create robots parser for a given URL"""
@@ -51,18 +48,61 @@ class RobotsParser:
         # Create new parser if needed
         if base_url not in self.parsers:
             rp = urllib.robotparser.RobotFileParser()
-            rp.set_url(f"{base_url}/robots.txt")
+            robots_url = f"{base_url}/robots.txt"
+            rp.set_url(robots_url)
+            
             try:
-                rp.read()
+                # Fetch robots.txt with configured timeout
+                response = self.session.get(
+                    robots_url, 
+                    timeout=CRAWLER_SETTINGS["robots_txt"]["fetch_timeout"]
+                )
+                if response.status_code == 200:
+                    rp.parse(response.text.splitlines())
+                else:
+                    return None
+                    
                 self.parsers[base_url] = rp
                 self.last_checked[base_url] = now
-            except Exception as e:
-                # If robots.txt can't be fetched, assume everything is allowed
+                
+            except (requests.RequestException, Exception) as e:
+                self.logger.warning(f"Error fetching robots.txt for {base_url}: {str(e)}")
                 return None
 
         return self.parsers.get(base_url)
 
     def can_fetch(self, url: str) -> bool:
+        """Check if URL can be fetched according to robots.txt"""
+        try:
+            parser = self.get_robots_parser(url)
+            if parser is None:
+                return True
+            
+            # Add configured timeout for the actual robots.txt check
+            with timeout(CRAWLER_SETTINGS["robots_txt"]["rule_check_timeout"]):
+                return parser.can_fetch(self.user_agent, url)
+                
+        except Exception as e:
+            self.logger.warning(f"Error checking robots.txt for {url}: {str(e)}")
+            return True
+
+# Add a context manager for timeout
+from contextlib import contextmanager
+import signal
+
+@contextmanager
+def timeout(seconds):
+    def signal_handler(signum, frame):
+        raise TimeoutError("Timed out")
+    
+    # Set the timeout handler
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.alarm(seconds)
+    
+    try:
+        yield
+    finally:
+        signal.alarm(0)  # Disable the alarm
         """Check if URL can be fetched according to robots.txt"""
         try:
             parser = self.get_robots_parser(url)
@@ -80,7 +120,7 @@ class ContentCrawler:
         self.output_dir = Path(output_dir)
         self.session = requests.Session()
         self.session.headers.update(CRAWLER_SETTINGS["headers"])
-        
+               
         # Initialize robots parser with our user agent
         self.robots = RobotsParser(
             CRAWLER_SETTINGS["headers"]["User-Agent"]
@@ -96,6 +136,28 @@ class ContentCrawler:
         # Load dead domains
         self.dead_domains = set()
         self._load_dead_domains()
+        
+        self.domain_stats = DomainStatsCollector(
+            Path(output_dir),
+            IGNORED_URLS,
+            self.dead_domains
+        )
+
+    def should_process_raw_content(self, cve_id: str) -> bool:
+        """Check if raw content needs to be downloaded"""
+        raw_dir = self.output_dir / cve_id / "raw"
+        if raw_dir.exists() and any(raw_dir.iterdir()):
+            self.logger.info(f"Skipping {cve_id} - raw content already exists")
+            return False
+        return True
+
+    def should_process_text_content(self, cve_id: str) -> bool:
+        """Check if text conversion is needed"""
+        text_dir = self.output_dir / cve_id / "text"
+        if text_dir.exists() and any(text_dir.iterdir()):
+            self.logger.info(f"Skipping {cve_id} - text content already exists")
+            return False
+        return True
 
     def find_cve_specific_urls(self, text_file: Path, target_cve: str) -> set[str]:
         """
@@ -220,17 +282,13 @@ class ContentCrawler:
         if hostname in self.dead_domains or f"www.{hostname}" in self.dead_domains:
             self.logger.info(f"Ignoring URL {url} (matches dead domain)")
             return True
-            
-        # Check robots.txt
-        if not self.robots.can_fetch(url):
-            self.logger.info(f"Ignoring URL {url} (blocked by robots.txt)")
-            return True
-            
+                
+        # By default, allow the URL
         return False
 
     def is_cve_processed(self, cve_id: str) -> bool:
         """
-        Check if CVE has already been processed
+        Check if CVE has already been processed by checking text directory
         
         Args:
             cve_id: CVE ID to check
@@ -238,10 +296,16 @@ class ContentCrawler:
         Returns:
             bool: True if CVE has already been processed
         """
+        raw_dir = self.output_dir / cve_id / "raw"
         text_dir = self.output_dir / cve_id / "text"
-        # Check if text directory exists and is not empty
-        if text_dir.exists() and any(text_dir.iterdir()):
-            return True
+        
+        # Consider processed if both raw and text directories exist and contain files
+        if raw_dir.exists() and text_dir.exists():
+            has_raw = any(raw_dir.iterdir())
+            has_text = any(text_dir.iterdir())
+            if has_raw and has_text:
+                return True
+                
         return False
 
     def _generate_filename(self, url: str, content_type: str) -> str:
@@ -280,19 +344,18 @@ class ContentCrawler:
     def _fetch_url(self, url: str) -> Optional[Dict]:
         """Fetch content from URL"""
         try:
-            # First check robots.txt
-            if not self.robots.can_fetch(url):
-                self.logger.warning(f"URL {url} blocked by robots.txt")
-                return None
-                
+            self.logger.debug(f"Starting URL fetch: {url}")
+            
             # Handle special cases
             if is_googlesource_url(url):
+                self.logger.debug("Processing as googlesource URL")
                 modified_url = handle_googlesource_url(url)
                 if not modified_url:
                     self.logger.warning(f"Skipping unsupported googlesource URL: {url}")
                     return None
                     
-                response = self.session.get(modified_url, timeout=30)
+                response = self.session.get(modified_url, timeout=CRAWLER_SETTINGS["timeout"])
+                self.logger.debug(f"Got response from {modified_url}")
                 response.raise_for_status()
                 
                 content = parse_googlesource_response(response.text)
@@ -301,16 +364,22 @@ class ContentCrawler:
                 return None
             
             # Normal URL handling
-            response = self.session.get(url, timeout=30)
+            self.logger.debug(f"Sending GET request to {url}")
+            response = self.session.get(url, timeout=CRAWLER_SETTINGS["timeout"])
             response.raise_for_status()
             
             content_type = response.headers.get('content-type', '').lower()
+            self.logger.debug(f"Got response with content-type: {content_type}")
+            
             if 'application/pdf' in content_type:
                 return {'content': response.content, 'type': 'pdf'}
             return {'content': response.text, 'type': 'html'}
                 
         except requests.RequestException as e:
-            self.logger.error(f"Error fetching URL {url}: {str(e)}")
+            self.logger.error(f"Request error fetching URL {url}: {str(e)}")
+            return None
+        except Exception as e:
+            self.logger.error(f"Unexpected error fetching URL {url}: {str(e)}", exc_info=True)
             return None
 
     def _save_converted_content(self, content: str, url: str, cve_id: str) -> Optional[Path]:
@@ -341,11 +410,17 @@ class ContentCrawler:
                 return True
 
             # Fetch content
+            self.logger.debug(f"Fetching content from URL: {url}")
             result = self._fetch_url(url)
             if not result:
+                self.logger.error(f"Failed to fetch content from {url}")
                 return False
 
+            # Record result
+            self.domain_stats.add_url(url, success=success)
+            
             # Save raw content
+            self.logger.debug(f"Saving raw content from {url}")
             raw_filepath = self._save_raw_content(
                 content=result['content'],
                 url=url,
@@ -354,15 +429,18 @@ class ContentCrawler:
             )
             
             if not raw_filepath:
+                self.logger.error(f"Failed to save raw content from {url}")
                 return False
             
-            # Convert the content using MarkItDown
+            # Convert the content
+            self.logger.debug(f"Converting content from {url}")
             converted_content, conversion_method = self._convert_content(raw_filepath)
             if not converted_content:
                 self.logger.error(f"Failed to convert content from {url}")
                 return False
                 
             # Save converted content
+            self.logger.debug(f"Saving converted content from {url}")
             text_filepath = self._save_converted_content(converted_content, url, cve_id)
             success = text_filepath is not None
             
@@ -373,15 +451,19 @@ class ContentCrawler:
             
             return success
             
+        except TimeoutError:
+            self.logger.error(f"Timeout processing URL {url}")
+            return False
         except Exception as e:
-            self.logger.error(f"Error processing URL {url}: {e}")
+            self.domain_stats.add_url(url, success=False)
+            self.logger.error(f"Error processing URL {url}: {e}", exc_info=True)
             return False
 
     def process_cve_urls(self, cve_id: str) -> None:
         """Process URLs for a given CVE"""
         # Check if already processed
         if self.is_cve_processed(cve_id):
-            self.logger.info(f"Skipping {cve_id} - already processed")
+            self.logger.info(f"Skipping {cve_id} - raw and text already processed")
             return
                 
         self.logger.info(f"Starting to process URLs for {cve_id}")
