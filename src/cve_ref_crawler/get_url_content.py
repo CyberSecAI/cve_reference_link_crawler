@@ -16,7 +16,8 @@ from tqdm import tqdm
 from .utils.file_utils import ensure_directory
 from .utils.logging_utils import setup_logging
 from .handlers.googlesource import is_googlesource_url, handle_googlesource_url, parse_googlesource_response
-from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS
+from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS, DEAD_DOMAINS_CSV
+from .utils.domain_stats import DomainStatsCollector  
 
 import urllib.robotparser
 from urllib.parse import urlparse
@@ -403,9 +404,12 @@ class ContentCrawler:
         """Process a single URL: fetch, save raw content, and convert"""
         self.logger.info(f"Started processing URL: {url} for {cve_id}")
         
+        success = False  # Initialize success flag at the start
+        
         try:
             # Skip if URL should be ignored
             if self.should_ignore_url(url):
+                self.domain_stats.add_url(url, ignored=True)
                 self.logger.info(f"Skipping ignored URL: {url}")
                 return True
 
@@ -414,11 +418,9 @@ class ContentCrawler:
             result = self._fetch_url(url)
             if not result:
                 self.logger.error(f"Failed to fetch content from {url}")
+                self.domain_stats.add_url(url, success=False)
                 return False
 
-            # Record result
-            self.domain_stats.add_url(url, success=success)
-            
             # Save raw content
             self.logger.debug(f"Saving raw content from {url}")
             raw_filepath = self._save_raw_content(
@@ -430,6 +432,7 @@ class ContentCrawler:
             
             if not raw_filepath:
                 self.logger.error(f"Failed to save raw content from {url}")
+                self.domain_stats.add_url(url, success=False)
                 return False
             
             # Convert the content
@@ -437,12 +440,16 @@ class ContentCrawler:
             converted_content, conversion_method = self._convert_content(raw_filepath)
             if not converted_content:
                 self.logger.error(f"Failed to convert content from {url}")
+                self.domain_stats.add_url(url, success=False)
                 return False
                 
             # Save converted content
             self.logger.debug(f"Saving converted content from {url}")
             text_filepath = self._save_converted_content(converted_content, url, cve_id)
             success = text_filepath is not None
+            
+            # Record final result
+            self.domain_stats.add_url(url, success=success)
             
             if success:
                 self.logger.info(f"Successfully processed {url} using {conversion_method}")
@@ -453,10 +460,11 @@ class ContentCrawler:
             
         except TimeoutError:
             self.logger.error(f"Timeout processing URL {url}")
+            self.domain_stats.add_url(url, success=False)
             return False
         except Exception as e:
-            self.domain_stats.add_url(url, success=False)
             self.logger.error(f"Error processing URL {url}: {e}", exc_info=True)
+            self.domain_stats.add_url(url, success=False)
             return False
 
     def process_cve_urls(self, cve_id: str) -> None:
@@ -496,3 +504,12 @@ class ContentCrawler:
                 
         except Exception as e:
             self.logger.error(f"Error processing URLs for {cve_id}: {str(e)}")
+
+    def finish_processing(self):
+        """Called after all processing is complete to generate final reports"""
+        try:
+            self.logger.info("Generating domain statistics report")
+            self.domain_stats.generate_report()
+            self.logger.info("Domain statistics report generated successfully")
+        except Exception as e:
+            self.logger.error(f"Error generating domain statistics report: {e}", exc_info=True)

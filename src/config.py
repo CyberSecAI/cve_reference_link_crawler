@@ -12,8 +12,8 @@ LOG_DIR = BASE_DIR / "logs"
 # External paths
 EXTERNAL_CWE_TOP25_DIR = BASE_DIR.parent / "cwe_top25"
 
-#TARGET_CVES_CSV =  "./data_in/top25-mitre-mapping-analysis-2023-public_10.csv"
-TARGET_CVES_CSV = EXTERNAL_CWE_TOP25_DIR / "data_in" / "top25-mitre-mapping-analysis-2023-public.csv"
+TARGET_CVES_CSV =  "./data_in/top25-mitre-mapping-analysis-2023-public_10.csv"
+#TARGET_CVES_CSV = EXTERNAL_CWE_TOP25_DIR / "data_in" / "top25-mitre-mapping-analysis-2023-public.csv"
 
 # File paths
 NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"

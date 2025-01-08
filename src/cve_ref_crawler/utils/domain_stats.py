@@ -7,6 +7,8 @@ from pathlib import Path
 import json
 import csv
 from dataclasses import dataclass
+from cve_ref_crawler.utils.logging_utils import setup_logging
+from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS, DEAD_DOMAINS_CSV
 
 @dataclass
 class DomainStatus:

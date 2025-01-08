@@ -1,15 +1,16 @@
 # CVE Reference Link Crawler
 
-A Python-based tool to extract, download, and process CVE reference content from the National Vulnerability Database (NVD). 
+A Python-based tool to extract, download, and process CVE reference content from the National Vulnerability Database (NVD).
 
-This tool focuses on specific CVEs from a target list, downloads their reference content, and converts it to a standardized text format.
+This tool focuses on specific CVEs from a target list, downloads their reference content, converts it to a standardized text format, and extracts structured vulnerability information using LLM analysis.
 
-[CVE-2021-4034](https://nvd.nist.gov/vuln/detail/cve-2021-4034) has 11 unique links
+For example, CVE-2021-4034 has 11 unique links that contain vulnerability information which this tool can process and analyze.
 
-https://access.redhat.com/security/vulnerabilities/RHSB-2022-001
+## Example
+[CVE-2021-4034](https://nvd.nist.gov/vuln/detail/cve-2021-4034) has 11 unique links including one from the CNA: https://access.redhat.com/security/vulnerabilities/RHSB-2022-001
 
 The links are in, e.g. for CVE-2021-4034:
-- "References to Advisories, Solutions, and Tools" on https://nvd.nist.gov/vuln/detail/CVE-2022-31516
+- "References to Advisories, Solutions, and Tools" on https://nvd.nist.gov/vuln/detail/CVE-2021-4034
 - "references" section of nvd.json for CVE-2021-4034
 ```json
    "cve": {
@@ -55,20 +56,20 @@ Some CVE reference links are not specific e.g. https://www.forescout.com/blog/ p
 > Enrichment efforts begin with reviewing any reference material provided with the CVE record and assigns appropriate reference tags. This helps organize the various data sources to help researchers find the relevant information for their needs. Enrichment efforts also include manual searches of the internet to ensure that any other available and relevant information is used for the enrichment process. NVD enrichment efforts only use publicly available materials in the enrichment process.
 
 
-## Overview
+### Overview
 
 This tool:
 1. Loads target CVEs from a CSV file
-   - TARGET_CVES_CSV in config.py is set to top25-mitre-mapping-analysis-2023-public.csv as the list of CVEs to get the references content for.
 2. Processes only the specified CVEs from the NVD JSON data
 3. Downloads and archives reference content for these CVEs
 4. Converts various file formats to text using MarkItDown
 5. Creates a structured archive of both raw and processed content
+6. Uses LLM analysis to extract structured vulnerability information
 
 ## Content Processing Workflow
 
-### Two-Phase Processing
-The tool processes content in two phases to ensure comprehensive coverage:
+### Three-Phase Processing
+The tool processes content in three phases to ensure comprehensive coverage:
 
 1. Initial Phase:
    - Processes all direct URLs from the CVE data
@@ -79,10 +80,63 @@ The tool processes content in two phases to ensure comprehensive coverage:
    - Downloads and processes these secondary URLs
    - Maintains the same directory structure for consistency
 
-This two-phase approach is particularly important because relevant vulnerability information is often not in the directly linked document. For example:
-- https://nvd.nist.gov/vuln/detail/CVE-2021-0955 links to
-  - https://source.android.com/docs/security/bulletin/2021-12-01 (a bulletin with multiple CVEs)
-    - Which contains the actual fix: https://android.googlesource.com/platform/packages/providers/MediaProvider/+/e81d03db8006fddf6e7c8a8eda1b73743314a214
+3. Analysis Phase:
+   - Uses LLM to analyze all collected text content
+   - Extracts structured vulnerability information including:
+     - Root cause of vulnerability
+     - Weaknesses/vulnerabilities present
+     - Impact of exploitation
+     - Attack vectors
+     - Required attacker capabilities/position
+   - Translates non-English content to English automatically
+   - Stores results in refined/ directory
+
+>[!NOTE]
+> This Secondary Phase is particularly important because relevant vulnerability information is often not in the directly linked document. For example:
+> - https://nvd.nist.gov/vuln/detail/CVE-2021-0955 links to
+>   - https://source.android.com/docs/security/bulletin/2021-12-01 (a bulletin with multiple CVEs) Which links to the actual relevant content: 
+>      - https://android.googlesource.com/platform/packages/providers/MediaProvider/+/e81d03db8006fddf6e7c8a8eda1b73743314a214
+
+### Vulnerability Information Extraction
+
+The tool uses Google's Gemini API to analyze and extract vulnerability information:
+
+1. Configuration:
+   - Uses environment variables for API keys
+   - Configurable safety settings to allow security content
+   - Customizable generation parameters
+
+2. Processing:
+   - Combines all text content from references
+   - Verifies content relevance to specific CVE
+   - Extracts structured vulnerability information
+   - Handles multi-language content with translation
+
+3. Output:
+   - Creates refined.txt with structured analysis
+   - Includes original technical details
+   - Removes unrelated content
+   - Notes additional details beyond CVE description
+
+### Example Output Structure
+
+For each CVE, the tool creates:
+```
+data_out/
+└── CVE-YYYY-XXXXX/
+    ├── links.txt              # URLs from CVE references
+    ├── raw/                   # Original content
+    │   ├── site1_hash_timestamp.html
+    │   └── site2_hash_timestamp.pdf
+    ├── text/                  # Converted content
+    │   ├── site1_hash_timestamp.md
+    │   └── site2_hash_timestamp.md
+    └── refined/               # Analyzed content
+        ├── combined.md       # All reference content
+        └── refined.md        # Extracted vulnerability info
+````
+
+
 
 ### Content Conversion
 The tool uses multiple methods to convert content to readable text:
@@ -183,20 +237,7 @@ project_root/
         └── top25-mitre-mapping-analysis-2023-public.csv 
 ```
 
-## Output Structure
 
-For each CVE, the tool creates:
-```
-data_out/
-└── CVE-YYYY-XXXXX/
-    ├── links.txt              # URLs from CVE references
-    ├── raw/                   # Original content
-    │   ├── site1_hash_timestamp.html
-    │   └── site2_hash_timestamp.pdf
-    └── text/                  # Converted content
-        ├── site1_hash_timestamp.md
-        └── site2_hash_timestamp.md
-```
 
 ### Example: CVE-2021-3675
 
@@ -220,6 +261,7 @@ This example demonstrates typical processing outcomes:
 2. Git
 3. NVD data (from http://nvd.handsonhacking.org/nvd.jsonl)
 4. MarkItDown (Microsoft's document conversion utility)
+5. Google Cloud API key for Gemini
 
 ## Installation
 
@@ -243,7 +285,15 @@ This example demonstrates typical processing outcomes:
 
 3. Configure:
    - Copy NVD data to data_in/nvd.jsonl
+   - Create .env file with Google API key
    - Review and modify config.py settings
+
+## Environment Setup
+
+Create a .env file in the env/ directory:
+```
+GOOGLE_API_KEY=your_api_key_here
+```
 
 ## Configuration
 
@@ -307,6 +357,149 @@ python src/main.py
 
 
 
+ 
+## Refined CVE Reference Link Vulnerability Info
+
+https://nvd.nist.gov/vuln/detail/CVE-2022-20148 
+
+CVE Description
+>In TBD of TBD, there is a possible use-after-free due to a race condition. This could lead to local escalation of privilege in the kernel with System execution privileges needed. User interaction is not needed for exploitation.Product: AndroidVersions: Android kernelAndroid ID: A-219513976References: Upstream kernel
+
+The CVE Reference Link is "Pixel Update Bulletin—June 2022" (a collection of links for many CVEs): https://source.android.com/security/bulletin/pixel/2022-06-01
+- the bulletin for CVE-2022-20148 links to https://android.googlesource.com/kernel/common/+/528611246fcbd which contains this information
+
+
+````
+f2fs: allow to change discard policy based on cached discard cmds
+
+With the default DPOLICY_BG discard thread is ioaware, which prevents
+the discard thread from issuing the discard commands. On low RAM setups,
+it is observed that these discard commands in the cache are consuming
+high memory. This patch aims to relax the memory pressure on the system
+due to f2fs pending discard cmds by changing the policy to DPOLICY_FORCE
+based on the nm_i->ram_thresh configured.
+
+Signed-off-by: Sahitya Tummala <stummala@codeaurora.org>
+Reviewed-by: Chao Yu <yuchao0@huawei.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+````
+
+data_out/CVE-2022-20148/refined/refined.md
+
+The data that was autoextracted by the crawler from the reference links is data_out/CVE-2022-20148/refined/refined.md:
+
+````
+Based on the provided information, here's an analysis of CVE-2022-20148:
+
+**Root cause of vulnerability:**
+
+The root cause lies in the f2fs (Flash-Friendly File System) discard mechanism. The default discard policy, `DPOLICY_BG`, uses an I/O aware background thread, which can be blocked from issuing discard commands. When dealing with low RAM situations, cached discard commands may consume large amounts of memory, creating memory pressure.
+
+**Weaknesses/vulnerabilities present:**
+
+*   **Memory exhaustion:**  The caching of discard commands in f2fs can lead to high memory consumption on low RAM devices, potentially causing a denial-of-service.
+*   **Inefficient discard processing:** The `DPOLICY_BG` thread may not be able to issue discard commands effectively in low RAM scenarios.
+
+**Impact of exploitation:**
+
+*   **Denial of Service (DoS):**  A device with limited memory may become unresponsive or crash due to memory exhaustion caused by the cached discard commands.
+*   **Reduced performance:**  The system may experience overall slowdowns due to excessive memory pressure.
+
+**Attack vectors:**
+
+*   **Normal File System Operations:** An attacker doesn't need direct access to the file system. Normal file system operations that lead to generating discard commands will cause the vulnerability to be triggered if the system has low memory.
+*   **Low Memory Conditions:** The vulnerability is exacerbated when the system is under memory pressure, making it more likely that a large amount of discard commands is cached.
+
+**Required attacker capabilities/position:**
+
+*   **Ability to cause discard commands**: An attacker only needs to perform file system operations that generate discard requests. No root or elevated privileges is required.
+*   **Low RAM conditions:** For the vulnerability to be triggered, low memory conditions need to be present.
+
+**Mitigation:**
+
+The fix involves allowing the discard policy to be changed to `DPOLICY_FORCE` based on the configured `nm_i->ram_thresh`. This allows discard commands to be issued more aggressively in low-memory situations, reducing memory pressure.
+
+**Additional Notes**
+
+*   The provided commit messages are all identical, which implies that the fix involves changing the discard policy under certain conditions.
+*   The commit message explicitly mentions "low RAM setups".
+*   The fix is related to the Linux Kernel f2fs implementation.
+*   The security bulletin for Pixel devices confirms the vulnerability as an Elevation of Privilege (EoP) issue within the Kernel component.
+````
+
+
+
+### Translation
+
+https://nvd.nist.gov/vuln/detail/cve-2022-30707 contains several reference links, 2 of which are in Japanese:
+- https://web-material3.yokogawa.com/1/32780/files/YSAR-22-0006-E.pdf
+- https://web-material3.yokogawa.com/19/32780/files/YSAR-22-0006-J.pdf
+
+This text is extracted as with all other reference content, **and then translated to English by an LLM**.
+
+**Japanese**
+```markdown
+脆弱性詳細:
+攻撃者が何らかの方法で同製品がインストールされたコンピューターに侵入できた場合、当該コンピュータ
+ーに格納されているアカウント、パスワードを用いて、別の CAMS for HIS が管理するデータが漏洩／改ざ
+んされる可能性があります。また、同アカウント、パスワードを用いて、別の CAMS for HIS に不要なファ
+イルを作成するリソース枯渇攻撃がおこなわれ、最終的に CAMS for HIS の機能を停止させられる可能性が
+あります。
+
+•セキュリティ設計の原則に反した設計(CWE-657)
+CVE: CVE-2022-30707
+CVSS v3 基本値:6.4
+CVSS:3.0/AV:A/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H
+````
+
+````
+Based on the provided information, here's an analysis of CVE-2022-30707:
+
+**Root Cause of Vulnerability:**
+The vulnerability stems from a flaw in the communication design of Yokogawa's CAMS for HIS (Consolidation Alarm Management Software for Human Interface Station). This is categorized as a violation of secure design principles. Specifically, the system allows for the potential misuse of stored credentials.
+
+**Weaknesses/Vulnerabilities Present:**
+- **Violation of Secure Design Principles (CWE-657):** The core weakness lies in how CAMS for HIS handles credentials. When a system is compromised, the stored credentials can be used to access and manipulate data on other CAMS for HIS systems.
+- **Insecure Credential Handling:** The vulnerability arises from the fact that credentials stored on one system can be used to authenticate against other systems, leading to unauthorized access.
+
+**Impact of Exploitation:**
+Successful exploitation can lead to:
+- **Data Breach/Leakage:** An attacker can access data managed by another CAMS for HIS, leading to potential exposure of sensitive information.
+- **Data Tampering/Modification:** Attackers may alter the data managed by other CAMS for HIS instances.
+- **Resource Exhaustion:** An attacker can create unnecessary files on another CAMS for HIS, potentially leading to resource exhaustion and service disruption.
+- **Denial of Service:** Ultimately, the attack can disable CAMS for HIS functionality on affected machines due to resource exhaustion.
+
+**Attack Vectors:**
+- **Compromised System:** The primary attack vector involves compromising a computer that has CAMS for HIS software installed.
+- **Adjacent Network Access:** The attacker needs to be on the adjacent network.
+
+**Required Attacker Capabilities/Position:**
+- **Initial Access:** The attacker needs to gain access to a system running the vulnerable CAMS for HIS software.
+- **Knowledge of Credentials:** Once a system is compromised, the attacker needs to be able to access and utilize stored account and password information to access other systems.
+- **Adjacent Network:** The attacker must be on the same network or a network segment that is adjacent to the vulnerable system.
+
+**Affected Products and Versions:**
+The following Yokogawa products and versions are affected:
+- **CENTUM CS 3000** (including CENTUM CS 3000 Small): R3.08.10 to R3.09.00 (affected if LHS4800 (CAMS for HIS) is installed)
+- **CENTUM VP** (including CENTUM VP Small, CENTUM VP Basic):
+    - R4.01.00 to R4.03.00 (affected only if CAMS function is used)
+    - R5.01.00 to R5.04.20 (affected regardless of CAMS function usage)
+    - R6.01.00 to R6.09.00 (affected regardless of CAMS function usage)
+- **Exaopc**: R3.72.00 to R3.80.00 (affected if NTPF100-S6 "For CENTUM VP Support CAMS for HIS" is installed)
+- **B/M9000CS**: R5.04.01 to R5.05.01
+- **B/M9000 VP**: R6.01.01 to R8.03.01
+
+**Mitigations:**
+- **Upgrade/Migration:** For older systems (CENTUM CS 3000, CENTUM VP R4.01.00-R4.03.00, R5.01.00-R5.04.20), the recommended mitigation is to migrate to the latest version of CENTUM VP.
+- **Patches:** For CENTUM VP (R6.01.00 to R6.09.00), upgrade to R6.09.00 and apply patch R6.09.03. For Exaopc (R3.72.00 to R3.80.00), upgrade to R3.80.00 and apply patch R3.80.01.
+- **B/M9000 Update:** While B/M9000CS and VP are not directly affected, if CENTUM is installed on the same PC, it is necessary to update CENTUM and B/M9000 to the latest version.
+
+The provided information provides more detailed technical information than the CVE description itself, including specific affected versions and detailed mitigation strategies
+````
+
+
+
+
 
 ## Notes
 
@@ -333,6 +526,14 @@ The log file indicates what links failed to download.
 4. Dell advisories content is not retrieved e.g. https://www.dell.com/support/kbdoc/en-us/000198780/dsa-2022-102
 5. secomea content is not retrieved https://secomea.com/cybersecurity-advisory/
 6. Qualcomm content is retrieved as blank e.g. https://www.qualcomm.com/company/product-security/bulletins/november-2022-bulletin 
+
+
+
+
+
+## ToDos
+1. If this is done for all published CVEs, then a directory structure per https://github.com/CVEProject/cvelistV5/tree/main/cves would be more appropriate to avoid having all CVEs in one directory.
+
 
 
 ## Contributing
@@ -362,79 +563,3 @@ The log file indicates what links failed to download.
 
 This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 https://creativecommons.org/licenses/by-sa/4.0/
-
-
-
-## Ideas for Applying LLMs
-
-### Only the Vulnerability-related info 
-It is possible to extract and summarize only the Vulnerability-related info e.g. using an LLM:
-
-**ChatGPT 4o Output**
-
-**Extracted Vulnerability Information for CVE-2021-0955:**
-
-- **CVE ID**: CVE-2021-0955  
-- **Component Affected**: Android Framework  
-- **Type of Vulnerability**: Elevation of Privilege (EoP)  
-- **Severity**: High  
-- **Updated AOSP Versions**: Android 11  
-- **References**:  
-  [AOSP Change](https://android.googlesource.com/platform/packages/providers/MediaProvider/%2B/e81d03db8006fddf6e7c8a8eda1b73743314a214)  
-  Bug ID: A-192085766  
-
-#### **Details:**
-CVE-2021-0955 is an elevation of privilege vulnerability in the Android Framework. The issue allows a local attacker to potentially execute actions with elevated privileges. The attack does not require user interaction or specific privileges.
-
-The vulnerability occurs due to a race condition in the `FuseDaemon` class. It involves the improper management of file handles during the `fuse_reply_write` process, leading to a use-after-free scenario. The issue is addressed by ensuring proper sequence ordering, specifically by recording operations before invoking `fuse_reply_write`.
-
-The fix for this vulnerability is available in the Android Open Source Project (AOSP) and applies to devices running Android 11.
-
-
-### Translation
-
-https://nvd.nist.gov/vuln/detail/cve-2022-30707 contains several reference links, 2 of which are in Japanese:
-- https://web-material3.yokogawa.com/1/32780/files/YSAR-22-0006-E.pdf
-- https://web-material3.yokogawa.com/19/32780/files/YSAR-22-0006-J.pdf
-
-This text can be extracted as with all other reference content, **and then translated to English by an LLM**.
-
-**Japanese**
-```markdown
-脆弱性詳細:
-攻撃者が何らかの方法で同製品がインストールされたコンピューターに侵入できた場合、当該コンピュータ
-ーに格納されているアカウント、パスワードを用いて、別の CAMS for HIS が管理するデータが漏洩／改ざ
-んされる可能性があります。また、同アカウント、パスワードを用いて、別の CAMS for HIS に不要なファ
-イルを作成するリソース枯渇攻撃がおこなわれ、最終的に CAMS for HIS の機能を停止させられる可能性が
-あります。
-
-•セキュリティ設計の原則に反した設計(CWE-657)
-CVE: CVE-2022-30707
-CVSS v3 基本値:6.4
-CVSS:3.0/AV:A/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H
-````
-**English**
-````
-Vulnerability Details:
-If an attacker gains access to a computer with the affected product installed, they could use stored account credentials to:
-
-Leak or manipulate data managed by another CAMS for HIS instance.
-Perform resource depletion attacks by creating unnecessary files in another CAMS for HIS instance, potentially leading to a service outage.
-Vulnerability Source:
-
-Non-compliance with security design principles (CWE-657)
-CVE: CVE-2022-30707
-CVSS v3 Base Score: 6.4
-Metrics: CVSS:3.0/AV:A/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:H
-````
-
-
-
-## ToDos
-1. Add .md to text files.
-1. Extract only the vulnerability-related info from `text` dir (to markdown) e.g.
-   1. can be done with an LLM e.g. prompts/extract_vulnerability_info_gemini_2.0.md
-2. If this is done for all published CVEs, then a directory structure per https://github.com/CVEProject/cvelistV5/tree/main/cves would be more appropriate to avoid having all CVEs in one directory.
-
-
-

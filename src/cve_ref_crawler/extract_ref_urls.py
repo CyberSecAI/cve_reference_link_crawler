@@ -38,6 +38,13 @@ class CVEProcessor:
             return False
         return True
     
+    def process_cve(self, cve_id: str) -> bool:
+        """Process all text files for a CVE and extract vulnerability information"""
+        # Check if already processed
+        if self.is_cve_extracted(cve_id):
+            self.logger.info(f"Skipping {cve_id} - vulnerability info already extracted")
+            return False
+        
     def read_json_content(self) -> Iterator[Dict]:
         """
         Read and parse JSON content from file
@@ -146,92 +153,92 @@ class CVEProcessor:
             return True
         return cve_id in self.target_cves
                 
-def process_file(self) -> None:
-    """Process as before but with better error handling and description storage"""
-    ensure_directory(self.output_dir)
-    
-    self.logger.info(f"Starting to process file: {self.input_file}")
-    
-    processed_count = 0
-    skipped_count = 0
-    error_count = 0
-    found_cves = set()
-    descriptions = {}
-    
-    try:
-        # Process each CVE entry
-        for entry in self.read_json_content():
-            try:
-                cve_data = entry.get('cve')
-                if not cve_data:
-                    continue
-                    
-                cve_id = cve_data.get('id')
-                if not cve_id:
-                    continue
-                
-                if not self.should_process_cve_links(cve_id):
-                    continue
-                
-                self.logger.debug(f"Found CVE ID: {cve_id}")
-                found_cves.add(cve_id)
-                
-                # Store CVE description
-                for desc in cve_data.get('descriptions', []):
-                    if desc.get('lang') == 'en':
-                        descriptions[cve_id] = desc.get('value')
-                        break
-                
-                if not self.should_process_cve(cve_id):
-                    skipped_count += 1
-                    self.logger.debug(f"Skipping {cve_id} (not in target list)")
-                    continue
-                    
-                references = cve_data.get('references', [])
-                if not references:
-                    self.logger.info(f"No references found for {cve_id}")
-                    continue
-                
-                self.logger.info(f"Processing {cve_id}")
-                cve_dir = self.create_output_directories(cve_id)
-                
-                # Save description to CVE directory
-                if cve_id in descriptions:
-                    try:
-                        with open(cve_dir / 'description.txt', 'w', encoding='utf-8') as f:
-                            f.write(descriptions[cve_id])
-                    except Exception as e:
-                        self.logger.error(f"Error saving description for {cve_id}: {e}")
-                
-                urls = self.extract_urls(references)
-                self.save_urls(urls, cve_dir)
-                self.logger.info(f"Successfully processed {cve_id} with {len(urls)} URLs")
-                processed_count += 1
-                
-            except Exception as e:
-                self.logger.error(f"Error processing entry: {e}")
-                error_count += 1
+    def process_file(self) -> None:
+        """Process as before but with better error handling and description storage"""
+        ensure_directory(self.output_dir)
         
-        # Save all descriptions to central file
+        self.logger.info(f"Starting to process file: {self.input_file}")
+        
+        processed_count = 0
+        skipped_count = 0
+        error_count = 0
+        found_cves = set()
+        descriptions = {}
+        
         try:
-            with open(self.output_dir / 'cve_descriptions.json', 'w', encoding='utf-8') as f:
-                json.dump(descriptions, f, indent=2, ensure_ascii=False)
-            self.logger.info(f"Saved {len(descriptions)} descriptions to central file")
+            # Process each CVE entry
+            for entry in self.read_json_content():
+                try:
+                    cve_data = entry.get('cve')
+                    if not cve_data:
+                        continue
+                        
+                    cve_id = cve_data.get('id')
+                    if not cve_id:
+                        continue
+                    
+                    if not self.should_process_cve_links(cve_id):
+                        continue
+                    
+                    self.logger.debug(f"Found CVE ID: {cve_id}")
+                    found_cves.add(cve_id)
+                    
+                    # Store CVE description
+                    for desc in cve_data.get('descriptions', []):
+                        if desc.get('lang') == 'en':
+                            descriptions[cve_id] = desc.get('value')
+                            break
+                    
+                    if not self.should_process_cve(cve_id):
+                        skipped_count += 1
+                        self.logger.debug(f"Skipping {cve_id} (not in target list)")
+                        continue
+                        
+                    references = cve_data.get('references', [])
+                    if not references:
+                        self.logger.info(f"No references found for {cve_id}")
+                        continue
+                    
+                    self.logger.info(f"Processing {cve_id}")
+                    cve_dir = self.create_output_directories(cve_id)
+                    
+                    # Save description to CVE directory
+                    if cve_id in descriptions:
+                        try:
+                            with open(cve_dir / 'description.txt', 'w', encoding='utf-8') as f:
+                                f.write(descriptions[cve_id])
+                        except Exception as e:
+                            self.logger.error(f"Error saving description for {cve_id}: {e}")
+                    
+                    urls = self.extract_urls(references)
+                    self.save_urls(urls, cve_dir)
+                    self.logger.info(f"Successfully processed {cve_id} with {len(urls)} URLs")
+                    processed_count += 1
+                    
+                except Exception as e:
+                    self.logger.error(f"Error processing entry: {e}")
+                    error_count += 1
+            
+            # Save all descriptions to central file
+            try:
+                with open(self.output_dir / 'cve_descriptions.json', 'w', encoding='utf-8') as f:
+                    json.dump(descriptions, f, indent=2, ensure_ascii=False)
+                self.logger.info(f"Saved {len(descriptions)} descriptions to central file")
+            except Exception as e:
+                self.logger.error(f"Error saving descriptions to central file: {e}")
+            
+            # Log statistics about found CVEs
+            self.logger.info(f"Found {len(found_cves)} total CVEs in input file")
+            if self.target_cves:
+                found_targets = found_cves.intersection(self.target_cves)
+                self.logger.info(f"Found {len(found_targets)} target CVEs out of {len(self.target_cves)} targets")
+            
         except Exception as e:
-            self.logger.error(f"Error saving descriptions to central file: {e}")
-        
-        # Log statistics about found CVEs
-        self.logger.info(f"Found {len(found_cves)} total CVEs in input file")
-        if self.target_cves:
-            found_targets = found_cves.intersection(self.target_cves)
-            self.logger.info(f"Found {len(found_targets)} target CVEs out of {len(self.target_cves)} targets")
-        
-    except Exception as e:
-        self.logger.error(f"Error in process_file: {e}", exc_info=True)
-        
-    self.logger.info(
-        f"Processing completed. "
-        f"Processed: {processed_count}, "
-        f"Skipped: {skipped_count}, "
-        f"Errors: {error_count}"
-    )
+            self.logger.error(f"Error in process_file: {e}", exc_info=True)
+            
+        self.logger.info(
+            f"Processing completed. "
+            f"Processed: {processed_count}, "
+            f"Skipped: {skipped_count}, "
+            f"Errors: {error_count}"
+        )
