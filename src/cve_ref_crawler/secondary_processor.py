@@ -1,11 +1,12 @@
-# src/cve_ref_crawler/secondary_processor.py
-
-import re
-from pathlib import Path
-from typing import Set, Optional, List, Dict
-from .get_url_content import ContentCrawler
+import os
+from typing import Optional
+import logging
 from .utils.logging_utils import setup_logging
 from config import LOG_CONFIG
+import re
+from pathlib import Path
+from typing import Set
+from .get_url_content import ContentCrawler
 
 class SecondaryProcessor:
     """Process text files to find and fetch CVE-specific URLs"""
@@ -25,66 +26,42 @@ class SecondaryProcessor:
         )
         self.crawler = ContentCrawler(base_dir)
 
-    def is_url_already_processed(self, cve_id: str, url: str) -> bool:
-        """Check if a URL has already been processed by looking for its content"""
-        # Check both raw and text directories for files containing the URL's domain and hash
-        parsed_url = urlparse(url)
-        domain = parsed_url.netloc
-        url_hash = hashlib.md5(url.encode()).hexdigest()[:8]
-        file_prefix = f"{domain}_{url_hash}"
-        
-        raw_dir = self.output_dir / cve_id / "raw"
-        text_dir = self.output_dir / cve_id / "text"
-        
-        # Check if files exist with this URL's signature
-        for directory in [raw_dir, text_dir]:
-            if directory.exists():
-                for file in directory.iterdir():
-                    if file_prefix in file.name:
-                        self.logger.debug(f"URL {url} already processed (found {file})")
-                        return True
-        return False
-
-
-    def extract_cve_specific_urls(self, text_content: str, cve_id: str) -> Set[str]:
+    def is_secondary_processing_completed(self, cve_id: str) -> bool:
         """
-        Extract URLs specifically related to the CVE
+        Check if secondary processing has been completed for a CVE
         
         Args:
-            text_content: Content to search
-            cve_id: CVE ID to look for
+            cve_id: CVE ID to check
             
         Returns:
-            Set of URLs
+            bool: True if secondary processing is complete
         """
-        urls = set()
+        secondary_links_file = self.base_dir / cve_id / "secondary_links_processed.txt"
+        return secondary_links_file.exists()
+
+    def save_secondary_links(self, cve_id: str, urls: Set[str]) -> None:
+        """
+        Save processed secondary links to file
         
-        # Look for URLs in lines containing the CVE ID
-        for line in text_content.split('\n'):
-            if cve_id in line:
-                # Find URLs in this line
-                found_urls = re.findall(r'https?://[^\s<>"]+|www\.[^\s<>"]+', line)
-                urls.update(found_urls)
-        
-        # Look for URLs in markdown tables containing the CVE ID
-        table_lines = []
-        in_table = False
-        
-        for line in text_content.split('\n'):
-            if '|' in line:
-                if not in_table:
-                    table_lines = [line]
-                    in_table = True
-                else:
-                    table_lines.append(line)
-                    if cve_id in line:
-                        # Found CVE in table, extract URLs from this row
-                        found_urls = re.findall(r'https?://[^\s<>"]+|www\.[^\s<>"]+', line)
-                        urls.update(found_urls)
-            else:
-                in_table = False
-        
-        return urls
+        Args:
+            cve_id: CVE ID being processed
+            urls: Set of secondary URLs found and processed
+        """
+        if not urls:
+            # Even if no URLs found, create the file to mark processing as complete
+            secondary_links_file = self.base_dir / cve_id / "secondary_links_processed.txt"
+            secondary_links_file.touch()
+            self.logger.info(f"No secondary links found for {cve_id}, marked as processed")
+            return
+
+        try:
+            secondary_links_file = self.base_dir / cve_id / "secondary_links_processed.txt"
+            with open(secondary_links_file, 'w', encoding='utf-8') as f:
+                for url in sorted(urls):
+                    f.write(f"{url}\n")
+            self.logger.info(f"Saved {len(urls)} secondary links for {cve_id}")
+        except Exception as e:
+            self.logger.error(f"Error saving secondary links for {cve_id}: {str(e)}")
 
     def process_cve_directory(self, cve_id: str) -> None:
         """
@@ -93,15 +70,19 @@ class SecondaryProcessor:
         Args:
             cve_id: CVE ID to process
         """
+        # Check if already processed
+        if self.is_secondary_processing_completed(cve_id):
+            self.logger.info(f"Skipping {cve_id} - secondary processing already completed")
+            return
+
         cve_dir = self.base_dir / cve_id
         text_dir = cve_dir / "text"
         
         if not text_dir.exists():
             self.logger.warning(f"No text directory found for {cve_id}")
             return
-            
-        # Create secondary directory for additional content
-        secondary_dir = cve_dir / "secondary"
+
+        processed_urls = set()
         
         for text_file in text_dir.glob("*"):
             try:
@@ -115,26 +96,11 @@ class SecondaryProcessor:
                     for url in urls:
                         if not self.crawler.should_ignore_url(url):
                             self.logger.info(f"Processing secondary URL: {url}")
-                            self.crawler.process_url(url, cve_id)
+                            if self.crawler.process_url(url, cve_id):
+                                processed_urls.add(url)
                             
             except Exception as e:
                 self.logger.error(f"Error processing {text_file}: {str(e)}")
 
-def process_directories(base_dir: str, cve_ids: Optional[List[str]] = None) -> None:
-    """
-    Process all or specific CVE directories
-    
-    Args:
-        base_dir: Base directory containing CVE directories
-        cve_ids: Optional list of specific CVE IDs to process
-    """
-    processor = SecondaryProcessor(base_dir)
-    base_path = Path(base_dir)
-    
-    if cve_ids:
-        directories = [d for d in base_path.iterdir() if d.is_dir() and d.name in cve_ids]
-    else:
-        directories = [d for d in base_path.iterdir() if d.is_dir() and d.name.startswith("CVE-")]
-        
-    for cve_dir in directories:
-        processor.process_cve_directory(cve_dir.name)
+        # Save secondary links and mark as processed
+        self.save_secondary_links(cve_id, processed_urls)

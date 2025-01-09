@@ -498,7 +498,50 @@ The provided information provides more detailed technical information than the C
 ````
 
 
+## Robust Processing and State Management
 
+The crawler is designed to be both robust and idempotent - meaning it can be safely interrupted and restarted without duplicating work or losing progress. This is achieved through a file-based state management system:
+
+1. State Tracking:
+   - Processing state is tracked through the presence of specific files in each CVE directory
+   - Each phase checks for completion markers before processing:
+     ```
+     CVE-YYYY-XXXXX/
+     ├── links.txt              # Indicates Phase 1 started
+     ├── secondary_links_processed.txt  # Indicates Phase 2 completed
+     └── refined/
+         └── refined.md         # Indicates Phase 3 completed
+     ```
+
+2. File-Based Completion Markers:
+   - Phase 1 (Primary URLs): Creates `links.txt`
+   - Phase 2 (Secondary URLs): Creates `secondary_links_processed.txt`
+   - Phase 3 (Vulnerability Extraction): Creates `refined/refined.md`
+
+3. Idempotent Operation:
+   - Each phase checks for its completion marker before processing
+   - Already processed CVEs are skipped automatically
+   - Partial progress within a phase is preserved
+   - Running the tool multiple times on the same data is safe
+
+4. Resumable Processing:
+   - If interrupted, the tool can be restarted safely
+   - Processing resumes from the last successful state
+   - No work is duplicated when restarting
+   - Progress tracking is maintained per CVE and per phase
+
+For example, if the tool is interrupted during Phase 2 while processing CVE-2021-4034:
+- Phase 1 completion (presence of `links.txt`) is preserved
+- Upon restart, Phase 1 is skipped
+- Phase 2 resumes with remaining unprocessed secondary URLs
+- Phase 3 will start fresh since `refined/refined.md` doesn't exist
+
+This design ensures:
+- No duplicate processing or content
+- Safe interruption and restart
+- Progress preservation
+- Efficient resource usage
+- Clear processing status visibility
 
 
 ## Notes

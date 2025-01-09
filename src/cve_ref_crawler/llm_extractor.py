@@ -95,17 +95,17 @@ CVE Description: {cve_desc}
 
     def is_cve_extracted(self, cve_id: str) -> bool:
         """
-        Check if vulnerability info has already been extracted
+        Check if vulnerability info has already been extracted by checking for refined.md
         
         Args:
             cve_id: CVE ID to check
             
         Returns:
-            bool: True if refined content exists
+            bool: True if refined.md exists
         """
-        refined_dir = self.output_dir / cve_id / "refined"
-        if refined_dir.exists() and any(refined_dir.iterdir()):
-            self.logger.info(f"Skipping {cve_id} - refined content already exists")
+        refined_file = self.output_dir / cve_id / "refined" / "refined.md"
+        if refined_file.exists():
+            self.logger.info(f"Skipping {cve_id} - refined.md already exists")
             return True
         return False
     

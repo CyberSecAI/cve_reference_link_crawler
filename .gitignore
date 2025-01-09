@@ -6,6 +6,7 @@ logs
 _data_out
 __data_out
 data_out/cve_descriptions.json #BIG file
+data_out/cve_descriptions.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
