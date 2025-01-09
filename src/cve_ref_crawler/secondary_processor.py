@@ -25,6 +25,27 @@ class SecondaryProcessor:
         )
         self.crawler = ContentCrawler(base_dir)
 
+    def is_url_already_processed(self, cve_id: str, url: str) -> bool:
+        """Check if a URL has already been processed by looking for its content"""
+        # Check both raw and text directories for files containing the URL's domain and hash
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc
+        url_hash = hashlib.md5(url.encode()).hexdigest()[:8]
+        file_prefix = f"{domain}_{url_hash}"
+        
+        raw_dir = self.output_dir / cve_id / "raw"
+        text_dir = self.output_dir / cve_id / "text"
+        
+        # Check if files exist with this URL's signature
+        for directory in [raw_dir, text_dir]:
+            if directory.exists():
+                for file in directory.iterdir():
+                    if file_prefix in file.name:
+                        self.logger.debug(f"URL {url} already processed (found {file})")
+                        return True
+        return False
+
+
     def extract_cve_specific_urls(self, text_content: str, cve_id: str) -> Set[str]:
         """
         Extract URLs specifically related to the CVE

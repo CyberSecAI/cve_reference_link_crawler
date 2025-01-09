@@ -25,3 +25,5 @@ pre-commit run check-added-large-files --all-files # manual test
 # count how many CVE subdirectories contain "text" dir
 find data_out -type d -name "CVE-*" -exec test -d "{}/text" \; -print | wc -l
 
+# count how many CVE subdirectories contain refined/refined.md
+find ./data_out -path "./data_out/CVE*/refined/refined.md" -type f | wc -l

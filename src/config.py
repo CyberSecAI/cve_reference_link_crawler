@@ -12,12 +12,16 @@ LOG_DIR = BASE_DIR / "logs"
 # External paths
 EXTERNAL_CWE_TOP25_DIR = BASE_DIR.parent / "cwe_top25"
 
-TARGET_CVES_CSV =  "./data_in/top25-mitre-mapping-analysis-2023-public_10.csv"
-#TARGET_CVES_CSV = EXTERNAL_CWE_TOP25_DIR / "data_in" / "top25-mitre-mapping-analysis-2023-public.csv"
+# Test mode flag
+TEST = False  # Set to False for production mode
 
-# File paths
-NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
-#NVD_JSONL_FILE = "tmp/cve.json"
+# File paths - conditional on TEST flag
+if TEST:
+    TARGET_CVES_CSV = "./data_in/top25-mitre-mapping-analysis-2023-public_10.csv"
+    NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
+else:
+    TARGET_CVES_CSV = EXTERNAL_CWE_TOP25_DIR / "data_in" / "top25-mitre-mapping-analysis-2023-public.csv"
+    NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
 
 DEAD_DOMAINS_CSV = DATA_IN_DIR / "dead_domains.csv"  
 
