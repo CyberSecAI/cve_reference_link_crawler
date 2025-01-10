@@ -23,8 +23,12 @@ def setup_logging(log_dir: Path = Path("logs"),
     log_dir.mkdir(parents=True, exist_ok=True)
     
     # Generate log filename with timestamp
-    timestamp = datetime.now().strftime("%Y%m%d")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_file = log_dir / f"crawler_{timestamp}.log"
+    
+    # Generate timestamp for log filename
+    #timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    #log_file = Path(log_dir) / f"{module_name}_{timestamp}.log"
     
     # Create formatter
     formatter = logging.Formatter(

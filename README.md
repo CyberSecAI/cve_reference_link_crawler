@@ -571,6 +571,97 @@ The log file indicates what links failed to download.
 6. Qualcomm content is retrieved as blank e.g. https://www.qualcomm.com/company/product-security/bulletins/november-2022-bulletin 
 
 
+## Failed Links and Processing Status Tracking
+
+The tool maintains comprehensive tracking of failed link attempts and processing status:
+
+1. Failed Links Tracking:
+   ```
+   data_out/
+   └── failed_urls.csv          # Central record of all failed URLs
+   ```
+
+   The failed_urls.csv contains:
+   - CVE_ID: The associated CVE identifier
+   - URL: The full URL that failed
+   - Status: Current status of the URL
+   - Failure_Reason: Specific error or failure message
+   - Timestamp: When the failure occurred
+
+   Example:
+   ```csv
+   CVE_ID,URL,Status,Failure_Reason,Timestamp
+   CVE-2022-26267,https://github.com/JCCD/Vul/blob/main/Piwigo_12.2.0_InforMation_Disclosure.md,failed,Request failed: 404 Not Found,2025-01-09 10:06:04
+   ```
+
+2. Processing Status:
+   ```
+   data_out/
+   └── status/
+       ├── CVE-2022-26267_status.json
+       └── ...
+   ```
+
+   Each CVE gets a status JSON file tracking:
+   - Completion status of all three phases
+   - Timestamps for each phase
+   - Status of all associated URLs
+   
+   Example status.json:
+   ```json
+   {
+     "cve_id": "CVE-2022-26267",
+     "timestamp": "2025-01-09 11:55:04",
+     "phases": {
+       "primary": {
+         "completed": true,
+         "timestamp": "2025-01-09 10:06:04"
+       },
+       "secondary": {
+         "completed": true,
+         "timestamp": "2025-01-09 11:55:04"
+       },
+       "extraction": {
+         "completed": false,
+         "timestamp": null
+       }
+     },
+     "urls": [
+       {
+         "url": "https://github.com/...",
+         "status": "failed",
+         "reason": "Request failed: 404 Not Found",
+         "timestamp": "2025-01-09 10:06:04"
+       }
+     ]
+   }
+   ```
+
+3. High Level Report
+
+A high-level report can be created from these files
+````
+python ./src/generate_report.py
+
+````
+
+5. Robust Processing:
+   - Failed URLs are not retried in subsequent runs
+   - Processing can be safely interrupted and resumed
+   - Status tracking enables monitoring of large batch jobs
+   - Clear visibility into processing progress and failure points
+
+6. Failure Categories:
+   - Request failures (404, timeouts, SSL errors)
+   - Authentication requirements
+   - File processing errors
+   - Content conversion issues
+
+This tracking system ensures:
+- No unnecessary retries of known-failed URLs
+- Clear audit trail of processing attempts
+- Ability to analyze failure patterns
+- Progress visibility for long-running jobs
 
 
 

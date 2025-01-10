@@ -71,3 +71,28 @@ IGNORED_URLS = [
     "securitytracker.com",
     "exchange.xforce.ibmcloud.com"
 ]
+
+# LLM extraction settings
+LLM_SETTINGS = {
+    "rate_limits": {
+        "min_request_interval": 1.0,    # Minimum time between requests in seconds
+        "requests_window": 60,          # Time window for request counting in seconds
+        "max_requests_per_window": 60,  # Maximum requests per window
+    },
+    "backoff": {
+        "initial": 1.0,                # Initial backoff time in seconds
+        "max": 60.0,                   # Maximum backoff time in seconds
+    },
+    "retries": {
+        "max_attempts": 3,             # Maximum number of retry attempts
+        "timeout": 60,                 # Timeout per request in seconds
+    },
+    "model": {
+        "name": "gemini-2.0-flash-exp",
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 40,
+        "max_output_tokens": 8192,
+        "response_mime_type": "text/plain",
+    }
+}

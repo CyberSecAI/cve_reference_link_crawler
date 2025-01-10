@@ -9,6 +9,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import PyPDF2
 import io
+import pandas as pd
 from typing import Optional, Dict, Tuple
 from markitdown import MarkItDown
 from markitdown._markitdown import FileConversionException
@@ -18,12 +19,11 @@ from .utils.logging_utils import setup_logging
 from .handlers.googlesource import is_googlesource_url, handle_googlesource_url, parse_googlesource_response
 from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS, DEAD_DOMAINS_CSV
 from .utils.domain_stats import DomainStatsCollector  
-
+from .tracking import ProcessingTracker, URLStatus 
 import urllib.robotparser
 from urllib.parse import urlparse
 from functools import lru_cache
 import time
-
 
 class RobotsParser:
     def __init__(self, user_agent):
@@ -122,6 +122,9 @@ class ContentCrawler:
         self.session = requests.Session()
         self.session.headers.update(CRAWLER_SETTINGS["headers"])
                
+        # Initialize tracking
+        self.tracker = ProcessingTracker(self.output_dir)
+        
         # Initialize robots parser with our user agent
         self.robots = RobotsParser(
             CRAWLER_SETTINGS["headers"]["User-Agent"]
@@ -404,7 +407,10 @@ class ContentCrawler:
         """Process a single URL: fetch, save raw content, and convert"""
         self.logger.info(f"Started processing URL: {url} for {cve_id}")
         
-        success = False  # Initialize success flag at the start
+        # Check if URL should be skipped
+        if self.tracker.should_skip_url(url, cve_id):
+            self.logger.info(f"Skipping previously failed URL: {url}")
+            return False
         
         try:
             # Skip if URL should be ignored
@@ -417,7 +423,7 @@ class ContentCrawler:
             self.logger.debug(f"Fetching content from URL: {url}")
             result = self._fetch_url(url)
             if not result:
-                self.logger.error(f"Failed to fetch content from {url}")
+                self.tracker.add_failed_url(url, cve_id, "Failed to fetch content")
                 self.domain_stats.add_url(url, success=False)
                 return False
 
@@ -452,19 +458,36 @@ class ContentCrawler:
             self.domain_stats.add_url(url, success=success)
             
             if success:
-                self.logger.info(f"Successfully processed {url} using {conversion_method}")
+                self.logger.info(f"Successfully processed {url}")
             else:
+                self.tracker.add_failed_url(url, cve_id, "Failed to save converted content")
                 self.logger.error(f"Failed to save converted content from {url}")
             
             return success
             
+        except requests.exceptions.RequestException as e:
+            error_msg = f"Request failed: {str(e)}"
+            self.logger.error(f"Request error for URL {url}: {error_msg}")
+            self.domain_stats.add_url(url, success=False)
+            self.tracker.add_failed_url(url, cve_id, error_msg)
+            return False
         except TimeoutError:
+            error_msg = "Request timed out"
             self.logger.error(f"Timeout processing URL {url}")
             self.domain_stats.add_url(url, success=False)
+            self.tracker.add_failed_url(url, cve_id, error_msg)
+            return False
+        except FileNotFoundError as e:
+            error_msg = f"File operation failed: {str(e)}"
+            self.logger.error(f"File error for URL {url}: {error_msg}")
+            self.domain_stats.add_url(url, success=False)
+            self.tracker.add_failed_url(url, cve_id, error_msg)
             return False
         except Exception as e:
-            self.logger.error(f"Error processing URL {url}: {e}", exc_info=True)
+            error_msg = f"Unexpected error: {str(e)}"
+            self.logger.error(f"Error processing URL {url}: {error_msg}", exc_info=True)
             self.domain_stats.add_url(url, success=False)
+            self.tracker.add_failed_url(url, cve_id, error_msg)
             return False
 
     def process_cve_urls(self, cve_id: str) -> None:
@@ -508,8 +531,17 @@ class ContentCrawler:
     def finish_processing(self):
         """Called after all processing is complete to generate final reports"""
         try:
+            # Generate domain statistics report
             self.logger.info("Generating domain statistics report")
             self.domain_stats.generate_report()
             self.logger.info("Domain statistics report generated successfully")
+            
+            # Update status for all processed CVEs
+            for cve_dir in self.output_dir.iterdir():
+                if cve_dir.is_dir() and cve_dir.name.startswith("CVE-"):
+                    self.tracker.update_cve_status(cve_dir.name)
+                    
         except Exception as e:
-            self.logger.error(f"Error generating domain statistics report: {e}", exc_info=True)
+            self.logger.error(f"Error in finish_processing: {e}", exc_info=True)
+            
+

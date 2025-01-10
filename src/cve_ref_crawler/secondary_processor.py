@@ -89,9 +89,10 @@ class SecondaryProcessor:
                 with open(text_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                 
-                urls = self.extract_cve_specific_urls(content, cve_id)
+                urls = self.crawler.find_cve_specific_urls(text_file, cve_id)
                 if urls:
                     self.logger.info(f"Found {len(urls)} CVE-specific URLs in {text_file}")
+                    
                     
                     for url in urls:
                         if not self.crawler.should_ignore_url(url):

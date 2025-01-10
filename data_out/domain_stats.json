@@ -1,73 +1,10 @@
 {
-  "github.com": {
-    "total_urls": 182,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 182
-  },
-  "arubanetworks.com": {
-    "total_urls": 40,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 40
-  },
-  "docs.github.com": {
-    "total_urls": 29,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 29
-  },
-  "gov.il": {
-    "total_urls": 19,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 19
-  },
-  "vuldb.com": {
-    "total_urls": 18,
-    "successful": 6,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 12
-  },
   "psirt.global.sonicwall.com": {
     "total_urls": 17,
     "successful": 0,
     "ignored": 0,
     "dead": 0,
     "failed": 17
-  },
-  "support.hcltechsw.com": {
-    "total_urls": 15,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 15
-  },
-  "brief-nymphea-813.notion.site": {
-    "total_urls": 14,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 14
-  },
-  "krcert.or.kr": {
-    "total_urls": 13,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 13
-  },
-  "search.abb.com": {
-    "total_urls": 12,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 12
   },
   "exchange.xforce.ibmcloud.com": {
     "total_urls": 12,
@@ -76,19 +13,12 @@
     "dead": 0,
     "failed": 0
   },
-  "download.schneider-electric.com": {
-    "total_urls": 12,
+  "brief-nymphea-813.notion.site": {
+    "total_urls": 5,
     "successful": 0,
     "ignored": 0,
     "dead": 0,
-    "failed": 12
-  },
-  "fidelissecurity.zendesk.com": {
-    "total_urls": 6,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 6
+    "failed": 5
   },
   "befitting-vinca-933.notion.site": {
     "total_urls": 5,
@@ -97,84 +27,7 @@
     "dead": 0,
     "failed": 5
   },
-  "archerirm.community": {
-    "total_urls": 4,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 4
-  },
-  "vmware.com": {
-    "total_urls": 3,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 3
-  },
-  "solidigm.com": {
-    "total_urls": 3,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 3
-  },
-  "gist.github.com": {
-    "total_urls": 3,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 3
-  },
-  "talosintelligence.com": {
-    "total_urls": 2,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 2
-  },
-  "puppet.com": {
-    "total_urls": 2,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 2
-  },
-  "mesec.cn": {
-    "total_urls": 2,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 2
-  },
-  "forum.xpdfreader.com": {
-    "total_urls": 2,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 2
-  },
   "cycura.com": {
-    "total_urls": 2,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 2
-  },
-  "community.safe.com": {
-    "total_urls": 2,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 2
-  },
-  "blog.csdn.net": {
-    "total_urls": 2,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 2
-  },
-  "barco.com": {
     "total_urls": 2,
     "successful": 0,
     "ignored": 0,
@@ -188,126 +41,7 @@
     "dead": 0,
     "failed": 1
   },
-  "support.pentaho.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "support.citrix.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
   "shimo.im": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "service.mcafee.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "se.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "sambabox.io": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "psirt.bosch.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "prosupport.logi.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "pcvuesolutions.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "mads.uniud.it": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "kb.isc.org": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "jianshu.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "hitachi-kokusai.co.jp": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "helpx.adobe.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "help.realvnc.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "hackerone.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "fordefence.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "elvexys.com": {
     "total_urls": 1,
     "successful": 0,
     "ignored": 0,
@@ -328,60 +62,11 @@
     "dead": 0,
     "failed": 1
   },
-  "donghuangt1.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "docs.cpanel.net": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "devolutions.net": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "dell.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "boho.or.kr": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
-  "bentley.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
-  },
   "aternity.force.com": {
     "total_urls": 1,
     "successful": 0,
-    "ignored": 0,
+    "ignored": 1,
     "dead": 0,
-    "failed": 1
-  },
-  "asus.com": {
-    "total_urls": 1,
-    "successful": 0,
-    "ignored": 0,
-    "dead": 0,
-    "failed": 1
+    "failed": 0
   }
 }
