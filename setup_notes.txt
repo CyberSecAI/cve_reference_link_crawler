@@ -27,3 +27,6 @@ find data_out -type d -name "CVE-*" -exec test -d "{}/text" \; -print | wc -l
 
 # count how many CVE subdirectories contain refined/refined.md
 find ./data_out -path "./data_out/CVE*/refined/refined.md" -type f | wc -l
+
+# list big files
+find ./data_out -type f -size +10M

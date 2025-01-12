@@ -17,6 +17,7 @@ from tqdm import tqdm
 from .utils.file_utils import ensure_directory
 from .utils.logging_utils import setup_logging
 from .handlers.googlesource import is_googlesource_url, handle_googlesource_url, parse_googlesource_response
+from .handlers.cisa import is_cisa_url, handle_cisa_url, parse_cisa_response
 from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS, DEAD_DOMAINS_CSV
 from .utils.domain_stats import DomainStatsCollector  
 from .tracking import ProcessingTracker, URLStatus 
@@ -351,6 +352,13 @@ class ContentCrawler:
             self.logger.debug(f"Starting URL fetch: {url}")
             
             # Handle special cases
+    
+    def _fetch_url(self, url: str) -> Optional[Dict]:
+        """Fetch content from URL"""
+        try:
+            self.logger.debug(f"Starting URL fetch: {url}")
+            
+            # Handle special cases
             if is_googlesource_url(url):
                 self.logger.debug("Processing as googlesource URL")
                 modified_url = handle_googlesource_url(url)
@@ -366,6 +374,33 @@ class ContentCrawler:
                 if content:
                     return {'content': content, 'type': 'text'}
                 return None
+                
+            elif is_cisa_url(url):
+                self.logger.debug("Processing as CISA URL")
+                modified_url = handle_cisa_url(url)
+                
+                if modified_url != url:
+                    self.logger.info(f"Redirecting to new CISA URL format: {modified_url}")
+                
+                response = self.session.get(modified_url, timeout=CRAWLER_SETTINGS["timeout"])
+                self.logger.debug(f"Got response from {modified_url}")
+                response.raise_for_status()
+                
+                content = parse_cisa_response(response.text)
+                if content:
+                    return {'content': content, 'type': 'text'}
+                return None
+
+            elif is_youtube_url(url):
+                self.logger.debug("Processing as YouTube URL")
+                content = handle_youtube_url(url)
+                
+                if content:
+                    self.logger.info(f"Successfully extracted transcript from YouTube video: {url}")
+                    return {'content': content, 'type': 'text'}
+                else:
+                    self.logger.warning(f"No transcript available for YouTube video: {url}")
+                    return None
             
             # Normal URL handling
             self.logger.debug(f"Sending GET request to {url}")
@@ -385,6 +420,7 @@ class ContentCrawler:
         except Exception as e:
             self.logger.error(f"Unexpected error fetching URL {url}: {str(e)}", exc_info=True)
             return None
+            
 
     def _save_converted_content(self, content: str, url: str, cve_id: str) -> Optional[Path]:
         """Save the converted text content"""

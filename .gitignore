@@ -7,6 +7,40 @@ _data_out
 __data_out
 data_out/cve_descriptions.json #BIG file
 data_out/cve_descriptions.json
+./data_out/cve_descriptions.json
+./data_out/CVE-2022-45544/text/www.schlix.com_2835c3c5_20250111_020105.html
+./data_out/CVE-2022-45544/raw/www.schlix.com_2835c3c5_20250111_020104.html
+./data_out/CVE-2023-39520/text/github.com_9c2a2837_20250111_021946.html
+./data_out/CVE-2023-39520/raw/github.com_9c2a2837_20250111_021934.html
+./data_out/CVE-2023-46116/text/user-images.githubusercontent.com_d16674e8_20250111_061926.html
+./data_out/CVE-2023-46116/raw/user-images.githubusercontent.com_d16674e8_20250111_061925.html
+./data_out/CVE-2023-38290/raw/media.defcon.org_2c81c5d2_20250111_002753.pdf
+./data_out/CVE-2023-38291/raw/media.defcon.org_2c81c5d2_20250111_030654.pdf
+./data_out/CVE-2023-38292/raw/media.defcon.org_2c81c5d2_20250111_153612.pdf
+./data_out/CVE-2023-38293/raw/media.defcon.org_2c81c5d2_20250111_114445.pdf
+./data_out/CVE-2023-38294/raw/media.defcon.org_2c81c5d2_20250111_134003.pdf
+./data_out/CVE-2023-38295/raw/media.defcon.org_2c81c5d2_20250110_121949.pdf
+./data_out/CVE-2023-38296/raw/media.defcon.org_2c81c5d2_20250110_144604.pdf
+./data_out/CVE-2023-38297/raw/media.defcon.org_2c81c5d2_20250110_155330.pdf
+./data_out/CVE-2023-38298/raw/media.defcon.org_2c81c5d2_20250110_111911.pdf
+./data_out/CVE-2023-38299/raw/media.defcon.org_2c81c5d2_20250111_185458.pdf
+./data_out/CVE-2023-38300/raw/media.defcon.org_2c81c5d2_20250111_200408.pdf
+./data_out/CVE-2023-38301/raw/media.defcon.org_2c81c5d2_20250111_050033.pdf
+./data_out/CVE-2023-38302/raw/media.defcon.org_2c81c5d2_20250111_180201.pdf
+./data_out/CVE-2024-22774/text/pancorp.com_1726c2ab_20250111_134335.html
+./data_out/CVE-2024-22774/raw/pancorp.com_1726c2ab_20250111_134331.html
+./data_out/CVE-2024-25742/text/cdn.kernel.org_1d1d0f12_20250110_173810.html
+./data_out/CVE-2024-25742/refined/combined.md
+./data_out/CVE-2024-25742/raw/cdn.kernel.org_1d1d0f12_20250110_173743.html
+./data_out/CVE-2024-4395/text/github.com_dc74805f_20250110_140822.html
+./data_out/CVE-2024-4395/refined/combined.md
+./data_out/CVE-2024-4395/raw/github.com_dc74805f_20250110_140810.html
+./data_out/CVE-2023-52340/text/cdn.kernel.org_582f898f_20250111_044318.html
+./data_out/CVE-2023-52340/raw/cdn.kernel.org_582f898f_20250111_044251.html
+./data_out/CVE-2024-40412/text/static.tenda.com.cn_b3683e89_20250110_155219.html
+./data_out/CVE-2024-40412/refined/combined.md
+./data_out/CVE-2024-40412/raw/static.tenda.com.cn_b3683e89_20250110_155216.html
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

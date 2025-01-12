@@ -14,15 +14,16 @@ EXTERNAL_CWE_TOP25_DIR = BASE_DIR.parent / "cwe_top25"
 
 # Test mode flag
 TEST = False  # Set to False for production mode
-
+CISA = True
 # File paths - conditional on TEST flag
 if TEST:
     TARGET_CVES_CSV = "./data_in/top25-mitre-mapping-analysis-2023-public_10.csv"
-    NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
+elif CISA:
+    TARGET_CVES_CSV = "./data_in/vulnrichment_all_cve_descriptions.csv"
 else:
     TARGET_CVES_CSV = EXTERNAL_CWE_TOP25_DIR / "data_in" / "top25-mitre-mapping-analysis-2023-public.csv"
-    NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
 
+NVD_JSONL_FILE = DATA_IN_DIR / "nvd.jsonl"
 DEAD_DOMAINS_CSV = DATA_IN_DIR / "dead_domains.csv"  
 
 # Logging configuration
@@ -60,6 +61,8 @@ CRAWLER_SETTINGS = {
 
 
 # URLs to ignore (will not be crawled)
+# vuldb requires an API key - so ignored here
+# https://hackerone.com/ requires account and human verification
 IGNORED_URLS = [
     "www.cve.org",
     "cve.org",
@@ -69,7 +72,9 @@ IGNORED_URLS = [
     "nist.gov",    
     "www.securitytracker.com",
     "securitytracker.com",
-    "exchange.xforce.ibmcloud.com"
+    "exchange.xforce.ibmcloud.com",
+    "vuldb.com",
+    "hackerone.com"
 ]
 
 # LLM extraction settings
