@@ -5,13 +5,17 @@ logs
 #data_out
 _data_out
 __data_out
-data_out/cve_descriptions.json #BIG file
-data_out/cve_descriptions.json
+data_out/cve_descriptions.json 
+
+#BIG files via: find ./data_out -type f -size +10M
 ./data_out/cve_descriptions.json
 ./data_out/CVE-2022-45544/text/www.schlix.com_2835c3c5_20250111_020105.html
+./data_out/CVE-2022-45544/refined/combined.md
 ./data_out/CVE-2022-45544/raw/www.schlix.com_2835c3c5_20250111_020104.html
 ./data_out/CVE-2023-39520/text/github.com_9c2a2837_20250111_021946.html
+./data_out/CVE-2023-39520/refined/combined.md
 ./data_out/CVE-2023-39520/raw/github.com_9c2a2837_20250111_021934.html
+./data_out/CVE-2023-44487/refined/combined.md
 ./data_out/CVE-2023-46116/text/user-images.githubusercontent.com_d16674e8_20250111_061926.html
 ./data_out/CVE-2023-46116/raw/user-images.githubusercontent.com_d16674e8_20250111_061925.html
 ./data_out/CVE-2023-38290/raw/media.defcon.org_2c81c5d2_20250111_002753.pdf
