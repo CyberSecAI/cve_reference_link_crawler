@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>JVN#22546110: LINE@ vulnerable to script injection</title>
+	<meta name="Keywords" content="Japan Vulnerability Notes" />
+	<meta name="Description" content="Japan Vulnerability Notes" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link href="/common/css/master.css" rel="stylesheet" type="text/css" media="screen,print" />
+	<link href="/common/css/font.css" rel="stylesheet" type="text/css" media="screen,print" />
+	<link href="/common/css/print.css" rel="stylesheet" type="text/css" media="print" />
+	<link href="/common/css/rightmenu.css" rel="stylesheet" type="text/css" media="screen,print" />
+	<script src="/common/js/swapImg.js" type="text/javascript"></script>
+    <style type="text/css">
+        .margin_list ul {
+            padding-left:16px;
+            margin-left:16px;
+        }
+        td.cvss_v2_selected {
+            width: 200px;
+            text-align: center;
+            color: #000000;
+            background-color: #fffec1;
+            font-weight: bold;
+        }
+        td.cvss_v2_unselected {
+            width: 200px;
+            text-align: center;
+            color: #727274;
+            background-color: #d5d4ea;
+        }
+    </style>
+</head>
+<body>
+<a name="top" id="top"></a>
+<div id="wrapper">
+  <!-- header begin -->
+  <div id="header">
+    <div class="logo"><img src="/common/img/note_logo.gif" border="0" alt="Japan Vulnerability Notes" width="370" height="45" /></div>
+  </div>
+  <!-- header begin -->
+
+  <!-- mainarea begin -->
+  <div id="mainarea">
+    <!-- leftarea begin -->
+    <div id="leftarea">
+      <div id="head-bar2">
+        <div id="head-bar-txt"><span class="margin-lb">Published:2015/07/10&nbsp;&nbsp;Last Updated:2015/07/10</span></div>
+      </div>
+      <h1 class="h1ver2">
+        JVN#22546110<br />
+        LINE@ vulnerable to script injection<br />
+              </h1>
+      <!-- textbox begin -->
+      <div class="textbox margin_list">
+        <h2>Overview</h2>
+        <p>LINE@ contains a vulnerability where any API can be invoked by a MITM (man-in-the-middle) attacker.</p>
+      </div>
+      <!-- textbox end -->
+
+
+      <!-- textbox begin -->
+      <div class="textbox margin_list">
+        <h2>Products Affected</h2>
+        <p><ul>
+	<li>LINE@ for Android version 1.0.0</li>
+	<li>LINE@ for iOS version 1.0.0</li>
+</ul></p>
+      </div>
+      <!-- textbox end -->
+
+      <!-- textbox begin -->
+      <div class="textbox margin_list">
+        <h2>Description</h2>
+        <p>LINE@ provided by LINE Corporation is an application used to communicate with others. LINE@ is vulnerable to MITM (man-in-the-middle) attacks since the application allows non-SSL/TLS communications. As a result, any API may be invoked from a script injected by a MITM (man-in-the-middle) attacker.</p>
+      </div>
+      <!-- textbox end -->
+
+      <!-- textbox begin -->
+      <div class="textbox margin_list">
+        <h2>Impact</h2>
+        <p>A script may be injected by a MITM (man-in-the-middle) attacker. As a result, any API can be invoked through the injected script.</p>
+      </div>
+      <!-- textbox end -->
+
+      <!-- textbox begin -->
+      <div class="textbox margin_list">
+        <h2>Solution</h2>
+        <p><strong>Update the software</strong><br />
+Update to the latest version according to the information provided by the developer.<br />
+<br />
+According to the developer, this vulnerability was addressed on the server side. However, the developer recommends updating the application for security purposes.</p>
+      </div>
+      <!-- textbox end -->
+
+
+            <!-- textbox begin -->
+      <div class="textbox">
+        <!-- table begin -->
+        <h2>Vendor Status</h2>
+                <!-- table end -->
+
+        <!-- Vendor status written in English starts from here
+        Vendor status written in English is end -->
+
+        <!-- table begin -->
+        <div class="margin-tbd">
+
+                    <div class="ie5">
+            <table class="style_table" border="0" cellspacing="1">
+              <tbody>
+                <tr>
+                  <td class="style_td">
+                    Vendor
+                  </td>
+                  <td class="style_td">
+                    Link
+                  </td>
+                </tr>
+                                <tr>
+                  <td class="style_td">
+                    LINE Corporation                  </td>
+                  <td class="style_td">
+                                        <a href="http://official-blog.line.me/ja/archives/36495925.html" target="_top">&lt;Security Notice&gt; Fixed Vulnerability in LINE related apps</a>
+                                      </td>
+                </tr>
+                              </tbody>
+            </table>
+          </div>
+          
+        </div>
+        <!-- table end -->
+      </div>
+      <!-- textbox end -->
+      
+      <!-- textbox begin -->
+      <div class="textbox">
+        <h2>References</h2>
+        <p>
+          <ol class='list1' style='padding-left:16px;margin-left:16px'>
+                      </ol>
+          <p class='empty'></p>
+        </p>
+      </div>
+      <!-- textbox end -->
+
+      <!-- textbox begin -->
+      <div class="textbox">
+        <h2>JPCERT/CC Addendum</h2>
+        <p></p>
+      </div>
+      <!-- textbox end -->
+
+      <!-- textbox begin -->
+      <div class="textbox">
+        <h2>Vulnerability Analysis by JPCERT/CC</h2>
+                            <p>
+            <strong>
+              Analyzed on 2015.07.10 (CVSS Base Metrics)
+                          </strong>
+          </p>
+          <p><a href="/en/nav/jvnhelp.html#cvssv2">What is CVSS?</a></p>
+
+        <!-- table begin -->
+        <div class="tbl-result margin-bd">
+          <table border="0" cellspacing="1" cellpadding="0" width="100%">
+
+            <colgroup></colgroup>
+            <colgroup class="gray"></colgroup>
+            <colgroup class="gray"></colgroup>
+            <colgroup class="gray"></colgroup>
+            <colgroup class="gray"></colgroup>
+
+            <tr>
+              <th>Measures</th>
+              <th colspan="3">Severity</th>
+              <th>Description</th>
+            </tr>
+                                      <tr>
+                <th style="white-space: nowrap">Access Vector(AV)</th>
+                                                  <td class="cvss_v2_unselected">
+                    Local (L)                  </td>
+                                  <td class="cvss_v2_unselected">
+                    Adjacent Network (A)                  </td>
+                                  <td class="cvss_v2_selected">
+                    Network (N)                  </td>
+                                <td>
+                  A vulnerability exploitable with network access means the vulnerable software is bound to the network stack and the attacker does not require local network access or local access. Such a vulnerability is often termed "remotely exploitable".                </td>
+              </tr>
+                          <tr>
+                <th style="white-space: nowrap">Access Complexity(AC)</th>
+                                                  <td class="cvss_v2_selected">
+                    High (H)                  </td>
+                                  <td class="cvss_v2_unselected">
+                    Medium (M)                  </td>
+                                  <td class="cvss_v2_unselected">
+                    Low (L)                  </td>
+                                <td>
+                  Specialized access conditions exist.                </td>
+              </tr>
+                          <tr>
+                <th style="white-space: nowrap">Authentication(Au)</th>
+                                                  <td class="cvss_v2_unselected">
+                    Multiple (M)                  </td>
+                                  <td class="cvss_v2_unselected">
+                    Single (S)                  </td>
+                                  <td class="cvss_v2_selected">
+                    None (N)                  </td>
+                                <td>
+                  Authentication is not required to exploit the vulnerability.                </td>
+              </tr>
+                          <tr>
+                <th style="white-space: nowrap">Confidentiality Impact(C)</th>
+                                                  <td class="cvss_v2_unselected">
+                    None (N)                  </td>
+                                  <td class="cvss_v2_selected">
+                    Partial (P)                  </td>
+                                  <td class="cvss_v2_unselected">
+                    Complete (C)                  </td>
+                                <td>
+                  There is considerable informational disclosure. Access to some system files is possible, but the attacker does not have control over what is obtained, or the scope of the loss is constrained.                </td>
+              </tr>
+                          <tr>
+                <th style="white-space: nowrap">Integrity Impact(I)</th>
+                                                  <td class="cvss_v2_unselected">
+                    None (N)                  </td>
+                                  <td class="cvss_v2_selected">
+                    Partial (P)                  </td>
+                                  <td class="cvss_v2_unselected">
+                    Complete (C)                  </td>
+                                <td>
+                  Modification of some system files or information is possible, but the attacker does not have control over what can be modified, or the scope of what the attacker can affect is limited.                </td>
+              </tr>
+                          <tr>
+                <th style="white-space: nowrap">Availability Impact(A)</th>
+                                                  <td class="cvss_v2_unselected">
+                    None (N)                  </td>
+                                  <td class="cvss_v2_selected">
+                    Partial (P)                  </td>
+                                  <td class="cvss_v2_unselected">
+                    Complete (C)                  </td>
+                                <td>
+                  There is reduced performance or interruptions in resource availability.                </td>
+              </tr>
+                      </table>
+        </div><!-- table end -->
+        <p style="font-weight: bold">Base Score:5.1</p>
+
+        
+          
+        <!-- table end -->
+                <p></p>
+      </div>
+      <!-- textbox end -->
+
+      <!-- textbox begin -->
+      <div class="textbox">
+        <h2>Credit</h2>
+        <p>Kenta Suefusa, Nobuaki Nakazawa, Tomonori Shiomi of Sprout Inc. reported this vulnerability to IPA.<br />
+JPCERT/CC coordinated with the developer under Information Security Early Warning Partnership.</p>
+      </div>
+      <!-- textbox end -->
+
+      <!-- textbox begin -->
+      <div class="textbox">
+        <h2>Other Information</h2>
+        <p>
+          <div class='ie5'>
+            <table class='style_table' cellspacing='1' border='0'>
+                            <tr>
+                <td class='style_td'>
+                  JPCERT Alert                </td>
+                <td class='style_td'>
+                                    <a href="" target="_top"></a><br />                                  </td>
+              </tr>
+                            <tr>
+                <td class='style_td'>
+                  JPCERT Reports                </td>
+                <td class='style_td'>
+                                    <a href="" target="_top"></a><br />                                  </td>
+              </tr>
+                            <tr>
+                <td class='style_td'>
+                  CERT Advisory                </td>
+                <td class='style_td'>
+                                    <a href="" target="_top"></a><br />                                  </td>
+              </tr>
+                            <tr>
+                <td class='style_td'>
+                  CPNI Advisory                </td>
+                <td class='style_td'>
+                                    <a href="" target="_top"></a><br />                                  </td>
+              </tr>
+                            <tr>
+                <td class='style_td'>
+                  TRnotes                </td>
+                <td class='style_td'>
+                                    <a href="" target="_top"></a><br />                                  </td>
+              </tr>
+                            <tr>
+                <td class='style_td'>
+                  CVE                </td>
+                <td class='style_td'>
+                                    <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-2968" target="_top">CVE-2015-2968</a><br />                                  </td>
+              </tr>
+                            <tr>
+                <td class='style_td'>
+                  JVN iPedia                </td>
+                <td class='style_td'>
+                                    <a href="http://jvndb.jvn.jp/jvndb/JVNDB-2015-000095" target="_top">JVNDB-2015-000095</a><br />                                  </td>
+              </tr>
+                          </table>
+          </div>
+          <p class='empty'></p>
+        </p>
+      </div>
+      <!-- textbox end -->
+
+      
+    </div>
+    <!-- leftarea end -->
+
+    <!-- rightarea begin -->
+		<div id="rightarea">
+			<div id="ajaxmenu">
+				<ul>
+					<li class="jvnhead">JVN</li>
+					<li class="link"><a href="http://jvn.jp/en/index.html" />HOME</a></li>
+					<li><a href="http://jvn.jp/en/nav/jvn.html" />What is JVN ?</a></li>
+					<li><a href="http://jvn.jp/en/nav/jvnhelp.html" />Instructions</a></li>
+					<li><a href="http://jvn.jp/en/report/index.html" />List of Vulnerability Report</a></li>
+					<li class="draft"><a href="http://jvn.jp/en/jp/index.html">VN_JP</a></li>
+					<li class="draft"><a href="http://jvn.jp/en/adj/index.html">VN_JP(Unreachable)</a></li>
+					<li class="draft"><a href="http://jvn.jp/en/vu/index.html">VN_VU</a></li>
+					<li class="draft"><a href="http://jvn.jp/en/ta/index.html">TA</a></li>
+					<li><a href="http://jvn.jp/en/tr/index.html" />TRnotes</a></li>
+					<li><a href="http://jvndb.jvn.jp/en/" />JVN iPedia</a></li>
+            <li><a href="http://jvndb.jvn.jp/en/apis/myjvn/index.html" />MyJVN</a></li>
+					<li><a href="http://jvn.jp/en/rss/index.html" />JVNJS/RSS</a></li>
+					<li><a href="http://jvn.jp/en/nav/index.html" />Vendor List</a></li>
+					<li><a href="http://jvn.jp/en/reply/index.html" />List of unreachable developers</a></li>
+					<li><a href="http://jvn.jp/en/contact/index.html" />Contact</a></li>
+				</ul>
+			</div>
+		</div>
+    <!-- rightarea end -->
+  </div>
+	<!-- mainarea end -->
+
+	<!-- footer begin -->
+	<div id="footer">
+		<div class="footertext">Copyright (c) 2000-2015 JPCERT/CC and IPA. All rights reserved.</div>
+	</div>
+	<!-- footer begin -->
+</div>
+</body>
+</html>
+

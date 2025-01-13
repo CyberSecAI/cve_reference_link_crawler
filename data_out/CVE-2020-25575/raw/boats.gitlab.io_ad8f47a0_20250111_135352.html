@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>From failure to Fehler</title>
+  <meta property="og:title" content="From failure to Fehler" />
+  <meta name="twitter:title" content="From failure to Fehler" />
+  <meta name="description" content="About two and a half years ago I wrote a Rust library called failure, which quickly became one of the most popular error handling libraries in Rust. This week, its current maintainer decided to deprecate it, a decision I strongly support. This week, I also released a new and very different error-handling library, called fehler. I wanted to discuss these two libraries briefly.
+A brief history of failure When I released failure, the most popular error handling library by far was error-chain.">
+  <meta property="og:description" content="About two and a half years ago I wrote a Rust library called failure, which quickly became one of the most popular error handling libraries in Rust. This week, its current maintainer decided to deprecate it, a decision I strongly support. This week, I also released a new and very different error-handling library, called fehler. I wanted to discuss these two libraries briefly.
+A brief history of failure When I released failure, the most popular error handling library by far was error-chain.">
+  <meta name="twitter:description" content="About two and a half years ago I wrote a Rust library called failure, which quickly became one of the most popular error handling libraries in Rust. This week, its current maintainer decided to …">
+  <meta name="author" content="boats"/>
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@withoutboats" />
+  <meta name="twitter:creator" content="@withoutboats" />
+  <meta property="og:url" content="https://boats.gitlab.io/blog/post/failure-to-fehler/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="withoutblogs" />
+
+  <meta name="generator" content="Hugo 0.26" />
+  <link rel="canonical" href="https://boats.gitlab.io/blog/post/failure-to-fehler/" />
+  <link rel="alternate" href="https://boats.gitlab.io/blog/index.xml" type="application/rss+xml" title="withoutblogs">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://boats.gitlab.io/blog/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://boats.gitlab.io/blog/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="https://boats.gitlab.io/blog/css/highlight.min.css" />
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://boats.gitlab.io/blog/">withoutblogs</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Blog" href="/blog/">Blog</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About" href="/blog/page/about/">About</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="Tags" href="/blog/tags">Tags</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>From failure to Fehler</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on April 6, 2020
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        
+
+<p>About two and a half years ago I wrote a Rust library called <a href="https://crates.io/crates/failure"><code>failure</code></a>, which quickly became one of
+the most popular error handling libraries in Rust. This week, its current maintainer decided to
+deprecate it, a decision I strongly support. This week, I also released a new and very different
+error-handling library, called <a href="https://crates.io/crates/fehler"><code>fehler</code></a>. I wanted to discuss these two libraries briefly.</p>
+
+<h1 id="a-brief-history-of-failure">A brief history of failure</h1>
+
+<p>When I released failure, the most popular error handling library by far was <a href="https://crates.io/crates/error-chain"><code>error-chain</code></a>.
+The only other major error handling library at the time really was a library called
+<a href="https://crates.io/crates/quick-error"><code>quick-error</code></a>. Both of these libraries had the same basic API: using a macro_rules
+macro, the user could enumerate all of the different kinds of errors that occur in their program to
+create a big error enum.</p>
+
+<p>For me, the syntax of error-chain was quite confusing, and I found it verbose and overly complex for
+the kinds of code I was writing. My experience was that at the application level, most users are not
+using errors in a way in which they frequently need to match on them and handle each case
+differently. Instead, my experience was that most applications followed a common pattern:</p>
+
+<ul>
+<li>Fallible code is very common, but errors are not (that is, the code that returns <code>Result</code> may be
+in your hot path, but the <code>Error</code> branch will not be)</li>
+<li>Many different kinds of errors can occur during program execution, all of them are handled in the
+same way</li>
+<li>The way that they are handled is completely agnostic to the kind error, usually some kind of
+reporting mechanism is involved, perhaps some sort of backpressure (in network applications).</li>
+</ul>
+
+<p>The central idea of <code>failure</code> then was to use a trait object to model the error type, instead of
+enum. I&rsquo;m not the person who came up with this: it was how the <code>Error</code> trait in std was always
+intended to be used. All I did was investigate why people weren&rsquo;t already using the Error trait in
+its intended way. I came up with these conclusions:</p>
+
+<ul>
+<li>People often want their errors to contain backtraces, because they may need to debug the condition
+if it represents a programmer mistake.</li>
+<li>The <code>Error::description</code> method had almost no utility.</li>
+<li>People often need their errors to be Send, Sync, and &lsquo;static.</li>
+<li>People sometimes do need to examine the specific error type, which requires downcasting, which
+also requires <code>'static</code>. The <code>Error::cause</code> method, for example, returns an object which cannot be
+downcast because it isn&rsquo;t bound by <code>'static</code>.</li>
+<li>No one feels good writing <code>-&gt; Result&lt;(), Box&lt;dyn Error + Send + Sync + 'static&gt;&gt;</code>.</li>
+</ul>
+
+<p>Thus was born the <code>Fail</code> trait, a &ldquo;fixed&rdquo; Error trait. At the same time, failure provided an
+<code>Error</code> type which was essentially a <code>Box&lt;dyn Fail&gt;</code> with some special features. A quick and easy
+derive for <code>Fail</code> was provided to avoid the complex macro syntax of earlier libraries. Adoption was
+widespread and rapid.</p>
+
+<h2 id="failure-s-fatal-flaw">Failure&rsquo;s fatal flaw</h2>
+
+<p>The big problem with failure was that it required that everyone buy into a new error trait,
+<code>failure::Fail</code>. This created compatibility hazards with people who weren&rsquo;t using failure, resulting
+in various frustrating experiences. When I wrote failure, I expected a &ldquo;fixed&rdquo; error trait to be
+added to std somewhere, that would be identical to failure, so that failure could ultimately just
+re-export that trait as <code>failure::Fail</code>.</p>
+
+<p>However, in the long run, things turned out differently. In the end, I made changes to the <code>Error</code>
+trait itself, as described in <a href="https://github.com/rust-lang/rfcs/blob/master/text/2504-fix-error.md">RFC 2504</a>. This meant there was no story for making failure
+compatible with the std ecosystem.</p>
+
+<p>In the end, many more error libraries have arisen since failure. <a href="https://crates.io/crates/snafu">snafu</a> for example is a bit
+of a spiritual successor to error-chain, but using proc macros. The crate I would recommend to
+anyone who likes failure&rsquo;s API is <a href="https://crates.io/crates/anyhow">anyhow</a>, which basically provides the <code>failure::Error</code>
+type (a fancy trait object), but based on the std <code>Error</code> trait instead of on.</p>
+
+<p>In general, for most libraries I would recommend just manually creating error types and implementing
+the Error trait for them. If this is too complicated, consider why your API is throwing so many
+different kinds of errors, and whether your library is doing too many things.</p>
+
+<p>For applications, I recommend using a trait object, rather than an enum, to manage your many kinds
+of errors. I believe that usually trying to enumerate all of the errors every library you use can
+throw is more trouble than its worth, and I still assert that for most applications this will lead
+to higher performance by keeping the happy path less pessimized. I recommend <code>anyhow::Error</code> as a
+strictly better trait object than <code>Box&lt;dyn Error + Send + Sync + 'static&gt;</code>, not to mention one that
+is much easier to deal with.</p>
+
+<h2 id="but-about-fehler">But about Fehler</h2>
+
+<p>When I wrote failure, I also had a vision for syntactic changes to Rust that would make error
+handling more lightweight. What I like about the <code>Result</code> type in Rust is that any function which
+can raise an error must be annotated as such, at both the definition side <em>and</em> the call site. This
+is a great feature, that I would never want to lose, because it allows users to identify all points
+of early return in their functions (i.e. marking fallible function calls with <code>?</code> is an amazing
+feature).</p>
+
+<p>What I don&rsquo;t like about Rust&rsquo;s error handling story is the impact writing a fallible function has on
+all of the unfallible return paths. I do not find that I benefit from writing loads of boilerplate
+<code>Ok()</code> expressions. I would prefer a syntax in which I could treat functions as existing only in the
+happy path <em>until I need to inspect their fallibility</em>.</p>
+
+<p>This viewpoint is very controversial, and I have no capacity to debate it with anyone who disagrees
+with me. But Rust has a very powerful macro system, so I don&rsquo;t have to.</p>
+
+<p>Fehler is a library which provides two macros: an attribute called <code>#[throws]</code> and an expression
+macro called <code>throw!()</code>. In functions annotated with <code>throws</code>, all returns are on the &ldquo;Ok&rdquo; happy
+path:</p>
+
+<pre><code class="language-rust">#[throws(io::Error)]
+fn read_to_string(path: &amp;impl AsRef&lt;Path&gt;) -&gt; String {
+    let mut file = File::open(path)?:
+    let mut string = String::new();
+    file.read_to_string(&amp;mut string)?;
+    string // Ok wrapping not necessary
+}
+</code></pre>
+
+<p>If you do want to raise an error in this context, you can, using the <code>throw</code> macro:</p>
+
+<pre><code class="language-rust">#[throws(io::Error)]
+fn read_to_string(path: &amp;impl AsRef&lt;Path&gt;) -&gt; String {
+    let mut file = File::open(path)?:
+    let mut string = String::new();
+    file.read_to_string(&amp;mut string)?;
+
+    if string.len() == 0 {
+        throw!(io::Error::new(io::ErrorKind::Other, &quot;empty file&quot;));
+    }
+
+    string
+}
+</code></pre>
+
+<p>This syntax also supports functions that return Option and some other features, if you want to know
+more you can <a href="https://docs.rs/fehler/1.0.0/fehler/">read the docs</a>.</p>
+
+<p>I&rsquo;ve been using Fehler in a personal project for the last two months, and I love it. My only issue
+with it has been some bad error messages on parse errors that aren&rsquo;t processed well because it&rsquo;s a
+proc macro. I am as convinced as I ever have been that this would be a great addition to Rust. I
+would encourage anyone else who would like to try writing Rust with syntax like this to use this
+library and get a feel for how it works. So much of the discussion around error-handling in Rust has
+been deeply ideological and ungrounded in specific experience: this library provides a way to get an
+understanding beyond that.</p>
+
+<p>Besides, I have no interest in pushing any further improvement to Rust&rsquo;s error handling syntax,
+because of what an enormous drain every attempt to improve that feature has ever been. So I&rsquo;m very
+happy to have fehler, which I will keep using in all of my projects, without having to convince
+anyone else that it&rsquo;s a good idea.</p>
+
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="https://boats.gitlab.io/blog/post/vulnerabilities/" data-toggle="tooltip" data-placement="top" title="What constitutes a vulnerability?">&larr; Previous Post</a>
+          </li>
+        
+        
+          <li class="next">
+            <a href="https://boats.gitlab.io/blog/post/why-ok-wrapping/" data-toggle="tooltip" data-placement="top" title="A brief apology of Ok-Wrapping">Next Post &rarr;</a>
+          </li>
+        
+      </ul>
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:woboats@gmail.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://gitlab.com/boats" title="GitLab">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-gitlab fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/withoutboats" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/withoutboats" title="Twitter">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://reddit.com/u/desiringmachines" title="Reddit">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-reddit-alien fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+          <li>
+            <a href="https://boats.gitlab.io/blog/index.xml" title="RSS">
+              <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          boats
+          &nbsp;&bull;&nbsp;
+          2020
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://boats.gitlab.io/blog/">withoutblogs</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.26</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://boats.gitlab.io/blog/js/main.js"></script>
+<script src="https://boats.gitlab.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> renderMathInElement(document.body); </script>
+
+
+
+
+
+  </body>
+</html>
+

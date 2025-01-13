@@ -1,0 +1,1 @@
+A local privilege escalation in Fortinet FortiClient for Windows 6.0.4 and earlier allows attacker to execute unauthorized code or commands via the parsing of the file.

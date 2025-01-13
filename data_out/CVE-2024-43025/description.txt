@@ -1,0 +1,1 @@
+An HTML injection vulnerability in RWS MultiTrans v7.0.23324.2 and earlier allows attackers to alter the HTML-layout and possibly execute a phishing attack via a crafted payload injected into a sent e-mail.

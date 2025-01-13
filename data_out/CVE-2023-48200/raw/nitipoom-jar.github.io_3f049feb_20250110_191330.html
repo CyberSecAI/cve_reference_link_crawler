@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>CVE-2023-48200</title>
+</head>
+<body>
+    <div class="green snipcss-3NIWg">
+        <div class="container center headings--one-size">
+          <header class="header">
+            <div class="header__inner">
+              <div class="header__logo">
+                <a href="#">
+                  <div class="logo">
+                    Quantiano
+                  </div>
+                </a>
+              </div>
+              <ul class="menu menu--mobile">
+                <li>
+                  <ul class="menu__dropdown">
+                    <li>
+                    </li>
+                    <li>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <nav class="navigation-menu">
+              <ul class="navigation-menu__inner menu--desktop">
+              </ul>
+            </nav>
+          </header>
+          <div class="content">
+            <article class="post">
+              <h1 class="post-title">
+                <a href="#">
+                  CVE-2023-48200
+                </a>
+              </h1>
+              <div class="post-meta">
+                <time class="post-date">
+                  2023-11-11
+                </time>
+                <span class="post-author">
+                  Nitipoom Jaroonchaipipat
+                </span>
+              </div><br>
+              <hr>
+              <div class="post-content">
+                <div>
+                  <h2 id="#">
+                    Product detail
+                    <a href="#" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+                  <ui>Affected product: Grocy</ui><br>
+                  <ui>Affected version: 4.0.3</ui><br>
+                  <ui>Affected component: manageApiKeys</ui><br><br>
+                  <p class="image-description">
+                    A Cross-Site Scripting (XSS) vulnerability in the ’equipment description’ component within ’/equipment’ of Grocy version <= 4.0.3 allows attackers to obtain victim’s cookies.
+                  </p>
+                  <hr>
+                  <h2 id="proof-of-concept">
+                    Prerequisite
+                    <a href="#proof-of-concept" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+                  <p>
+                    Install Grocy from official Grocy Github repository  
+                    <a href="https://github.com/grocy/grocy" target="_blank">
+                      GitHub page
+                    </a><br>
+                    <li>In this case I use Docker (Portainer) to install it.</li>
+                  </p>
+                  <img src="https://nitipoom-jar.github.io/CVE-2023-48200/1.png">
+                  <p class="image-description">Grocy version 4.0.3 released on Sep 2</p><br>
+                  <img src="https://nitipoom-jar.github.io/CVE-2023-48200/1.gif">
+                  <p class="image-description">Installation on Portainer Docker</p><br>
+                  <img src="https://nitipoom-jar.github.io/CVE-2023-48200/2.gif">
+                  <img src="https://nitipoom-jar.github.io/CVE-2023-48200/2.png">
+                  <p class="image-description">Installed Grocy version 4.0.3</p><br>
+             
+                  <hr>
+    
+                  <h2 id="proof-of-concept">
+                    Exploitation
+                    <a href="#proof-of-concept" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+
+                  <p class="image-description">
+                    1. Go to equipment page<br>
+                    2. Add new equipment <br>
+                    3. Insert malicious script in the description <br>
+                  </p>
+
+              
+                    <code>
+                      <xmp>
+                   <script>alert(document.cookie)</script>
+                  </xmp>
+                    </code>
+                  
+
+
+                  <p class="image-description">
+                    As you can see in the gif below:
+                  </p>
+                  <img src="https://nitipoom-jar.github.io/CVE-2023-48200/3.gif"><br><br><hr>
+
+                  <p class="image-description">
+                    When the victim visit this page, the cookie can get stolen.
+                  </p>
+                  <img src="https://nitipoom-jar.github.io/CVE-2023-48200/4.gif"><br>
+                  <img src="https://nitipoom-jar.github.io/CVE-2023-48200/5.png"><br>
+                
+                </div>
+              </div>
+            </article>
+          </div>
+          <footer class="footer">
+            <div class="footer__inner">
+              <div class="copyright">
+                <span>
+                  © 2023 Powered by 
+                  <a href="https://gohugo.io">
+                    Hugo
+                  </a>
+                </span>
+                <span>
+                  :: 
+                  <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">
+                    Theme
+                  </a>
+                  made by 
+                  <a href="https://github.com/panr" target="_blank">
+                    panr
+                  </a>
+                </span>
+              </div>
+            </div>
+          </footer>
+</body>
+</html>
+
+
+
+  

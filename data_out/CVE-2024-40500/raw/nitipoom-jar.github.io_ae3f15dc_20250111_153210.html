@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>CVE-2024-40500</title>
+</head>
+<body>
+    <div class="green snipcss-3NIWg">
+        <div class="container center headings--one-size">
+          <header class="header">
+            <div class="header__inner">
+              <div class="header__logo">
+                <a href="#">
+                  <div class="logo">
+                    Quantiano
+                  </div>
+                </a>
+              </div>
+              <ul class="menu menu--mobile">
+                <li>
+                  <ul class="menu__dropdown">
+                    <li>
+                    </li>
+                    <li>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <nav class="navigation-menu">
+              <ul class="navigation-menu__inner menu--desktop">
+              </ul>
+            </nav>
+          </header>
+          <div class="content">
+            <article class="post">
+              <h1 class="post-title">
+                <a href="#">
+                  CVE-2024-40500
+                </a>
+              </h1>
+              <div class="post-meta">
+                <time class="post-date">
+                  2024-07-02
+                </time>
+                <span class="post-author">
+                  Nitipoom Jaroonchaipipat
+                </span>
+              </div><br>
+              <hr>
+              <div class="post-content">
+                <div>
+                  <h2 id="#">
+                    Product detail
+                    <a href="#" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+                  <ui>Affected product: I-Librarian</ui><br>
+                  <ui>Affected version: 5.11.0</ui><br>
+                  <ui>Affected components: '/librarian/index.php/arxiv/search', '/librarian/index.php/#pubmed/search' and '/librarian/index.php/#pmc/search' etc.</ui><br><br>
+                  <p class="image-description">
+                    A multiple Cross-site scripting (XSS) vulnerability in the '/librarian/index.php/arxiv/search', '/librarian/index.php/#pubmed/search' and '/librarian/index.php/#pmc/search' via the search function in Martin Kucej i-librarian v.5.11.0 and before allows a local attacker to execute XSS.
+                  </p>
+                  <hr>
+                  <h2 id="proof-of-concept">
+                    Prerequisite
+                    <a href="#proof-of-concept" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+                  <p >
+                    Install I-Librarian from official I-Librarian Github repository  
+                    <a href="https://github.com/mkucej/i-librarian-free" target="_blank">
+                      GitHub page
+                    </a><br>
+                  </p>
+                  <img src="https://nitipoom-jar.github.io/CVE-2024-40500/1.png"><br>
+                  <p class="image-description">Installed I-Librarian version 5.11.0</p><br>
+             
+                  <hr>
+    
+                  <h2 id="proof-of-concept">
+                    Exploitation
+                    <a href="#proof-of-concept" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+
+                    <p class="image-description">
+                      XSS payload in search function
+                    </p>
+                    <img src="https://nitipoom-jar.github.io/CVE-2024-40500/2.png"><br><br>
+
+                    <p class="image-description">
+                      XSS executed successfully.
+                    </p>
+                    <img src="https://nitipoom-jar.github.io/CVE-2024-40500/3.png"><br><br>
+                    <img src="https://nitipoom-jar.github.io/CVE-2024-40500/4.png"><br><br>
+                    <img src="https://nitipoom-jar.github.io/CVE-2024-40500/5.png"><br><br>
+                </div>
+              </div>
+            </article>
+          </div>
+          <footer class="footer">
+            <div class="footer__inner">
+              <div class="copyright">
+                <span>
+                  © 2023 Powered by 
+                  <a href="https://gohugo.io">
+                    Hugo
+                  </a>
+                </span>
+                <span>
+                  :: 
+                  <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">
+                    Theme
+                  </a>
+                  made by 
+                  <a href="https://github.com/panr" target="_blank">
+                    panr
+                  </a>
+                </span>
+              </div>
+            </div>
+          </footer>
+</body>
+</html>
+
+
+
+  

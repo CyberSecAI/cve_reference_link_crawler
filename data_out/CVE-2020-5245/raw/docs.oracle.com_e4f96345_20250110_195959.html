@@ -1,0 +1,2772 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<title>9 Expression Language (Release 7)</title>
+<meta name="description" content="This chapter introduces the Expression Language (also referred to as the EL), which provides an important mechanism for enabling the presentation layer (web pages) to communicate with the application logic (managed beans).">
+
+<meta name="viewport" content="width=device-width">
+
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/main-media-480-tablet.css">
+<link rel="stylesheet" href="../assets/css/main-media-768-laptop.css">
+<link rel="stylesheet" href="../assets/css/main-media-1140-deskp.css">
+
+<link rel="stylesheet" href="../assets/css/simpletree.css">
+<link rel="stylesheet" href="../assets/css/forms.css">
+<link rel="stylesheet" href="../assets/css/panel.css">
+<link rel="stylesheet" href="../assets/css/altanav.css">
+<link rel="stylesheet" href="../assets/css/docstyles.css">
+
+<link rel="stylesheet" href="../assets/css/print.css">
+<link rel="stylesheet" href="../assets/css/home.css">
+<link rel="stylesheet" href="../assets/css/normalize.min.css">    
+
+        
+<!--[if lt IE 9]>
+<link rel="stylesheet" href="../assets/css/ltIE9.css">
+<![endif]-->         
+        
+<script src="../assets/js/jquery-1.6.2.js"></script>
+<script src="../assets/js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+
+<!--toggle search-->
+<script src="../assets/js/toggle.search.js"  type="text/javascript"></script>
+<!--navigation main-->
+<script src="../assets/js/altanav.js"  type="text/javascript"></script> 
+<!--custom tag element-->
+<script src="../assets/js/customhtmltags.js"  type="text/javascript"></script> 
+
+<!--project specific head data-->
+  
+<!-- Function for printing -->  
+<script>
+function PrintPage()
+  {window.print();}
+</script>
+
+<script>
+  $(window).unload(function() {
+  });
+</script>
+
+
+<!-- keep select menu's sticking when hit back button-->
+<script>
+$(window).load(function () {
+    $("select").each(function () {
+        $(this).val($(this).find('option[selected]').val());
+    });
+});
+</script>
+
+<script>window.ohcglobal || document.write('<script src="/en/dcommon/js/global.js">\x3C/script>')</script></head>
+
+<body>
+<!--[if lt IE 7]>
+<div style="border-bottom: 1px solid #A3A481; background-color: #FFFFDC; padding: 10px; font: normal 13px/16px Arial, sans-serif;">
+<strong>You are running an older version of Internet Explorer or running Internet Explorer in compatibility mode.</strong>  For a richer experience, please upgrade to the latest <a target="_blank" href="http://windows.microsoft.com/en-US/internet-explorer/downloads/ie" target="_blank">Internet Explorer</a> version, or use <a target="_blank" href="http://www.google.com/chrome/" target="_blank">Chrome</a>, <a target="_blank" href="http://www.mozilla.com/en-US/firefox/" target="_blank">Firefox</a>, or <a target="_blank" href="http://www.apple.com/safari/" target="_blank">Safari</a>.
+</div>
+<![endif]--> 
+
+<div id="altlogo">Oracle | Hardware and Software, Engineered to Work Together</div>
+
+<span id="top"></span>
+
+
+<div class="header-container">
+<header class="bookwrapper  clearfix">
+
+<div id="brandProdName" >
+<div id="logocover"></div>
+<div id="productName" >Documentation</div>
+</div> 
+
+<div id="signInArea"></div>
+<script type="text/javascript">
+$(document).ready(function() {
+$("#signInArea").load("../../version.html");
+});
+</script>
+
+<div id="searchheader">
+<a href="/javaee/search.html" class="button">Search Java EE Documentation</a></div>
+
+<!-- Main Navigation -->
+ <br class="clearfloat" />
+ <div id="navBar" class="io" >
+
+<!--
+<ul>
+<li><a class="menu1" title="Home" href="pg-home.php"><span>Home</span></a></li>
+<li><a class="menu2" title="What's New"><span>What's New</span><span class="dropdown-arrow"></span></a></li>
+<li><a class="menu3" title="All Books" href="pg-allbooks-infotype.php"><span>All Books</span></a></li>
+</ul>
+-->
+</div>
+            <br class="clearfloat" />
+<!--         
+<div id="navcontainer" >
+<div class="submenu2 shadow" ><h3>See What's New in <strong>SE</strong> Documentation</h3>
+</div>
+
+</div> -->
+            <br class="clearfloat" />
+<!-- End Main Navigation -->
+
+
+  </header>
+</div><!-- header -->
+
+<div class="main-container" >
+<div class="main bookwrapper bookindent clearfix" >
+
+<div id="breadcrumb"><a href="../index.html">Java Platform, Enterprise Edition (Java EE) 7</a>
+</div>
+<div class="bookoptions"><a href="mailto:javaee-docs_ww@oracle.com" title="Send Feedback">Send Feedback</a> | <a href="#" onclick="PrintPage();">Print</a>
+ | <a href="../JEETT.pdf">PDF</a> | <a href="../JEETT.epub">ePub</a> | <a href="../JEETT.mobi">Mobi</a>
+</div>
+
+<div class="booktitle">Java Platform, Enterprise Edition: The Java EE Tutorial</div>
+
+<div class="contentarea clearboth">
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+//////////////////////
+$(".trig1").click(function(){
+        $("#panel1").toggle("fast"); <!--/*makes panel visible*/-->
+        $(this).toggleClass("active"); <!--makes trigger expand out-->
+        return false;
+    });
+
+///////////////////////
+
+$("#X").click(function(){
+      // trigger click is needed for css .active to work
+	  $( ".trig1" ).trigger( "click" );
+   return false;
+    });
+
+/*/////////////////////
+
+$("#panel1").mouseleave(function(){
+  $( ".trig1" ).trigger( "click" );
+   return false;
+});
+
+/////////////////////*/
+});
+
+</script>
+
+
+<!-- page navigation -->
+
+<!--div id="tocbutton" ><span class="button"><a href="#mypanel"><img src="../assets/img-common/3linemenu.png" alt="menu icon" />Menu</a></span></div-->
+
+<div id="pagenav"><a class="button" title="Previous Page" href="jsf-facelets009.htm">Previous Page</a><a class="button" title="Next Page" href="jsf-el001.htm">Next Page</a></div>
+
+<article>
+
+<!-- End Header -->
+<div id="JEETT00069" class="chapter"><a id="GJDDD" name="GJDDD" class="anchor"></a>
+<h1 class="chapter"><span class="secnum">9</span> <a id="sthref402" name="sthref402" class="anchor"></a>Expression Language</h1>
+<p>This chapter introduces the Expression Language (also referred to as the EL), which provides an important mechanism for enabling the presentation layer (web pages) to communicate with the application logic (managed beans). The EL is used by several JavaEE technologies, such as JavaServer Faces technology, JavaServer Pages (JSP) technology, and Contexts and Dependency Injection for Java EE (CDI). The EL can also be used in stand-alone environments. This chapter only covers the use of the EL in Java EE containers.</p>
+<p>The following topics are addressed here:</p>
+<ul>
+<li>
+<p><a href="jsf-el001.htm#BNAHQ">Overview of the EL</a></p>
+</li>
+<li>
+<p><a href="jsf-el002.htm#BNAHR">Immediate and Deferred Evaluation Syntax</a></p>
+</li>
+<li>
+<p><a href="jsf-el003.htm#BNAHU">Value and Method Expressions</a></p>
+</li>
+<li>
+<p><a href="jsf-el004.htm#CIHGABHD">Operations on Collection Objects</a></p>
+</li>
+<li>
+<p><a href="jsf-el005.htm#BNAIK">Operators</a></p>
+</li>
+<li>
+<p><a href="jsf-el006.htm#BNAIL">Reserved Words</a></p>
+</li>
+<li>
+<p><a href="jsf-el007.htm#BNAIM">Examples of EL Expressions</a></p>
+</li>
+<li>
+<p><a href="jsf-el008.htm#CIHGBBHA">Further Information about the Expression Language</a></p>
+</li>
+</ul>
+
+
+</article>
+
+<div id=rightslider>
+
+
+<!--/*///////////////////////////////////////////////////////////////////////
+PANEL 1 /* table of contents */
+///////////////////////////////////////////////////////////////////////*/-->
+
+<div id="panel1" class="panel shadow">
+<div class="panellists">
+<div style="float:right;"><a href="#" id="X"><img src="../assets/img-common/X.png"   alt="Close Window" title="Close Table of Contents Window" /></a></div>
+	<h3>Table of Contents</h3>
+		<script type="text/javascript" src="../assets/js/tree.menu2.js" >
+
+/***********************************************
+* Simple Tree Menu - (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+/*http://www.dynamicdrive.com/dynamicindex1/navigate1.htm*/
+</script>
+
+<h2>Java Platform, Enterprise Edition: The Java EE Tutorial</h2>
+
+<a href="javascript:ddtreemenu.flatten('treemenu1', 'expand')">Expand</a> | <a href="javascript:ddtreemenu.flatten('treemenu1', 'contact')">Collapse</a>
+
+<ul id="treemenu1" class="treeview">
+<li><a href="title.htm">Title and Copyright Information</a></li>
+<li><a href="preface.htm#GEXAF">Preface</a>
+<ul>
+<li><a href="preface.htm#CIACGIBD">Audience</a></li>
+<li><a href="preface.htm#CIAHFICG">Documentation Accessibility</a></li>
+<li><a href="preface.htm#BNAAC">Before You Read This Book</a></li>
+<li><a href="preface.htm#GIPRL">Related Documentation</a></li>
+<li><a href="preface.htm#GKVTF">Conventions</a></li>
+<li><a href="preface.htm#GFIRK">Default Paths and File Names</a></li>
+</ul></li>
+<li><a href="partintro.htm#GFIRP">Part I Introduction</a>
+<ul>
+<li><a href="overview.htm#BNAAW">1 Overview</a>
+<ul>
+<li><a href="overview001.htm#GIQVH">1.1 Java EE 7 Platform Highlights</a></li>
+<li><a href="overview002.htm#BNAAX">1.2 Java EE Application Model</a></li>
+<li><a href="overview003.htm#BNAAY">1.3 Distributed Multitiered Applications</a>
+<ul>
+<li><a href="overview003.htm#BNABA">1.3.1 Security</a></li>
+<li><a href="overview003.htm#BNABB">1.3.2 Java EE Components</a></li>
+<li><a href="overview003.htm#BNABC">1.3.3 Java EE Clients</a>
+<ul>
+<li><a href="overview003.htm#BNABD">1.3.3.1 Web Clients</a></li>
+<li><a href="overview003.htm#BNABF">1.3.3.2 Application Clients</a></li>
+<li><a href="overview003.htm#BNABE">1.3.3.3 Applets</a></li>
+<li><a href="overview003.htm#BNABG">1.3.3.4 The JavaBeans Component Architecture</a></li>
+<li><a href="overview003.htm#BNABH">1.3.3.5 Java EE Server Communications</a></li>
+</ul></li>
+<li><a href="overview003.htm#BNABJ">1.3.4 Web Components</a></li>
+<li><a href="overview003.htm#BNABK">1.3.5 Business Components</a></li>
+<li><a href="overview003.htm#BNABL">1.3.6 Enterprise Information System Tier</a></li>
+</ul></li>
+<li><a href="overview004.htm#BNABO">1.4 Java EE Containers</a>
+<ul>
+<li><a href="overview004.htm#BNABP">1.4.1 Container Services</a></li>
+<li><a href="overview004.htm#BNABQ">1.4.2 Container Types</a></li>
+</ul></li>
+<li><a href="overview005.htm#BNABS">1.5 Web Services Support</a>
+<ul>
+<li><a href="overview005.htm#BNABT">1.5.1 XML</a></li>
+<li><a href="overview005.htm#BNABU">1.5.2 SOAP Transport Protocol</a></li>
+<li><a href="overview005.htm#BNABV">1.5.3 WSDL Standard Format</a></li>
+</ul></li>
+<li><a href="overview006.htm#BNABX">1.6 Java EE Application Assembly and Deployment</a></li>
+<li><a href="overview007.htm#BNACJ">1.7 Java EE 7 APIs</a>
+<ul>
+<li><a href="overview007.htm#BNACL">1.7.1 Enterprise JavaBeans Technology</a></li>
+<li><a href="overview007.htm#BNACM">1.7.2 Java Servlet Technology</a></li>
+<li><a href="overview007.htm#BNACP">1.7.3 JavaServer Faces Technology</a></li>
+<li><a href="overview007.htm#BNACN">1.7.4 JavaServer Pages Technology</a></li>
+<li><a href="overview007.htm#BNACO">1.7.5 JavaServer Pages Standard Tag Library</a></li>
+<li><a href="overview007.htm#BNADB">1.7.6 Java Persistence API</a></li>
+<li><a href="overview007.htm#BNACR">1.7.7 Java Transaction API</a></li>
+<li><a href="overview007.htm#GIRBT">1.7.8 Java API for RESTful Web Services</a></li>
+<li><a href="overview007.htm#GJXSD">1.7.9 Managed Beans</a></li>
+<li><a href="overview007.htm#GJXVO">1.7.10 Contexts and Dependency Injection for Java EE</a></li>
+<li><a href="overview007.htm#GJXVG">1.7.11 Dependency Injection for Java</a></li>
+<li><a href="overview007.htm#GJXTY">1.7.12 Bean Validation</a></li>
+<li><a href="overview007.htm#BNACQ">1.7.13 Java Message Service API</a></li>
+<li><a href="overview007.htm#BNACZ">1.7.14 Java EE Connector Architecture</a></li>
+<li><a href="overview007.htm#BNACS">1.7.15 JavaMail API</a></li>
+<li><a href="overview007.htm#GIRBE">1.7.16 Java Authorization Contract for Containers</a></li>
+<li><a href="overview007.htm#GIRGP">1.7.17 Java Authentication Service Provider Interface for Containers</a></li>
+<li><a href="overview007.htm#CJAHDJBJ">1.7.18 Java API for WebSocket</a></li>
+<li><a href="overview007.htm#CJAGIEEI">1.7.19 Java API for JSON Processing</a></li>
+<li><a href="overview007.htm#CJAFGFCJ">1.7.20 Concurrency Utilities for Java EE</a></li>
+<li><a href="overview007.htm#CJAJHGIH">1.7.21 Batch Applications for the Java Platform</a></li>
+</ul></li>
+<li><a href="overview008.htm#GIRDR">1.8 Java EE 7 APIs in the Java Platform, Standard Edition 7</a>
+<ul>
+<li><a href="overview008.htm#BNADA">1.8.1 Java Database Connectivity API</a></li>
+<li><a href="overview008.htm#BNADC">1.8.2 Java Naming and Directory Interface API</a></li>
+<li><a href="overview008.htm#BNACT">1.8.3 JavaBeans Activation Framework</a></li>
+<li><a href="overview008.htm#BNACU">1.8.4 Java API for XML Processing</a></li>
+<li><a href="overview008.htm#BNACW">1.8.5 Java Architecture for XML Binding</a></li>
+<li><a href="overview008.htm#BNACV">1.8.6 Java API for XML Web Services</a></li>
+<li><a href="overview008.htm#BNACX">1.8.7 SOAP with Attachments API for Java</a></li>
+<li><a href="overview008.htm#BNADD">1.8.8 Java Authentication and Authorization Service</a></li>
+<li><a href="overview008.htm#sthref108">1.8.9 Common Annotations for the Java Platform</a></li>
+</ul></li>
+<li><a href="overview009.htm#BNADF">1.9 GlassFish Server Tools</a></li>
+</ul></li>
+<li><a href="usingexamples.htm#GFIUD">2 Using the Tutorial Examples</a>
+<ul>
+<li><a href="usingexamples001.htm#GEXAJ">2.1 Required Software</a>
+<ul>
+<li><a href="usingexamples001.htm#GEXAE">2.1.1 Java Platform, Standard Edition</a></li>
+<li><a href="usingexamples001.htm#GEXAB">2.1.2 Java EE 7 Software Development Kit</a>
+<ul>
+<li><a href="usingexamples001.htm#GEXBC">2.1.2.1 SDK Installation Tips</a></li>
+</ul></li>
+<li><a href="usingexamples001.htm#GEXBA">2.1.3 Java EE 7 Tutorial Component</a></li>
+<li><a href="usingexamples001.htm#GEXAZ">2.1.4 NetBeans IDE</a>
+<ul>
+<li><a href="usingexamples001.htm#GJSEQ">2.1.4.1 To Install NetBeans IDE without GlassFish Server</a></li>
+<li><a href="usingexamples001.htm#GIQZL">2.1.4.2 To Add GlassFish Server as a Server Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="usingexamples001.htm#GEXAA">2.1.5 Apache Maven</a></li>
+</ul></li>
+<li><a href="usingexamples002.htm#BNADI">2.2 Starting and Stopping GlassFish Server</a>
+<ul>
+<li><a href="usingexamples002.htm#CHDCACDI">2.2.1 To Start GlassFish Server Using NetBeans IDE</a></li>
+<li><a href="usingexamples002.htm#sthref128">2.2.2 To Stop GlassFish Server Using NetBeans IDE</a></li>
+<li><a href="usingexamples002.htm#CHDBDDAF">2.2.3 To Start GlassFish Server Using the Command Line</a></li>
+<li><a href="usingexamples002.htm#sthref131">2.2.4 To Stop GlassFish Server Using the Command Line</a></li>
+</ul></li>
+<li><a href="usingexamples003.htm#BNADJ">2.3 Starting the Administration Console</a>
+<ul>
+<li><a href="usingexamples003.htm#GJKST">2.3.1 To Start the Administration Console Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="usingexamples004.htm#BNADK">2.4 Starting and Stopping the Java DB Server</a>
+<ul>
+<li><a href="usingexamples004.htm#GJSFS">2.4.1 To Start the Database Server Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="usingexamples005.htm#BNAAN">2.5 Building the Examples</a></li>
+<li><a href="usingexamples006.htm#GEXAP">2.6 Tutorial Example Directory Structure</a></li>
+<li><a href="usingexamples007.htm#CIHBHEFF">2.7 Java EE 7 Maven Archetypes in the Tutorial</a>
+<ul>
+<li><a href="usingexamples007.htm#CHDJGCCA">2.7.1 Installing the Tutorial Archetypes</a>
+<ul>
+<li><a href="usingexamples007.htm#sthref140">2.7.1.1 Installing the Tutorial Archetypes Using NetBeans IDE</a></li>
+<li><a href="usingexamples007.htm#sthref141">2.7.1.2 Installing the Tutorial Archetypes Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="usingexamples008.htm#GIQWR">2.8 Getting the Latest Updates to the Tutorial</a>
+<ul>
+<li><a href="usingexamples008.htm#GIQYK">2.8.1 To Update the Tutorial Using NetBeans IDE</a></li>
+<li><a href="usingexamples008.htm#sthref142">2.8.2 To Update the Tutorial Using the Command Line</a></li>
+</ul></li>
+<li><a href="usingexamples009.htm#BNADL">2.9 Debugging Java EE Applications</a>
+<ul>
+<li><a href="usingexamples009.htm#BNADM">2.9.1 Using the Server Log</a>
+<ul>
+<li><a href="usingexamples009.htm#GJSGH">2.9.1.1 To Use the Administration Console Log Viewer</a></li>
+</ul></li>
+<li><a href="usingexamples009.htm#BNADN">2.9.2 Using a Debugger</a>
+<ul>
+<li><a href="usingexamples009.htm#GJQWL">2.9.2.1 To Debug an Application Using a Debugger</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partplatform.htm#GFIRP2">Part II Platform Basics</a>
+<ul>
+<li><a href="resource-creation.htm#GKJIQ2">3 Resource Creation</a>
+<ul>
+<li><a href="resource-creation001.htm#BNCJI">3.1 Resources and JNDI Naming</a></li>
+<li><a href="resource-creation002.htm#BNCJJ">3.2 DataSource Objects and Connection Pools</a></li>
+<li><a href="resource-creation003.htm#CACFBGBE">3.3 Creating Resources Administratively</a></li>
+</ul></li>
+<li><a href="injection.htm#GKJIQ3">4 Injection</a>
+<ul>
+<li><a href="injection001.htm#BABHDCAI">4.1 Resource Injection</a></li>
+<li><a href="injection002.htm#BABDJGIE">4.2 Dependency Injection</a></li>
+<li><a href="injection003.htm#BABHFECJ">4.3 The Main Differences between Resource Injection and Dependency Injection</a></li>
+</ul></li>
+<li><a href="packaging.htm#GKJIQ4">5 Packaging</a>
+<ul>
+<li><a href="packaging001.htm#BCGDJDFB">5.1 Packaging Applications</a></li>
+<li><a href="packaging002.htm#BCGECBIJ">5.2 Packaging Enterprise Beans</a>
+<ul>
+<li><a href="packaging002.htm#CHDFCDBG">5.2.1 Packaging Enterprise Beans in EJB JAR Modules</a></li>
+<li><a href="packaging002.htm#CHDJABEJ">5.2.2 Packaging Enterprise Beans in WAR Modules</a></li>
+</ul></li>
+<li><a href="packaging003.htm#BCGHAHGD">5.3 Packaging Web Archives</a></li>
+<li><a href="packaging004.htm#BCGDHBHJ">5.4 Packaging Resource Adapter Archives</a></li>
+</ul></li>
+</ul></li>
+<li><a href="partwebtier.htm#BNADP">Part III The Web Tier</a>
+<ul>
+<li><a href="webapp.htm#BNADR">6 Getting Started with Web Applications</a>
+<ul>
+<li><a href="webapp001.htm#GEYSJ">6.1 Web Applications</a></li>
+<li><a href="webapp002.htm#BNADU">6.2 Web Application Lifecycle</a></li>
+<li><a href="webapp003.htm#BNADX">6.3 A Web Module That Uses JavaServer Faces Technology: The hello1 Example</a>
+<ul>
+<li><a href="webapp003.htm#GJWTV">6.3.1 To View the hello1 Web Module Using NetBeans IDE</a>
+<ul>
+<li><a href="webapp003.htm#GLQLK">6.3.1.1 Introduction to Scopes</a></li>
+</ul></li>
+<li><a href="webapp003.htm#BNADZ">6.3.2 Packaging and Deploying the hello1 Web Module</a>
+<ul>
+<li><a href="webapp003.htm#GJRGN">6.3.2.1 To Build and Package the hello1 Web Module Using NetBeans IDE</a></li>
+<li><a href="webapp003.htm#GJRKN">6.3.2.2 To Build and Package the hello1 Web Module Using Maven</a></li>
+</ul></li>
+<li><a href="webapp003.htm#BNAEI">6.3.3 Viewing Deployed Web Modules</a>
+<ul>
+<li><a href="webapp003.htm#GJSGR">6.3.3.1 To View Deployed Web Modules Using the Administration Console</a></li>
+<li><a href="webapp003.htm#GJSEW">6.3.3.2 To View Deployed Web Modules Using the asadmin Command</a></li>
+<li><a href="webapp003.htm#sthref206">6.3.3.3 To View Deployed Web Modules Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="webapp003.htm#sthref207">6.3.4 Running the Deployed hello1 Web Module</a>
+<ul>
+<li><a href="webapp003.htm#BNAEM">6.3.4.1 Dynamic Reloading of Deployed Modules</a></li>
+</ul></li>
+<li><a href="webapp003.htm#BNAEN">6.3.5 Undeploying the hello1 Web Module</a>
+<ul>
+<li><a href="webapp003.htm#GJSEJ">6.3.5.1 To Undeploy the hello1 Web Module Using NetBeans IDE</a></li>
+<li><a href="webapp003.htm#GJSHH">6.3.5.2 To Undeploy the hello1 Web Module Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="webapp004.htm#BNAEO">6.4 A Web Module That Uses Java Servlet Technology: The hello2 Example</a>
+<ul>
+<li><a href="webapp004.htm#BNAEP">6.4.1 Mapping URLs to Web Components</a></li>
+<li><a href="webapp004.htm#GJWWG">6.4.2 Examining the hello2 Web Module</a>
+<ul>
+<li><a href="webapp004.htm#GJWWA">6.4.2.1 To View the hello2 Web Module Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="webapp004.htm#GKBLH">6.4.3 Running the hello2 Example</a>
+<ul>
+<li><a href="webapp004.htm#GJSED">6.4.3.1 To Run the hello2 Example Using NetBeans IDE</a></li>
+<li><a href="webapp004.htm#GJSHX">6.4.3.2 To Run the hello2 Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="webapp005.htm#CHDHGJIA">6.5 Configuring Web Applications</a>
+<ul>
+<li><a href="webapp005.htm#BNAES">6.5.1 Setting Context Parameters</a>
+<ul>
+<li><a href="webapp005.htm#GJSFJ">6.5.1.1 To Add a Context Parameter Using NetBeans IDE</a></li>
+<li><a href="webapp005.htm#GKIHH">6.5.1.2 To Create a web.xml File Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="webapp005.htm#BNAER">6.5.2 Declaring Welcome Files</a></li>
+<li><a href="webapp005.htm#GKBKW">6.5.3 Mapping Errors to Error Screens</a>
+<ul>
+<li><a href="webapp005.htm#BNAET">6.5.3.1 To Set Up Error Mapping Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="webapp005.htm#BNAEU">6.5.4 Declaring Resource References</a>
+<ul>
+<li><a href="webapp005.htm#BNAEW">6.5.4.1 Declaring a Reference to a Resource</a></li>
+<li><a href="webapp005.htm#BNAEX">6.5.4.2 Declaring a Reference to a Web Service</a></li>
+</ul></li>
+</ul></li>
+<li><a href="webapp006.htm#BNAFC">6.6 Further Information about Web Applications</a></li>
+</ul></li>
+<li><a href="jsf-intro.htm#BNAPH">7 JavaServer Faces Technology</a>
+<ul>
+<li><a href="jsf-intro001.htm#BNAPK">7.1 What Is a JavaServer Faces Application?</a></li>
+<li><a href="jsf-intro002.htm#BNAPJ">7.2 JavaServer Faces Technology Benefits</a></li>
+<li><a href="jsf-intro003.htm#GJAAM">7.3 A Simple JavaServer Faces Application</a></li>
+<li><a href="jsf-intro004.htm#BNAQD">7.4 User Interface Component Model</a>
+<ul>
+<li><a href="jsf-intro004.htm#BNAQE">7.4.1 User Interface Component Classes</a></li>
+<li><a href="jsf-intro004.htm#BNAQF">7.4.2 Component Rendering Model</a></li>
+<li><a href="jsf-intro004.htm#BNAQI">7.4.3 Conversion Model</a></li>
+<li><a href="jsf-intro004.htm#GIREH">7.4.4 Event and Listener Model</a></li>
+<li><a href="jsf-intro004.htm#BNAQK">7.4.5 Validation Model</a></li>
+</ul></li>
+<li><a href="jsf-intro005.htm#BNAQL">7.5 Navigation Model</a></li>
+<li><a href="jsf-intro006.htm#BNAQQ">7.6 The Lifecycle of a JavaServer Faces Application</a>
+<ul>
+<li><a href="jsf-intro006.htm#GLPRC">7.6.1 Overview of the JavaServer Faces Lifecycle</a></li>
+<li><a href="jsf-intro006.htm#BNAQS">7.6.2 Restore View Phase</a></li>
+<li><a href="jsf-intro006.htm#BNAQT">7.6.3 Apply Request Values Phase</a></li>
+<li><a href="jsf-intro006.htm#GJSBP">7.6.4 Process Validations Phase</a></li>
+<li><a href="jsf-intro006.htm#BNAQV">7.6.5 Update Model Values Phase</a></li>
+<li><a href="jsf-intro006.htm#BNAQW">7.6.6 Invoke Application Phase</a></li>
+<li><a href="jsf-intro006.htm#BNAQX">7.6.7 Render Response Phase</a></li>
+</ul></li>
+<li><a href="jsf-intro007.htm#GKNOJ">7.7 Partial Processing and Partial Rendering</a></li>
+<li><a href="jsf-intro008.htm#BNAQY">7.8 Further Information about JavaServer Faces Technology</a></li>
+</ul></li>
+<li><a href="jsf-facelets.htm#GIEPX">8 Introduction to Facelets</a>
+<ul>
+<li><a href="jsf-facelets001.htm#GIJTU">8.1 What Is Facelets?</a></li>
+<li><a href="jsf-facelets002.htm#GIPRR">8.2 The Lifecycle of a Facelets Application</a></li>
+<li><a href="jsf-facelets003.htm#GIPOB">8.3 Developing a Simple Facelets Application: The guessnumber-jsf Example Application</a>
+<ul>
+<li><a href="jsf-facelets003.htm#GIQTE">8.3.1 Creating a Facelets Application</a>
+<ul>
+<li><a href="jsf-facelets003.htm#GIQQZ">8.3.1.1 Developing a Managed Bean</a></li>
+<li><a href="jsf-facelets003.htm#GJZPV">8.3.1.2 Creating Facelets Views</a></li>
+</ul></li>
+<li><a href="jsf-facelets003.htm#GJJKC">8.3.2 Configuring the Application</a></li>
+<li><a href="jsf-facelets003.htm#GIRGF">8.3.3 Running the guessnumber-jsf Facelets Example</a>
+<ul>
+<li><a href="jsf-facelets003.htm#GJQZL">8.3.3.1 To Build, Package, and Deploy the guessnumber-jsf Example Using NetBeans IDE</a></li>
+<li><a href="jsf-facelets003.htm#GJQYU">8.3.3.2 To Build, Package, and Deploy the guessnumber-jsf Example Using Maven</a></li>
+<li><a href="jsf-facelets003.htm#GJQYX">8.3.3.3 To Run the guessnumber-jsf Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsf-facelets004.htm#GIQXP">8.4 Using Facelets Templates</a></li>
+<li><a href="jsf-facelets005.htm#GIQZR">8.5 Composite Components</a></li>
+<li><a href="jsf-facelets006.htm#GIRGM">8.6 Web Resources</a></li>
+<li><a href="jsf-facelets007.htm#BABHGBJI">8.7 Relocatable Resources</a></li>
+<li><a href="jsf-facelets008.htm#BABHAHDF">8.8 Resource Library Contracts</a>
+<ul>
+<li><a href="jsf-facelets008.htm#sthref380">8.8.1 The hello1-rlc Example Application</a>
+<ul>
+<li><a href="jsf-facelets008.htm#sthref383">8.8.1.1 Configuring the hello1-rlc Example</a></li>
+<li><a href="jsf-facelets008.htm#sthref384">8.8.1.2 The Facelets Pages for the hello1-rlc Example</a></li>
+<li><a href="jsf-facelets008.htm#sthref385">8.8.1.3 To Build, Package, and Deploy the hello1-rlc Example Using NetBeans IDE</a></li>
+<li><a href="jsf-facelets008.htm#sthref386">8.8.1.4 To Build, Package, and Deploy the hello1-rlc Example Using Maven</a></li>
+<li><a href="jsf-facelets008.htm#sthref387">8.8.1.5 To Run the hello1-rlc Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsf-facelets009.htm#BABGECCJ">8.9 HTML5-Friendly Markup</a>
+<ul>
+<li><a href="jsf-facelets009.htm#sthref390">8.9.1 Using Pass-Through Elements</a></li>
+<li><a href="jsf-facelets009.htm#sthref393">8.9.2 Using Pass-Through Attributes</a></li>
+<li><a href="jsf-facelets009.htm#BABGGIAA">8.9.3 The reservation Example Application</a>
+<ul>
+<li><a href="jsf-facelets009.htm#sthref397">8.9.3.1 The Facelets Pages for the reservation Application</a></li>
+<li><a href="jsf-facelets009.htm#sthref398">8.9.3.2 The Managed Bean for the reservation Application</a></li>
+<li><a href="jsf-facelets009.htm#sthref399">8.9.3.3 To Build, Package, and Deploy the reservation Example Using NetBeans IDE</a></li>
+<li><a href="jsf-facelets009.htm#sthref400">8.9.3.4 To Build, Package, and Deploy the reservation Example Using Maven</a></li>
+<li><a href="jsf-facelets009.htm#sthref401">8.9.3.5 To Run the reservation Example</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a class="selected" href="jsf-el.htm#GJDDD">9 Expression Language</a>
+<ul>
+<li><a href="jsf-el001.htm#BNAHQ">9.1 Overview of the EL</a></li>
+<li><a href="jsf-el002.htm#BNAHR">9.2 Immediate and Deferred Evaluation Syntax</a>
+<ul>
+<li><a href="jsf-el002.htm#BNAHS">9.2.1 Immediate Evaluation</a></li>
+<li><a href="jsf-el002.htm#BNAHT">9.2.2 Deferred Evaluation</a></li>
+</ul></li>
+<li><a href="jsf-el003.htm#BNAHU">9.3 Value and Method Expressions</a>
+<ul>
+<li><a href="jsf-el003.htm#BNAHV">9.3.1 Value Expressions</a>
+<ul>
+<li><a href="jsf-el003.htm#BNAHW">9.3.1.1 Referencing Objects</a></li>
+<li><a href="jsf-el003.htm#BNAHX">9.3.1.2 Referencing Object Properties or Collection Elements</a></li>
+<li><a href="jsf-el003.htm#sthref409">9.3.1.3 Referencing Literals</a></li>
+<li><a href="jsf-el003.htm#GJHBZ">9.3.1.4 Parameterized Method Calls</a></li>
+<li><a href="jsf-el003.htm#BNAHY">9.3.1.5 Where Value Expressions Can Be Used</a></li>
+</ul></li>
+<li><a href="jsf-el003.htm#BNAHZ">9.3.2 Method Expressions</a></li>
+<li><a href="jsf-el003.htm#sthref415">9.3.3 Lambda Expressions</a></li>
+</ul></li>
+<li><a href="jsf-el004.htm#CIHGABHD">9.4 Operations on Collection Objects</a></li>
+<li><a href="jsf-el005.htm#BNAIK">9.5 Operators</a></li>
+<li><a href="jsf-el006.htm#BNAIL">9.6 Reserved Words</a></li>
+<li><a href="jsf-el007.htm#BNAIM">9.7 Examples of EL Expressions</a></li>
+<li><a href="jsf-el008.htm#CIHGBBHA">9.8 Further Information about the Expression Language</a></li>
+</ul></li>
+<li><a href="jsf-page.htm#BNAQZ">10 Using JavaServer Faces Technology in Web Pages</a>
+<ul>
+<li><a href="jsf-page001.htm#BNARB">10.1 Setting Up a Page</a></li>
+<li><a href="jsf-page002.htm#BNARF">10.2 Adding Components to a Page Using HTML Tag Library Tags</a>
+<ul>
+<li><a href="jsf-page002.htm#BNARG">10.2.1 Common Component Tag Attributes</a>
+<ul>
+<li><a href="jsf-page002.htm#BNARH">10.2.1.1 The id Attribute</a></li>
+<li><a href="jsf-page002.htm#BNARI">10.2.1.2 The immediate Attribute</a></li>
+<li><a href="jsf-page002.htm#BNARJ">10.2.1.3 The rendered Attribute</a></li>
+<li><a href="jsf-page002.htm#BNARK">10.2.1.4 The style and styleClass Attributes</a></li>
+<li><a href="jsf-page002.htm#BNARL">10.2.1.5 The value and binding Attributes</a></li>
+</ul></li>
+<li><a href="jsf-page002.htm#GJDGQ">10.2.2 Adding HTML Head and Body Tags</a></li>
+<li><a href="jsf-page002.htm#BNARM">10.2.3 Adding a Form Component</a></li>
+<li><a href="jsf-page002.htm#BNARO">10.2.4 Using Text Components</a>
+<ul>
+<li><a href="jsf-page002.htm#BNARR">10.2.4.1 Rendering a Field with the h:inputText Tag</a></li>
+<li><a href="jsf-page002.htm#BNARV">10.2.4.2 Rendering a Password Field with the h:inputSecret Tag</a></li>
+<li><a href="jsf-page002.htm#BNARS">10.2.4.3 Rendering a Label with the h:outputLabel Tag</a></li>
+<li><a href="jsf-page002.htm#BNART">10.2.4.4 Rendering a Link with the h:outputLink Tag</a></li>
+<li><a href="jsf-page002.htm#BNARU">10.2.4.5 Displaying a Formatted Message with the h:outputFormat Tag</a></li>
+</ul></li>
+<li><a href="jsf-page002.htm#BNARW">10.2.5 Using Command Component Tags for Performing Actions and Navigation</a>
+<ul>
+<li><a href="jsf-page002.htm#BNARX">10.2.5.1 Rendering a Button with the h:commandButton Tag</a></li>
+<li><a href="jsf-page002.htm#GKBUJ">10.2.5.2 Rendering a Link with the h:commandLink Tag</a></li>
+</ul></li>
+<li><a href="jsf-page002.htm#BNASB">10.2.6 Adding Graphics and Images with the h:graphicImage Tag</a></li>
+<li><a href="jsf-page002.htm#BNASC">10.2.7 Laying Out Components with the h:panelGrid and h:panelGroup Tags</a></li>
+<li><a href="jsf-page002.htm#BNASE">10.2.8 Displaying Components for Selecting One Value</a>
+<ul>
+<li><a href="jsf-page002.htm#BNASG">10.2.8.1 Displaying a Check Box Using the h:selectBooleanCheckbox Tag</a></li>
+<li><a href="jsf-page002.htm#BNASH">10.2.8.2 Displaying a Menu Using the h:selectOneMenu Tag</a></li>
+</ul></li>
+<li><a href="jsf-page002.htm#BNASI">10.2.9 Displaying Components for Selecting Multiple Values</a></li>
+<li><a href="jsf-page002.htm#BNASK">10.2.10 Using the f:selectItem and f:selectItems Tags</a>
+<ul>
+<li><a href="jsf-page002.htm#BNASM">10.2.10.1 Using the f:selectItems Tag</a></li>
+<li><a href="jsf-page002.htm#BNASN">10.2.10.2 Using the f:selectItem Tag</a></li>
+</ul></li>
+<li><a href="jsf-page002.htm#sthref558">10.2.11 Displaying the Results from Selection Components</a></li>
+<li><a href="jsf-page002.htm#BNARZ">10.2.12 Using Data-Bound Table Components</a></li>
+<li><a href="jsf-page002.htm#BNASO">10.2.13 Displaying Error Messages with the h:message and h:messages Tags</a></li>
+<li><a href="jsf-page002.htm#GIQZD">10.2.14 Creating Bookmarkable URLs with the h:button and h:link Tags</a></li>
+<li><a href="jsf-page002.htm#GIQWQ">10.2.15 Using View Parameters to Configure Bookmarkable URLs</a></li>
+<li><a href="jsf-page002.htm#sthref575">10.2.16 The bookmarks Example Application</a>
+<ul>
+<li><a href="jsf-page002.htm#sthref578">10.2.16.1 To Build, Package, and Deploy the bookmarks Example Using NetBeans IDE</a></li>
+<li><a href="jsf-page002.htm#sthref579">10.2.16.2 To Build, Package, and Deploy the bookmarks Example Using Maven</a></li>
+<li><a href="jsf-page002.htm#sthref580">10.2.16.3 To Run the bookmarks Example</a></li>
+</ul></li>
+<li><a href="jsf-page002.htm#GJGEP">10.2.17 Resource Relocation Using h:outputScript and h:outputStylesheet Tags</a></li>
+</ul></li>
+<li><a href="jsf-page003.htm#BNARC">10.3 Using Core Tags</a></li>
+</ul></li>
+<li><a href="jsf-page-core.htm#GJCUT">11 Using Converters, Listeners, and Validators</a>
+<ul>
+<li><a href="jsf-page-core001.htm#BNAST">11.1 Using the Standard Converters</a>
+<ul>
+<li><a href="jsf-page-core001.htm#BNASU">11.1.1 Converting a Component's Value</a></li>
+<li><a href="jsf-page-core001.htm#BNASV">11.1.2 Using DateTimeConverter</a></li>
+<li><a href="jsf-page-core001.htm#BNASX">11.1.3 Using NumberConverter</a></li>
+</ul></li>
+<li><a href="jsf-page-core002.htm#BNASZ">11.2 Registering Listeners on Components</a>
+<ul>
+<li><a href="jsf-page-core002.htm#BNATA">11.2.1 Registering a Value-Change Listener on a Component</a></li>
+<li><a href="jsf-page-core002.htm#BNATB">11.2.2 Registering an Action Listener on a Component</a></li>
+</ul></li>
+<li><a href="jsf-page-core003.htm#BNATC">11.3 Using the Standard Validators</a>
+<ul>
+<li><a href="jsf-page-core003.htm#BNATE">11.3.1 Validating a Component's Value</a></li>
+<li><a href="jsf-page-core003.htm#BNATF">11.3.2 Using Validator Tags</a></li>
+</ul></li>
+<li><a href="jsf-page-core004.htm#BNATN">11.4 Referencing a Managed Bean Method</a>
+<ul>
+<li><a href="jsf-page-core004.htm#BNATP">11.4.1 Referencing a Method That Performs Navigation</a></li>
+<li><a href="jsf-page-core004.htm#BNATQ">11.4.2 Referencing a Method That Handles an Action Event</a></li>
+<li><a href="jsf-page-core004.htm#BNATR">11.4.3 Referencing a Method That Performs Validation</a></li>
+<li><a href="jsf-page-core004.htm#BNATS">11.4.4 Referencing a Method That Handles a Value-Change Event</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsf-develop.htm#BNATX">12 Developing with JavaServer Faces Technology</a>
+<ul>
+<li><a href="jsf-develop001.htm#BNAQM">12.1 Managed Beans in JavaServer Faces Technology</a>
+<ul>
+<li><a href="jsf-develop001.htm#BNAQN">12.1.1 Creating a Managed Bean</a></li>
+<li><a href="jsf-develop001.htm#BNAQP">12.1.2 Using the EL to Reference Managed Beans</a></li>
+</ul></li>
+<li><a href="jsf-develop002.htm#BNATY">12.2 Writing Bean Properties</a>
+<ul>
+<li><a href="jsf-develop002.htm#BNATZ">12.2.1 Writing Properties Bound to Component Values</a>
+<ul>
+<li><a href="jsf-develop002.htm#BNAUB">12.2.1.1 UIInput and UIOutput Properties</a></li>
+<li><a href="jsf-develop002.htm#BNAUC">12.2.1.2 UIData Properties</a></li>
+<li><a href="jsf-develop002.htm#BNAUD">12.2.1.3 UISelectBoolean Properties</a></li>
+<li><a href="jsf-develop002.htm#BNAUE">12.2.1.4 UISelectMany Properties</a></li>
+<li><a href="jsf-develop002.htm#BNAUF">12.2.1.5 UISelectOne Properties</a></li>
+<li><a href="jsf-develop002.htm#BNAUG">12.2.1.6 UISelectItem Properties</a></li>
+<li><a href="jsf-develop002.htm#BNAUH">12.2.1.7 UISelectItems Properties</a></li>
+</ul></li>
+<li><a href="jsf-develop002.htm#BNAUK">12.2.2 Writing Properties Bound to Component Instances</a></li>
+<li><a href="jsf-develop002.htm#BNAUL">12.2.3 Writing Properties Bound to Converters, Listeners, or Validators</a></li>
+</ul></li>
+<li><a href="jsf-develop003.htm#BNAVB">12.3 Writing Managed Bean Methods</a>
+<ul>
+<li><a href="jsf-develop003.htm#BNAVC">12.3.1 Writing a Method to Handle Navigation</a></li>
+<li><a href="jsf-develop003.htm#BNAVD">12.3.2 Writing a Method to Handle an Action Event</a></li>
+<li><a href="jsf-develop003.htm#BNAVE">12.3.3 Writing a Method to Perform Validation</a></li>
+<li><a href="jsf-develop003.htm#BNAVF">12.3.4 Writing a Method to Handle a Value-Change Event</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsf-ajax.htm#GKIOW">13 Using Ajax with JavaServer Faces Technology</a>
+<ul>
+<li><a href="jsf-ajax001.htm#GKIGR">13.1 Overview of Ajax</a></li>
+<li><a href="jsf-ajax002.htm#GKINL">13.2 Using Ajax Functionality with JavaServer Faces Technology</a></li>
+<li><a href="jsf-ajax003.htm#GKABR">13.3 Using Ajax with Facelets</a>
+<ul>
+<li><a href="jsf-ajax003.htm#GKAFN">13.3.1 Using the f:ajax Tag</a></li>
+</ul></li>
+<li><a href="jsf-ajax004.htm#GKACE">13.4 Sending an Ajax Request</a>
+<ul>
+<li><a href="jsf-ajax004.htm#GKHVT">13.4.1 Using the event Attribute</a></li>
+<li><a href="jsf-ajax004.htm#GKHUZ">13.4.2 Using the execute Attribute</a></li>
+<li><a href="jsf-ajax004.htm#GKHWM">13.4.3 Using the immediate Attribute</a></li>
+<li><a href="jsf-ajax004.htm#GKHZS">13.4.4 Using the listener Attribute</a></li>
+</ul></li>
+<li><a href="jsf-ajax005.htm#GKDDF">13.5 Monitoring Events on the Client</a></li>
+<li><a href="jsf-ajax006.htm#GKDCB">13.6 Handling Errors</a></li>
+<li><a href="jsf-ajax007.htm#GKDBR">13.7 Receiving an Ajax Response</a></li>
+<li><a href="jsf-ajax008.htm#GKUAR">13.8 Ajax Request Lifecycle</a></li>
+<li><a href="jsf-ajax009.htm#GKHYH">13.9 Grouping of Components</a></li>
+<li><a href="jsf-ajax010.htm#GKAAM">13.10 Loading JavaScript as a Resource</a>
+<ul>
+<li><a href="jsf-ajax010.htm#GKAFI">13.10.1 Using JavaScript API in a Facelets Application</a></li>
+<li><a href="jsf-ajax010.htm#GKIPX">13.10.2 Using the @ResourceDependency Annotation in a Bean Class</a></li>
+</ul></li>
+<li><a href="jsf-ajax011.htm#GKOKB">13.11 The ajaxguessnumber Example Application</a>
+<ul>
+<li><a href="jsf-ajax011.htm#GKOIJ">13.11.1 The ajaxguessnumber Source Files</a>
+<ul>
+<li><a href="jsf-ajax011.htm#GKOFW">13.11.1.1 The ajaxgreeting.xhtml Facelets Page</a></li>
+<li><a href="jsf-ajax011.htm#GKOHN">13.11.1.2 The UserNumberBean Backing Bean</a></li>
+<li><a href="jsf-ajax011.htm#sthref844">13.11.1.3 The DukesNumberBean CDI Managed Bean</a></li>
+</ul></li>
+<li><a href="jsf-ajax011.htm#GKOKE">13.11.2 Running the ajaxguessnumber Example</a>
+<ul>
+<li><a href="jsf-ajax011.htm#GLHVU">13.11.2.1 To Build, Package, and Deploy the ajaxguessnumber Example Using NetBeans IDE</a></li>
+<li><a href="jsf-ajax011.htm#GLHVQ">13.11.2.2 To Build, Package, and Deploy the ajaxguessnumber Example Using Maven</a></li>
+<li><a href="jsf-ajax011.htm#GLHWE">13.11.2.3 To Run the ajaxguessnumber Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsf-ajax012.htm#GKSDK">13.12 Further Information about Ajax in JavaServer Faces Technology</a></li>
+</ul></li>
+<li><a href="jsf-advanced-cc.htm#GKHXA">14 Composite Components: Advanced Topics and an Example</a>
+<ul>
+<li><a href="jsf-advanced-cc001.htm#GKHWV">14.1 Attributes of a Composite Component</a></li>
+<li><a href="jsf-advanced-cc002.htm#GKHUO">14.2 Invoking a Managed Bean</a></li>
+<li><a href="jsf-advanced-cc003.htm#GKHWO">14.3 Validating Composite Component Values</a></li>
+<li><a href="jsf-advanced-cc004.htm#GKHVN">14.4 The compositecomponentexample Example Application</a>
+<ul>
+<li><a href="jsf-advanced-cc004.htm#GKHUU">14.4.1 The Composite Component File</a></li>
+<li><a href="jsf-advanced-cc004.htm#GKHVX">14.4.2 The Using Page</a></li>
+<li><a href="jsf-advanced-cc004.htm#GKHVQ">14.4.3 The Managed Bean</a></li>
+<li><a href="jsf-advanced-cc004.htm#GLECV">14.4.4 Running the compositecomponentexample Example</a>
+<ul>
+<li><a href="jsf-advanced-cc004.htm#GKHVC">14.4.4.1 To Build, Package, and Deploy the compositecomponentexample Example Using NetBeans IDE</a></li>
+<li><a href="jsf-advanced-cc004.htm#GLEAE">14.4.4.2 To Build, Package, and Deploy the compositecomponentexample Example Using Maven</a></li>
+<li><a href="jsf-advanced-cc004.htm#GLEEU">14.4.4.3 To Run the compositecomponentexample Example</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="jsf-custom.htm#BNAVG">15 Creating Custom UI Components and Other Custom Objects</a>
+<ul>
+<li><a href="jsf-custom001.htm#BNAVH">15.1 Determining Whether You Need a Custom Component or Renderer</a>
+<ul>
+<li><a href="jsf-custom001.htm#BNAVI">15.1.1 When to Use a Custom Component</a></li>
+<li><a href="jsf-custom001.htm#BNAVJ">15.1.2 When to Use a Custom Renderer</a></li>
+<li><a href="jsf-custom001.htm#BNAVK">15.1.3 Component, Renderer, and Tag Combinations</a></li>
+</ul></li>
+<li><a href="jsf-custom002.htm#GLPCB">15.2 Understanding the Image Map Example</a>
+<ul>
+<li><a href="jsf-custom002.htm#GLPBD">15.2.1 Why Use JavaServer Faces Technology to Implement an Image Map?</a></li>
+<li><a href="jsf-custom002.htm#GLPEM">15.2.2 Understanding the Rendered HTML</a></li>
+<li><a href="jsf-custom002.htm#GLPCD">15.2.3 Understanding the Facelets Page</a></li>
+<li><a href="jsf-custom002.htm#GLPBO">15.2.4 Configuring Model Data</a></li>
+<li><a href="jsf-custom002.htm#GLPEL">15.2.5 Summary of the Image Map Application Classes</a></li>
+</ul></li>
+<li><a href="jsf-custom003.htm#BNAVT">15.3 Steps for Creating a Custom Component</a></li>
+<li><a href="jsf-custom004.htm#BNAVU">15.4 Creating Custom Component Classes</a>
+<ul>
+<li><a href="jsf-custom004.htm#BNAVV">15.4.1 Specifying the Component Family</a></li>
+<li><a href="jsf-custom004.htm#BNAVW">15.4.2 Performing Encoding</a></li>
+<li><a href="jsf-custom004.htm#BNAVX">15.4.3 Performing Decoding</a></li>
+<li><a href="jsf-custom004.htm#BNAVY">15.4.4 Enabling Component Properties to Accept Expressions</a></li>
+<li><a href="jsf-custom004.htm#BNAVZ">15.4.5 Saving and Restoring State</a></li>
+</ul></li>
+<li><a href="jsf-custom005.htm#BNAWA">15.5 Delegating Rendering to a Renderer</a>
+<ul>
+<li><a href="jsf-custom005.htm#BNAWB">15.5.1 Creating the Renderer Class</a></li>
+<li><a href="jsf-custom005.htm#BNAWC">15.5.2 Identifying the Renderer Type</a></li>
+</ul></li>
+<li><a href="jsf-custom006.htm#BNAUT">15.6 Implementing an Event Listener</a>
+<ul>
+<li><a href="jsf-custom006.htm#BNAUU">15.6.1 Implementing Value-Change Listeners</a></li>
+<li><a href="jsf-custom006.htm#BNAUV">15.6.2 Implementing Action Listeners</a></li>
+</ul></li>
+<li><a href="jsf-custom007.htm#BNAWD">15.7 Handling Events for Custom Components</a></li>
+<li><a href="jsf-custom008.htm#BNAWN">15.8 Defining the Custom Component Tag in a Tag Library Descriptor</a></li>
+<li><a href="jsf-custom009.htm#BNATT">15.9 Using a Custom Component</a></li>
+<li><a href="jsf-custom010.htm#BNAUS">15.10 Creating and Using a Custom Converter</a>
+<ul>
+<li><a href="jsf-custom010.htm#GLPHB">15.10.1 Creating a Custom Converter</a></li>
+<li><a href="jsf-custom010.htm#BNATU">15.10.2 Using a Custom Converter</a></li>
+</ul></li>
+<li><a href="jsf-custom011.htm#BNAUW">15.11 Creating and Using a Custom Validator</a>
+<ul>
+<li><a href="jsf-custom011.htm#BNAUX">15.11.1 Implementing the Validator Interface</a></li>
+<li><a href="jsf-custom011.htm#BNAUY">15.11.2 Specifying a Custom Tag</a></li>
+<li><a href="jsf-custom011.htm#BNATV">15.11.3 Using a Custom Validator</a></li>
+</ul></li>
+<li><a href="jsf-custom012.htm#BNATG">15.12 Binding Component Values and Instances to Managed Bean Properties</a>
+<ul>
+<li><a href="jsf-custom012.htm#BNATI">15.12.1 Binding a Component Value to a Property</a></li>
+<li><a href="jsf-custom012.htm#BNATJ">15.12.2 Binding a Component Value to an Implicit Object</a></li>
+<li><a href="jsf-custom012.htm#BNATL">15.12.3 Binding a Component Instance to a Bean Property</a></li>
+</ul></li>
+<li><a href="jsf-custom013.htm#BNATM">15.13 Binding Converters, Listeners, and Validators to Managed Bean Properties</a></li>
+</ul></li>
+<li><a href="jsf-configure.htm#BNAWO">16 Configuring JavaServer Faces Applications</a>
+<ul>
+<li><a href="jsf-configure001.htm#GIRCH">16.1 Using Annotations to Configure Managed Beans</a>
+<ul>
+<li><a href="jsf-configure001.htm#GIRCR">16.1.1 Using Managed Bean Scopes</a></li>
+</ul></li>
+<li><a href="jsf-configure002.htm#BNAWP">16.2 Application Configuration Resource File</a>
+<ul>
+<li><a href="jsf-configure002.htm#GIREP">16.2.1 Configuring Eager Application-Scoped Managed Beans</a></li>
+<li><a href="jsf-configure002.htm#GIQCK">16.2.2 Ordering of Application Configuration Resource Files</a></li>
+</ul></li>
+<li><a href="jsf-configure003.htm#CHDGFCJF">16.3 Using Faces Flows</a>
+<ul>
+<li><a href="jsf-configure003.htm#sthref1043">16.3.1 Packaging Flows in an Application</a></li>
+<li><a href="jsf-configure003.htm#sthref1044">16.3.2 The Simplest Possible Flow: The simple-flow Example Application</a>
+<ul>
+<li><a href="jsf-configure003.htm#sthref1045">16.3.2.1 To Build, Package, and Deploy the simple-flow Example Using NetBeans IDE</a></li>
+<li><a href="jsf-configure003.htm#sthref1046">16.3.2.2 To Build, Package, and Deploy the simple-flow Example Using Maven</a></li>
+<li><a href="jsf-configure003.htm#sthref1047">16.3.2.3 To Run the simple-flow Example</a></li>
+</ul></li>
+<li><a href="jsf-configure003.htm#sthref1048">16.3.3 The checkout-module Example Application</a>
+<ul>
+<li><a href="jsf-configure003.htm#sthref1049">16.3.3.1 The Facelets Pages for the checkout-module Example</a></li>
+<li><a href="jsf-configure003.htm#sthref1050">16.3.3.2 Using a Configuration File to Configure a Flow</a></li>
+<li><a href="jsf-configure003.htm#sthref1051">16.3.3.3 Using a Java Class to Configure a Flow</a></li>
+<li><a href="jsf-configure003.htm#sthref1052">16.3.3.4 The Flow-Scoped Managed Beans</a></li>
+<li><a href="jsf-configure003.htm#sthref1053">16.3.3.5 To Build, Package, and Deploy the checkout-module Example Using NetBeans IDE</a></li>
+<li><a href="jsf-configure003.htm#sthref1054">16.3.3.6 To Build, Package, and Deploy the checkout-module Example Using Maven</a></li>
+<li><a href="jsf-configure003.htm#sthref1055">16.3.3.7 To Run the checkout-module Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsf-configure004.htm#BNAWQ">16.4 Configuring Managed Beans</a>
+<ul>
+<li><a href="jsf-configure004.htm#BNAWR">16.4.1 Using the managed-bean Element</a></li>
+<li><a href="jsf-configure004.htm#BNAWS">16.4.2 Initializing Properties Using the managed-property Element</a>
+<ul>
+<li><a href="jsf-configure004.htm#BNAWU">16.4.2.1 Referencing a Java Enum Type</a></li>
+<li><a href="jsf-configure004.htm#BNAWV">16.4.2.2 Referencing a Context Initialization Parameter</a></li>
+<li><a href="jsf-configure004.htm#BNAWW">16.4.2.3 Initializing Map Properties</a></li>
+<li><a href="jsf-configure004.htm#BNAWX">16.4.2.4 Initializing Array and List Properties</a></li>
+<li><a href="jsf-configure004.htm#BNAWY">16.4.2.5 Initializing Managed Bean Properties</a></li>
+</ul></li>
+<li><a href="jsf-configure004.htm#BNAXA">16.4.3 Initializing Maps and Lists</a></li>
+</ul></li>
+<li><a href="jsf-configure005.htm#BNAXB">16.5 Registering Application Messages</a>
+<ul>
+<li><a href="jsf-configure005.htm#GKUHG">16.5.1 Using FacesMessage to Create a Message</a></li>
+<li><a href="jsf-configure005.htm#BNASS">16.5.2 Referencing Error Messages</a></li>
+</ul></li>
+<li><a href="jsf-configure006.htm#GIREB">16.6 Using Default Validators</a></li>
+<li><a href="jsf-configure007.htm#BNAXD">16.7 Registering a Custom Validator</a></li>
+<li><a href="jsf-configure008.htm#BNAXE">16.8 Registering a Custom Converter</a></li>
+<li><a href="jsf-configure009.htm#BNAXF">16.9 Configuring Navigation Rules</a></li>
+<li><a href="jsf-configure010.htm#BNAXH">16.10 Registering a Custom Renderer with a Render Kit</a></li>
+<li><a href="jsf-configure011.htm#BNAXI">16.11 Registering a Custom Component</a></li>
+<li><a href="jsf-configure012.htm#BNAXJ">16.12 Basic Requirements of a JavaServer Faces Application</a>
+<ul>
+<li><a href="jsf-configure012.htm#BNAXK">16.12.1 Configuring an Application with a Web Deployment Descriptor</a>
+<ul>
+<li><a href="jsf-configure012.htm#GLPOO">16.12.1.1 Identifying the Servlet for Lifecycle Processing</a></li>
+<li><a href="jsf-configure012.htm#BNAXM">16.12.1.2 To Specify a Path to an Application Configuration Resource File</a></li>
+<li><a href="jsf-configure012.htm#BNAXN">16.12.1.3 To Specify Where State Is Saved</a></li>
+</ul></li>
+<li><a href="jsf-configure012.htm#GIQXL">16.12.2 Configuring Project Stage</a></li>
+<li><a href="jsf-configure012.htm#BNAXT">16.12.3 Including the Classes, Pages, and Other Resources</a></li>
+</ul></li>
+</ul></li>
+<li><a href="servlets.htm#BNAFD">17 Java Servlet Technology</a>
+<ul>
+<li><a href="servlets001.htm#BNAFE">17.1 What Is a Servlet?</a></li>
+<li><a href="servlets002.htm#BNAFI">17.2 Servlet Lifecycle</a>
+<ul>
+<li><a href="servlets002.htm#BNAFJ">17.2.1 Handling Servlet Lifecycle Events</a>
+<ul>
+<li><a href="servlets002.htm#BNAFK">17.2.1.1 Defining the Listener Class</a></li>
+</ul></li>
+<li><a href="servlets002.htm#BNAFN">17.2.2 Handling Servlet Errors</a></li>
+</ul></li>
+<li><a href="servlets003.htm#BNAFO">17.3 Sharing Information</a>
+<ul>
+<li><a href="servlets003.htm#BNAFP">17.3.1 Using Scope Objects</a></li>
+<li><a href="servlets003.htm#BNAFS">17.3.2 Controlling Concurrent Access to Shared Resources</a></li>
+</ul></li>
+<li><a href="servlets004.htm#BNAFU">17.4 Creating and Initializing a Servlet</a></li>
+<li><a href="servlets005.htm#BNAFV">17.5 Writing Service Methods</a>
+<ul>
+<li><a href="servlets005.htm#BNAFW">17.5.1 Getting Information from Requests</a></li>
+<li><a href="servlets005.htm#BNAFZ">17.5.2 Constructing Responses</a></li>
+</ul></li>
+<li><a href="servlets006.htm#BNAGB">17.6 Filtering Requests and Responses</a>
+<ul>
+<li><a href="servlets006.htm#BNAGC">17.6.1 Programming Filters</a></li>
+<li><a href="servlets006.htm#BNAGD">17.6.2 Programming Customized Requests and Responses</a></li>
+<li><a href="servlets006.htm#BNAGF">17.6.3 Specifying Filter Mappings</a>
+<ul>
+<li><a href="servlets006.htm#GJSLC">17.6.3.1 To Specify Filter Mappings Using NetBeans IDE</a></li>
+</ul></li>
+</ul></li>
+<li><a href="servlets007.htm#BNAGI">17.7 Invoking Other Web Resources</a>
+<ul>
+<li><a href="servlets007.htm#BNAGJ">17.7.1 Including Other Resources in the Response</a></li>
+<li><a href="servlets007.htm#BNAGK">17.7.2 Transferring Control to Another Web Component</a></li>
+</ul></li>
+<li><a href="servlets008.htm#BNAGL">17.8 Accessing the Web Context</a></li>
+<li><a href="servlets009.htm#BNAGM">17.9 Maintaining Client State</a>
+<ul>
+<li><a href="servlets009.htm#BNAGN">17.9.1 Accessing a Session</a></li>
+<li><a href="servlets009.htm#BNAGO">17.9.2 Associating Objects with a Session</a></li>
+<li><a href="servlets009.htm#BNAGQ">17.9.3 Session Management</a>
+<ul>
+<li><a href="servlets009.htm#sthref1222">17.9.3.1 To Set the Timeout Period Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="servlets009.htm#BNAGR">17.9.4 Session Tracking</a></li>
+</ul></li>
+<li><a href="servlets010.htm#BNAGS">17.10 Finalizing a Servlet</a>
+<ul>
+<li><a href="servlets010.htm#BNAGT">17.10.1 Tracking Service Requests</a></li>
+<li><a href="servlets010.htm#BNAGU">17.10.2 Notifying Methods to Shut Down</a></li>
+<li><a href="servlets010.htm#BNAGV">17.10.3 Creating Polite Long-Running Methods</a></li>
+</ul></li>
+<li><a href="servlets011.htm#BABFGCHB">17.11 Uploading Files with Java Servlet Technology</a>
+<ul>
+<li><a href="servlets011.htm#sthref1230">17.11.1 The @MultipartConfig Annotation</a></li>
+<li><a href="servlets011.htm#sthref1232">17.11.2 The getParts and getPart Methods</a></li>
+</ul></li>
+<li><a href="servlets012.htm#BEIGCFDF">17.12 Asynchronous Processing</a>
+<ul>
+<li><a href="servlets012.htm#sthref1236">17.12.1 Asynchronous Processing in Servlets</a></li>
+<li><a href="servlets012.htm#sthref1238">17.12.2 Waiting for a Resource</a></li>
+</ul></li>
+<li><a href="servlets013.htm#BEIHICDH">17.13 Nonblocking I/O</a>
+<ul>
+<li><a href="servlets013.htm#sthref1243">17.13.1 Reading a Large HTTP POST Request Using Nonblocking I/O</a></li>
+</ul></li>
+<li><a href="servlets014.htm#BEIJHCDJ">17.14 Protocol Upgrade Processing</a></li>
+<li><a href="servlets015.htm#GKCPG">17.15 The mood Example Application</a>
+<ul>
+<li><a href="servlets015.htm#sthref1247">17.15.1 Components of the mood Example Application</a></li>
+<li><a href="servlets015.htm#GKCOJ">17.15.2 Running the mood Example</a>
+<ul>
+<li><a href="servlets015.htm#GKCOB">17.15.2.1 To Run the mood Example Using NetBeans IDE</a></li>
+<li><a href="servlets015.htm#GKCPJ">17.15.2.2 To Run the mood Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="servlets016.htm#BABDGFJJ">17.16 The fileupload Example Application</a>
+<ul>
+<li><a href="servlets016.htm#sthref1249">17.16.1 Architecture of the fileupload Example Application</a></li>
+<li><a href="servlets016.htm#sthref1250">17.16.2 Running the fileupload Example</a>
+<ul>
+<li><a href="servlets016.htm#sthref1251">17.16.2.1 To Build, Package, and Deploy the fileupload Example Using NetBeans IDE</a></li>
+<li><a href="servlets016.htm#sthref1252">17.16.2.2 To Build, Package, and Deploy the fileupload Example Using Maven</a></li>
+<li><a href="servlets016.htm#sthref1253">17.16.2.3 To Run the fileupload Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="servlets017.htm#BEIFAIFF">17.17 The dukeetf Example Application</a>
+<ul>
+<li><a href="servlets017.htm#sthref1254">17.17.1 Architecture of the dukeetf Example Application</a>
+<ul>
+<li><a href="servlets017.htm#sthref1255">17.17.1.1 The Servlet</a></li>
+<li><a href="servlets017.htm#sthref1256">17.17.1.2 The Enterprise Bean</a></li>
+<li><a href="servlets017.htm#sthref1257">17.17.1.3 The HTML Page</a></li>
+</ul></li>
+<li><a href="servlets017.htm#sthref1258">17.17.2 Running the dukeetf Example Application</a>
+<ul>
+<li><a href="servlets017.htm#sthref1259">17.17.2.1 To Run the dukeetf Example Application Using NetBeans IDE</a></li>
+<li><a href="servlets017.htm#sthref1260">17.17.2.2 To Run the dukeetf Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="servlets018.htm#BNAGW">17.18 Further Information about Java Servlet Technology</a></li>
+</ul></li>
+<li><a href="websocket.htm#GKJIQ5">18 Java API for WebSocket</a>
+<ul>
+<li><a href="websocket001.htm#BABDABHF">18.1 Introduction to WebSocket</a></li>
+<li><a href="websocket002.htm#BABEAEFC">18.2 Creating WebSocket Applications in the Java EE Platform</a></li>
+<li><a href="websocket003.htm#BABGJEIG">18.3 Programmatic Endpoints</a></li>
+<li><a href="websocket004.htm#BABFEBGA">18.4 Annotated Endpoints</a></li>
+<li><a href="websocket005.htm#BABFCGBJ">18.5 Sending and Receiving Messages</a>
+<ul>
+<li><a href="websocket005.htm#sthref1272">18.5.1 Sending Messages</a>
+<ul>
+<li><a href="websocket005.htm#BABIFBCG">18.5.1.1 Sending Messages to All Peers Connected to an Endpoint</a></li>
+</ul></li>
+<li><a href="websocket005.htm#sthref1274">18.5.2 Receiving Messages</a></li>
+</ul></li>
+<li><a href="websocket006.htm#BABGJCAD">18.6 Maintaining Client State</a></li>
+<li><a href="websocket007.htm#BABGADFG">18.7 Using Encoders and Decoders</a>
+<ul>
+<li><a href="websocket007.htm#sthref1277">18.7.1 Implementing Encoders to Convert Java Objects into WebSocket Messages</a></li>
+<li><a href="websocket007.htm#sthref1279">18.7.2 Implementing Decoders to Convert WebSocket Messages into Java Objects</a></li>
+</ul></li>
+<li><a href="websocket008.htm#BABEJIJI">18.8 Path Parameters</a></li>
+<li><a href="websocket009.htm#BABDEJHB">18.9 Handling Errors</a></li>
+<li><a href="websocket010.htm#BABJAIGH">18.10 Specifying an Endpoint Configurator Class</a></li>
+<li><a href="websocket011.htm#BABGCEHE">18.11 The dukeetf2 Example Application</a>
+<ul>
+<li><a href="websocket011.htm#sthref1286">18.11.1 Architecture of the dukeetf2 Sample Application</a>
+<ul>
+<li><a href="websocket011.htm#sthref1287">18.11.1.1 The Endpoint</a></li>
+<li><a href="websocket011.htm#sthref1288">18.11.1.2 The Enterprise Bean</a></li>
+<li><a href="websocket011.htm#sthref1289">18.11.1.3 The HTML Page</a></li>
+</ul></li>
+<li><a href="websocket011.htm#sthref1290">18.11.2 Running the dukeetf2 Example Application</a>
+<ul>
+<li><a href="websocket011.htm#sthref1291">18.11.2.1 To Run the dukeetf2 Example Application Using NetBeans IDE</a></li>
+<li><a href="websocket011.htm#sthref1292">18.11.2.2 To Run the dukeetf2 Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="websocket012.htm#BABCDBBC">18.12 The websocketbot Example Application</a>
+<ul>
+<li><a href="websocket012.htm#sthref1295">18.12.1 Architecture of the websocketbot Example Application</a>
+<ul>
+<li><a href="websocket012.htm#sthref1296">18.12.1.1 The CDI Bean</a></li>
+<li><a href="websocket012.htm#sthref1297">18.12.1.2 The WebSocket Endpoint</a></li>
+<li><a href="websocket012.htm#sthref1298">18.12.1.3 The Application Messages</a></li>
+<li><a href="websocket012.htm#sthref1299">18.12.1.4 The Encoder Classes</a></li>
+<li><a href="websocket012.htm#sthref1300">18.12.1.5 The Message Decoder</a></li>
+<li><a href="websocket012.htm#sthref1301">18.12.1.6 The HTML Page</a></li>
+</ul></li>
+<li><a href="websocket012.htm#sthref1302">18.12.2 Running the websocketbot Example Application</a>
+<ul>
+<li><a href="websocket012.htm#sthref1303">18.12.2.1 To Run the websocketbot Example Application Using NetBeans IDE</a></li>
+<li><a href="websocket012.htm#sthref1304">18.12.2.2 To Run the websocketbot Example Application Using Maven</a></li>
+<li><a href="websocket012.htm#BABDDAAG">18.12.2.3 To Test the websocketbot Example Application</a></li>
+</ul></li>
+</ul></li>
+<li><a href="websocket013.htm#BABDFIFD">18.13 Further Information about WebSocket</a></li>
+</ul></li>
+<li><a href="jsonp.htm#GLRBB">19 JSON Processing</a>
+<ul>
+<li><a href="jsonp001.htm#BABEECIB">19.1 Introduction to JSON</a>
+<ul>
+<li><a href="jsonp001.htm#BABGHEHG">19.1.1 JSON Syntax</a></li>
+<li><a href="jsonp001.htm#sthref1306">19.1.2 Uses of JSON</a></li>
+<li><a href="jsonp001.htm#BABJJACI">19.1.3 Generating and Parsing JSON Data</a></li>
+</ul></li>
+<li><a href="jsonp002.htm#BABDFHHD">19.2 JSON Processing in the Java EE Platform</a></li>
+<li><a href="jsonp003.htm#BABHAHIA">19.3 Using the Object Model API</a>
+<ul>
+<li><a href="jsonp003.htm#BABBHEBA">19.3.1 Creating an Object Model from JSON Data</a></li>
+<li><a href="jsonp003.htm#BABIGIAF">19.3.2 Creating an Object Model from Application Code</a></li>
+<li><a href="jsonp003.htm#BABJHEHG">19.3.3 Navigating an Object Model</a></li>
+<li><a href="jsonp003.htm#BABHEJFF">19.3.4 Writing an Object Model to a Stream</a></li>
+</ul></li>
+<li><a href="jsonp004.htm#BABDBHIA">19.4 Using the Streaming API</a>
+<ul>
+<li><a href="jsonp004.htm#BABGCHIG">19.4.1 Reading JSON Data Using a Parser</a></li>
+<li><a href="jsonp004.htm#BABGJEEF">19.4.2 Writing JSON Data Using a Generator</a></li>
+</ul></li>
+<li><a href="jsonp005.htm#BABCFABH">19.5 JSON in Java EE RESTful Web Services</a></li>
+<li><a href="jsonp006.htm#BABEDFCG">19.6 The jsonpmodel Example Application</a>
+<ul>
+<li><a href="jsonp006.htm#sthref1309">19.6.1 Components of the jsonpmodel Example Application</a></li>
+<li><a href="jsonp006.htm#sthref1310">19.6.2 Running the jsonpmodel Example Application</a>
+<ul>
+<li><a href="jsonp006.htm#sthref1311">19.6.2.1 To Run the jsonpmodel Example Application Using NetBeans IDE</a></li>
+<li><a href="jsonp006.htm#sthref1312">19.6.2.2 To Run the jsonpmodel Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsonp007.htm#BABBJDAC">19.7 The jsonpstreaming Example Application</a>
+<ul>
+<li><a href="jsonp007.htm#sthref1313">19.7.1 Components of the jsonpstreaming Example Application</a></li>
+<li><a href="jsonp007.htm#sthref1314">19.7.2 Running the jsonpstreaming Example Application</a>
+<ul>
+<li><a href="jsonp007.htm#sthref1315">19.7.2.1 To Run the jsonpstreaming Example Application Using NetBeans IDE</a></li>
+<li><a href="jsonp007.htm#sthref1316">19.7.2.2 To Run the jsonpstreaming Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jsonp008.htm#BABGAAGB">19.8 Further Information about the Java API for JSON Processing</a></li>
+</ul></li>
+<li><a href="webi18n.htm#BNAXU">20 Internationalizing and Localizing Web Applications</a>
+<ul>
+<li><a href="webi18n001.htm#BNAXV">20.1 Java Platform Localization Classes</a></li>
+<li><a href="webi18n002.htm#BNAXW">20.2 Providing Localized Messages and Labels</a>
+<ul>
+<li><a href="webi18n002.htm#GKUIA">20.2.1 Establishing the Locale</a></li>
+<li><a href="webi18n002.htm#BNAXY">20.2.2 Setting the Resource Bundle</a></li>
+<li><a href="webi18n002.htm#GKUFC">20.2.3 Retrieving Localized Messages</a></li>
+</ul></li>
+<li><a href="webi18n003.htm#BNAYA">20.3 Date and Number Formatting</a></li>
+<li><a href="webi18n004.htm#BNAYB">20.4 Character Sets and Encodings</a>
+<ul>
+<li><a href="webi18n004.htm#BNAYC">20.4.1 Character Sets</a></li>
+<li><a href="webi18n004.htm#BNAYD">20.4.2 Character Encoding</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partbeanvalidation.htm#sthref1322">Part IV Bean Validation</a>
+<ul>
+<li><a href="bean-validation.htm#CHDGJIIA">21 Introduction to Bean Validation</a>
+<ul>
+<li><a href="bean-validation001.htm#GIRCZ">21.1 Using Bean Validation Constraints</a></li>
+<li><a href="bean-validation002.htm#GKCRG">21.2 Validating Null and Empty Strings</a></li>
+<li><a href="bean-validation003.htm#CACJIBEJ">21.3 Validating Constructors and Methods</a>
+<ul>
+<li><a href="bean-validation003.htm#sthref1347">21.3.1 Cross-Parameter Constraints</a></li>
+<li><a href="bean-validation003.htm#sthref1349">21.3.2 Identifying Parameter Constraint Violations</a></li>
+<li><a href="bean-validation003.htm#sthref1353">21.3.3 Adding Constraints to Method Return Values</a></li>
+</ul></li>
+<li><a href="bean-validation004.htm#CACDECFE">21.4 Further Information about Bean Validation</a></li>
+</ul></li>
+<li><a href="bean-validation-advanced.htm#GKAHP">22 Bean Validation: Advanced Topics</a>
+<ul>
+<li><a href="bean-validation-advanced001.htm#GKFGX">22.1 Creating Custom Constraints</a>
+<ul>
+<li><a href="bean-validation-advanced001.htm#GKAIA">22.1.1 Using the Built-In Constraints to Make a New Constraint</a></li>
+<li><a href="bean-validation-advanced001.htm#CIHCICAI">22.1.2 Removing Ambiguity in Constraint Targets</a></li>
+</ul></li>
+<li><a href="bean-validation-advanced002.htm#GKAHI">22.2 Customizing Validator Messages</a>
+<ul>
+<li><a href="bean-validation-advanced002.htm#GKAGY">22.2.1 The ValidationMessages Resource Bundle</a>
+<ul>
+<li><a href="bean-validation-advanced002.htm#GKAIQ">22.2.1.1 Localizing Validation Messages</a></li>
+</ul></li>
+</ul></li>
+<li><a href="bean-validation-advanced003.htm#GKAGV">22.3 Grouping Constraints</a>
+<ul>
+<li><a href="bean-validation-advanced003.htm#GKAGU">22.3.1 Customizing Group Validation Order</a></li>
+</ul></li>
+<li><a href="bean-validation-advanced004.htm#CIHGJBGI">22.4 Using Method Constraints in Type Hierarchies</a>
+<ul>
+<li><a href="bean-validation-advanced004.htm#sthref1371">22.4.1 Rules for Using Method Constraints in Type Hierarchies</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partcdi.htm#GJBNR">Part V Contexts and Dependency Injection for Java EE</a>
+<ul>
+<li><a href="cdi-basic.htm#GIWHB">23 Introduction to Contexts and Dependency Injection for Java EE</a>
+<ul>
+<li><a href="cdi-basic001.htm#BABJDJGA">23.1 Getting Started</a></li>
+<li><a href="cdi-basic002.htm#GIWHL">23.2 Overview of CDI</a></li>
+<li><a href="cdi-basic003.htm#GJEBJ">23.3 About Beans</a></li>
+<li><a href="cdi-basic004.htm#GJFZI">23.4 About CDI Managed Beans</a></li>
+<li><a href="cdi-basic005.htm#GIZKS">23.5 Beans as Injectable Objects</a></li>
+<li><a href="cdi-basic006.htm#GJBCK">23.6 Using Qualifiers</a></li>
+<li><a href="cdi-basic007.htm#GJBAN">23.7 Injecting Beans</a></li>
+<li><a href="cdi-basic008.htm#GJBBK">23.8 Using Scopes</a></li>
+<li><a href="cdi-basic009.htm#GJBAK">23.9 Giving Beans EL Names</a></li>
+<li><a href="cdi-basic010.htm#GJBBP">23.10 Adding Setter and Getter Methods</a></li>
+<li><a href="cdi-basic011.htm#GJBBU">23.11 Using a Managed Bean in a Facelets Page</a></li>
+<li><a href="cdi-basic012.htm#GJDID">23.12 Injecting Objects by Using Producer Methods</a></li>
+<li><a href="cdi-basic013.htm#GJBNZ">23.13 Configuring a CDI Application</a></li>
+<li><a href="cdi-basic014.htm#BABJFEAI">23.14 Using the @PostConstruct and @PreDestroy Annotations with CDI Managed Bean Classes</a>
+<ul>
+<li><a href="cdi-basic014.htm#sthref1405">23.14.1 To Initialize a Managed Bean Using the @PostConstruct Annotation</a></li>
+<li><a href="cdi-basic014.htm#sthref1406">23.14.2 To Prepare for the Destruction of a Managed Bean Using the @PreDestroy Annotation</a></li>
+</ul></li>
+<li><a href="cdi-basic015.htm#GIWEL">23.15 Further Information about CDI</a></li>
+</ul></li>
+<li><a href="cdi-basicexamples.htm#GJBLS">24 Running the Basic Contexts and Dependency Injection Examples</a>
+<ul>
+<li><a href="cdi-basicexamples001.htm#GJBJU">24.1 The simplegreeting CDI Example</a>
+<ul>
+<li><a href="cdi-basicexamples001.htm#GJCQS">24.1.1 The simplegreeting Source Files</a></li>
+<li><a href="cdi-basicexamples001.htm#GJDOJ">24.1.2 The Facelets Template and Page</a></li>
+<li><a href="cdi-basicexamples001.htm#GJCYM">24.1.3 Running the simplegreeting Example</a>
+<ul>
+<li><a href="cdi-basicexamples001.htm#GJCXP">24.1.3.1 To Build, Package, and Run the simplegreeting Example Using NetBeans IDE</a></li>
+<li><a href="cdi-basicexamples001.htm#GJCZT">24.1.3.2 To Build, Package, and Deploy the simplegreeting Example Using Maven</a></li>
+<li><a href="cdi-basicexamples001.htm#GJCZE">24.1.3.3 To Run the simplegreeting Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="cdi-basicexamples002.htm#GJCXV">24.2 The guessnumber-cdi CDI Example</a>
+<ul>
+<li><a href="cdi-basicexamples002.htm#GJDJU">24.2.1 The guessnumber-cdi Source Files</a>
+<ul>
+<li><a href="cdi-basicexamples002.htm#GJDJP">24.2.1.1 The @MaxNumber and @Random Qualifier Interfaces</a></li>
+<li><a href="cdi-basicexamples002.htm#GJDJN">24.2.1.2 The Generator Managed Bean</a></li>
+<li><a href="cdi-basicexamples002.htm#GJDHY">24.2.1.3 The UserNumberBean Managed Bean</a></li>
+</ul></li>
+<li><a href="cdi-basicexamples002.htm#GJDON">24.2.2 The Facelets Page</a></li>
+<li><a href="cdi-basicexamples002.htm#GJDPW">24.2.3 Running the guessnumber-cdi Example</a>
+<ul>
+<li><a href="cdi-basicexamples002.htm#GJDPS">24.2.3.1 To Build, Package, and Deploy the guessnumber-cdi Example Using NetBeans IDE</a></li>
+<li><a href="cdi-basicexamples002.htm#GJDPR">24.2.3.2 To Build, Package, and Deploy the guessnumber-cdi Example Using Maven</a></li>
+<li><a href="cdi-basicexamples002.htm#GJDQB">24.2.3.3 To Run the guessnumber Example</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="cdi-adv.htm#GJEHI">25 Contexts and Dependency Injection for Java EE: Advanced Topics</a>
+<ul>
+<li><a href="cdi-adv001.htm#CACDCFDE">25.1 Packaging CDI Applications</a></li>
+<li><a href="cdi-adv002.htm#GJSDF">25.2 Using Alternatives in CDI Applications</a>
+<ul>
+<li><a href="cdi-adv002.htm#GKHPO">25.2.1 Using Specialization</a></li>
+</ul></li>
+<li><a href="cdi-adv003.htm#GKGKV">25.3 Using Producer Methods, Producer Fields, and Disposer Methods in CDI Applications</a>
+<ul>
+<li><a href="cdi-adv003.htm#sthref1420">25.3.1 Using Producer Methods</a></li>
+<li><a href="cdi-adv003.htm#sthref1421">25.3.2 Using Producer Fields to Generate Resources</a></li>
+<li><a href="cdi-adv003.htm#sthref1422">25.3.3 Using a Disposer Method</a></li>
+</ul></li>
+<li><a href="cdi-adv004.htm#CJGHGDBA">25.4 Using Predefined Beans in CDI Applications</a></li>
+<li><a href="cdi-adv005.htm#GKHIC">25.5 Using Events in CDI Applications</a>
+<ul>
+<li><a href="cdi-adv005.htm#GKHHY">25.5.1 Defining Events</a></li>
+<li><a href="cdi-adv005.htm#GKHNF">25.5.2 Using Observer Methods to Handle Events</a></li>
+<li><a href="cdi-adv005.htm#GKHIH">25.5.3 Firing Events</a></li>
+</ul></li>
+<li><a href="cdi-adv006.htm#GKHJX">25.6 Using Interceptors in CDI Applications</a></li>
+<li><a href="cdi-adv007.htm#GKHQF">25.7 Using Decorators in CDI Applications</a></li>
+<li><a href="cdi-adv008.htm#GKHQC">25.8 Using Stereotypes in CDI Applications</a></li>
+</ul></li>
+<li><a href="cdi-adv-examples.htm#GKHRE">26 Running the Advanced Contexts and Dependency Injection Examples</a>
+<ul>
+<li><a href="cdi-adv-examples001.htm#GKHPU">26.1 The encoder Example: Using Alternatives</a>
+<ul>
+<li><a href="cdi-adv-examples001.htm#GKHQA">26.1.1 The Coder Interface and Implementations</a></li>
+<li><a href="cdi-adv-examples001.htm#GKHPM">26.1.2 The encoder Facelets Page and Managed Bean</a></li>
+<li><a href="cdi-adv-examples001.htm#GKHQQ">26.1.3 Running the encoder Example</a>
+<ul>
+<li><a href="cdi-adv-examples001.htm#GKHOW">26.1.3.1 To Build, Package, and Deploy the encoder Example Using NetBeans IDE</a></li>
+<li><a href="cdi-adv-examples001.htm#GKHQU">26.1.3.2 To Run the encoder Example Using NetBeans IDE</a></li>
+<li><a href="cdi-adv-examples001.htm#GKHQL">26.1.3.3 To Build, Package, and Deploy the encoder Example Using Maven</a></li>
+<li><a href="cdi-adv-examples001.htm#GKHOL">26.1.3.4 To Run the encoder Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="cdi-adv-examples002.htm#GKHPY">26.2 The producermethods Example: Using a Producer Method to Choose a Bean Implementation</a>
+<ul>
+<li><a href="cdi-adv-examples002.htm#GKHRO">26.2.1 Components of the producermethods Example</a></li>
+<li><a href="cdi-adv-examples002.htm#GKHQE">26.2.2 Running the producermethods Example</a>
+<ul>
+<li><a href="cdi-adv-examples002.htm#GKHPE">26.2.2.1 To Build, Package, and Deploy the producermethods Example Using NetBeans IDE</a></li>
+<li><a href="cdi-adv-examples002.htm#GKHPS">26.2.2.2 To Build, Package, and Deploy the producermethods Example Using Maven</a></li>
+<li><a href="cdi-adv-examples002.htm#GKHQG">26.2.2.3 To Run the producermethods Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="cdi-adv-examples003.htm#GKHRG">26.3 The producerfields Example: Using Producer Fields to Generate Resources</a>
+<ul>
+<li><a href="cdi-adv-examples003.htm#GKHPP">26.3.1 The Producer Field for the producerfields Example</a></li>
+<li><a href="cdi-adv-examples003.htm#GKHPD">26.3.2 The producerfields Entity and Session Bean</a></li>
+<li><a href="cdi-adv-examples003.htm#GKHPF">26.3.3 The producerfields Facelets Pages and Managed Bean</a></li>
+<li><a href="cdi-adv-examples003.htm#GKHRH">26.3.4 Running the producerfields Example</a>
+<ul>
+<li><a href="cdi-adv-examples003.htm#GKHPB">26.3.4.1 To Build, Package, and Deploy the producerfields Example Using NetBeans IDE</a></li>
+<li><a href="cdi-adv-examples003.htm#GKHRM">26.3.4.2 To Build, Package, and Deploy the producerfields Example Using Maven</a></li>
+<li><a href="cdi-adv-examples003.htm#GKHRR">26.3.4.3 To Run the producerfields Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="cdi-adv-examples004.htm#GKHPA">26.4 The billpayment Example: Using Events and Interceptors</a>
+<ul>
+<li><a href="cdi-adv-examples004.htm#GKHOK">26.4.1 The PaymentEvent Event Class</a></li>
+<li><a href="cdi-adv-examples004.htm#GKHRB">26.4.2 The PaymentHandler Event Listener</a></li>
+<li><a href="cdi-adv-examples004.htm#GKHRJ">26.4.3 The billpayment Facelets Pages and Managed Bean</a></li>
+<li><a href="cdi-adv-examples004.htm#GKHRQ">26.4.4 The LoggedInterceptor Interceptor Class</a></li>
+<li><a href="cdi-adv-examples004.htm#GKHPK">26.4.5 Running the billpayment Example</a>
+<ul>
+<li><a href="cdi-adv-examples004.htm#GKHQS">26.4.5.1 To Build, Package, and Deploy the billpayment Example Using NetBeans IDE</a></li>
+<li><a href="cdi-adv-examples004.htm#GKHPX">26.4.5.2 To Build, Package, and Deploy the billpayment Example Using Maven</a></li>
+<li><a href="cdi-adv-examples004.htm#GKHPT">26.4.5.3 To Run the billpayment Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="cdi-adv-examples005.htm#GKPAX">26.5 The decorators Example: Decorating a Bean</a>
+<ul>
+<li><a href="cdi-adv-examples005.htm#GKPAQ">26.5.1 Components of the decorators Example</a></li>
+<li><a href="cdi-adv-examples005.htm#GKPBK">26.5.2 Running the decorators Example</a>
+<ul>
+<li><a href="cdi-adv-examples005.htm#GKPAG">26.5.2.1 To Build, Package, and Deploy the decorators Example Using NetBeans IDE</a></li>
+<li><a href="cdi-adv-examples005.htm#GKPAJ">26.5.2.2 To Build, Package, and Deploy the decorators Example Using Maven</a></li>
+<li><a href="cdi-adv-examples005.htm#GKPAN">26.5.2.3 To Run the decorators Example</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partwebsvcs.htm#BNAYK">Part VI Web Services</a>
+<ul>
+<li><a href="webservices-intro.htm#GIJTI">27 Introduction to Web Services</a>
+<ul>
+<li><a href="webservices-intro001.htm#GIJVH">27.1 What Are Web Services?</a></li>
+<li><a href="webservices-intro002.htm#GIQSX">27.2 Types of Web Services</a>
+<ul>
+<li><a href="webservices-intro002.htm#GKCDG">27.2.1 "Big" Web Services</a></li>
+<li><a href="webservices-intro002.htm#GKCAW">27.2.2 RESTful Web Services</a></li>
+</ul></li>
+<li><a href="webservices-intro003.htm#GJBJI">27.3 Deciding Which Type of Web Service to Use</a></li>
+</ul></li>
+<li><a href="jaxws.htm#BNAYL">28 Building Web Services with JAX-WS</a>
+<ul>
+<li><a href="jaxws001.htm#BNAYN">28.1 Creating a Simple Web Service and Clients with JAX-WS</a>
+<ul>
+<li><a href="jaxws001.htm#BNAYP">28.1.1 Requirements of a JAX-WS Endpoint</a></li>
+<li><a href="jaxws001.htm#BNAYQ">28.1.2 Coding the Service Endpoint Implementation Class</a></li>
+<li><a href="jaxws001.htm#BNAYR">28.1.3 Building, Packaging, and Deploying the Service</a>
+<ul>
+<li><a href="jaxws001.htm#BNAYS">28.1.3.1 To Build, Package, and Deploy the Service Using NetBeans IDE</a></li>
+<li><a href="jaxws001.htm#BNAYT">28.1.3.2 To Build, Package, and Deploy the Service Using Maven</a></li>
+</ul></li>
+<li><a href="jaxws001.htm#GKAJL">28.1.4 Testing the Methods of a Web Service Endpoint</a>
+<ul>
+<li><a href="jaxws001.htm#BNAYW">28.1.4.1 To Test the Service without a Client</a></li>
+</ul></li>
+<li><a href="jaxws001.htm#BNAYX">28.1.5 A Simple JAX-WS Application Client</a>
+<ul>
+<li><a href="jaxws001.htm#BNAYY">28.1.5.1 Coding the Application Client</a></li>
+<li><a href="jaxws001.htm#BNAYZ">28.1.5.2 Running the Application Client</a></li>
+</ul></li>
+<li><a href="jaxws001.htm#GJYGB">28.1.6 A Simple JAX-WS Web Client</a>
+<ul>
+<li><a href="jaxws001.htm#GJYFL">28.1.6.1 Coding the Servlet</a></li>
+<li><a href="jaxws001.htm#GJYGE">28.1.6.2 Running the Web Client</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jaxws002.htm#BNAZC">28.2 Types Supported by JAX-WS</a>
+<ul>
+<li><a href="jaxws002.htm#BNAZT">28.2.1 Schema-to-Java Mapping</a></li>
+<li><a href="jaxws002.htm#BNAZW">28.2.2 Java-to-Schema Mapping</a></li>
+</ul></li>
+<li><a href="jaxws003.htm#BNAZD">28.3 Web Services Interoperability and JAX-WS</a></li>
+<li><a href="jaxws004.htm#BNAZE">28.4 Further Information about JAX-WS</a></li>
+</ul></li>
+<li><a href="jaxrs.htm#GIEPU">29 Building RESTful Web Services with JAX-RS</a>
+<ul>
+<li><a href="jaxrs001.htm#GIJQY">29.1 What Are RESTful Web Services?</a></li>
+<li><a href="jaxrs002.htm#GILIK">29.2 Creating a RESTful Root Resource Class</a>
+<ul>
+<li><a href="jaxrs002.htm#GILRU">29.2.1 Developing RESTful Web Services with JAX-RS</a></li>
+<li><a href="jaxrs002.htm#GILQB">29.2.2 Overview of a JAX-RS Application</a></li>
+<li><a href="jaxrs002.htm#GINPW">29.2.3 The @Path Annotation and URI Path Templates</a></li>
+<li><a href="jaxrs002.htm#GIPYS">29.2.4 Responding to HTTP Methods and Requests</a>
+<ul>
+<li><a href="jaxrs002.htm#GIPXS">29.2.4.1 The Request Method Designator Annotations</a></li>
+<li><a href="jaxrs002.htm#GIPZE">29.2.4.2 Using Entity Providers to Map HTTP Response and Request Entity Bodies</a></li>
+</ul></li>
+<li><a href="jaxrs002.htm#GIPZH">29.2.5 Using @Consumes and @Produces to Customize Requests and Responses</a>
+<ul>
+<li><a href="jaxrs002.htm#GIPXF">29.2.5.1 The @Produces Annotation</a></li>
+<li><a href="jaxrs002.htm#GIPYT">29.2.5.2 The @Consumes Annotation</a></li>
+</ul></li>
+<li><a href="jaxrs002.htm#GIPYW">29.2.6 Extracting Request Parameters</a></li>
+<li><a href="jaxrs002.htm#sthref1547">29.2.7 Configuring JAX-RS Applications</a>
+<ul>
+<li><a href="jaxrs002.htm#sthref1551">29.2.7.1 Configuring a JAX-RS Application Using a Subclass of Application</a></li>
+<li><a href="jaxrs002.htm#sthref1552">29.2.7.2 Configuring the Base URI in web.xml</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jaxrs003.htm#GIPZZ">29.3 Example Applications for JAX-RS</a>
+<ul>
+<li><a href="jaxrs003.htm#GIPYZ">29.3.1 Creating a Simple RESTful Web Service</a>
+<ul>
+<li><a href="jaxrs003.htm#GIQAA">29.3.1.1 To Create a RESTful Web Service Using NetBeans IDE</a></li>
+</ul></li>
+<li><a href="jaxrs003.htm#GJVBC">29.3.2 The rsvp Example Application</a>
+<ul>
+<li><a href="jaxrs003.htm#GJVAW">29.3.2.1 Components of the rsvp Example Application</a></li>
+<li><a href="jaxrs003.htm#GKCCA">29.3.2.2 Running the rsvp Example Application</a></li>
+</ul></li>
+<li><a href="jaxrs003.htm#GIRCI">29.3.3 Real-World Examples</a></li>
+</ul></li>
+<li><a href="jaxrs004.htm#GILIZ">29.4 Further Information about JAX-RS</a></li>
+</ul></li>
+<li><a href="jaxrs-client.htm#BABEIGIH">30 Accessing REST Resources with the JAX-RS Client API</a>
+<ul>
+<li><a href="jaxrs-client001.htm#BABBIHEJ">30.1 Overview of the Client API</a>
+<ul>
+<li><a href="jaxrs-client001.htm#sthref1563">30.1.1 Creating a Basic Client Request Using the Client API</a>
+<ul>
+<li><a href="jaxrs-client001.htm#sthref1564">30.1.1.1 Obtaining the Client Instance</a></li>
+<li><a href="jaxrs-client001.htm#sthref1565">30.1.1.2 Setting the Client Target</a></li>
+<li><a href="jaxrs-client001.htm#sthref1566">30.1.1.3 Setting Path Parameters in Targets</a></li>
+<li><a href="jaxrs-client001.htm#sthref1568">30.1.1.4 Invoking the Request</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jaxrs-client002.htm#BABJCIJC">30.2 Using the Client API in the JAX-RS Example Applications</a>
+<ul>
+<li><a href="jaxrs-client002.htm#BABEDFIG">30.2.1 The Client API in the rsvp Example Application</a></li>
+<li><a href="jaxrs-client002.htm#sthref1570">30.2.2 The Client API in the customer Example Application</a></li>
+</ul></li>
+<li><a href="jaxrs-client003.htm#BABCDDGH">30.3 Advanced Features of the Client API</a>
+<ul>
+<li><a href="jaxrs-client003.htm#sthref1571">30.3.1 Configuring the Client Request</a>
+<ul>
+<li><a href="jaxrs-client003.htm#sthref1572">30.3.1.1 Setting Message Headers in the Client Request</a></li>
+<li><a href="jaxrs-client003.htm#sthref1574">30.3.1.2 Setting Cookies in the Client Request</a></li>
+<li><a href="jaxrs-client003.htm#sthref1577">30.3.1.3 Adding Filters to the Client</a></li>
+</ul></li>
+<li><a href="jaxrs-client003.htm#sthref1579">30.3.2 Asynchronous Invocations in the Client API</a>
+<ul>
+<li><a href="jaxrs-client003.htm#sthref1581">30.3.2.1 Using Custom Callbacks in Asynchronous Invocations</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="jaxrs-advanced.htm#GJJXE">31 JAX-RS: Advanced Topics and an Example</a>
+<ul>
+<li><a href="jaxrs-advanced001.htm#GKKRB">31.1 Annotations for Field and Bean Properties of Resource Classes</a>
+<ul>
+<li><a href="jaxrs-advanced001.htm#GKKYA">31.1.1 Extracting Path Parameters</a></li>
+<li><a href="jaxrs-advanced001.htm#GKKXJ">31.1.2 Extracting Query Parameters</a></li>
+<li><a href="jaxrs-advanced001.htm#GKKYC">31.1.3 Extracting Form Data</a></li>
+<li><a href="jaxrs-advanced001.htm#GKLCQ">31.1.4 Extracting the Java Type of a Request or Response</a></li>
+</ul></li>
+<li><a href="jaxrs-advanced002.htm#BABCJEDF">31.2 Validating Resource Data with Bean Validation</a>
+<ul>
+<li><a href="jaxrs-advanced002.htm#sthref1606">31.2.1 Using Constraint Annotations on Resource Methods</a></li>
+<li><a href="jaxrs-advanced002.htm#sthref1607">31.2.2 Validating Entity Data</a></li>
+<li><a href="jaxrs-advanced002.htm#sthref1608">31.2.3 Validation Exception Handling and Response Codes</a></li>
+</ul></li>
+<li><a href="jaxrs-advanced003.htm#GKNAV">31.3 Subresources and Runtime Resource Resolution</a>
+<ul>
+<li><a href="jaxrs-advanced003.htm#GKLAG">31.3.1 Subresource Methods</a></li>
+<li><a href="jaxrs-advanced003.htm#GKRHR">31.3.2 Subresource Locators</a></li>
+</ul></li>
+<li><a href="jaxrs-advanced004.htm#GKNCY">31.4 Integrating JAX-RS with EJB Technology and CDI</a></li>
+<li><a href="jaxrs-advanced005.htm#GKQDA">31.5 Conditional HTTP Requests</a></li>
+<li><a href="jaxrs-advanced006.htm#GKQBQ">31.6 Runtime Content Negotiation</a></li>
+<li><a href="jaxrs-advanced007.htm#GKKNJ">31.7 Using JAX-RS with JAXB</a>
+<ul>
+<li><a href="jaxrs-advanced007.htm#sthref1635">31.7.1 Using Java Objects to Model Your Data</a></li>
+<li><a href="jaxrs-advanced007.htm#sthref1636">31.7.2 Starting from an Existing XML Schema Definition</a></li>
+<li><a href="jaxrs-advanced007.htm#sthref1637">31.7.3 Using JSON with JAX-RS and JAXB</a></li>
+</ul></li>
+<li><a href="jaxrs-advanced008.htm#GKOIB">31.8 The customer Example Application</a>
+<ul>
+<li><a href="jaxrs-advanced008.htm#GKOFO">31.8.1 Overview of the customer Example Application</a></li>
+<li><a href="jaxrs-advanced008.htm#sthref1642">31.8.2 The Customer and Address Entity Classes</a></li>
+<li><a href="jaxrs-advanced008.htm#GKLGT">31.8.3 The CustomerService Class</a></li>
+<li><a href="jaxrs-advanced008.htm#GKQJQ">31.8.4 Using the JAX-RS Client in the CustomerBean Classes</a></li>
+<li><a href="jaxrs-advanced008.htm#GKQKV">31.8.5 Running the customer Example</a>
+<ul>
+<li><a href="jaxrs-advanced008.htm#GKQLY">31.8.5.1 To Build, Package, and Deploy the customer Example Using NetBeans IDE</a></li>
+<li><a href="jaxrs-advanced008.htm#GKQJV">31.8.5.2 To Build, Package, and Deploy the customer Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partentbeans.htm#BNBLR">Part VII Enterprise Beans</a>
+<ul>
+<li><a href="ejb-intro.htm#GIJSZ">32 Enterprise Beans</a>
+<ul>
+<li><a href="ejb-intro001.htm#GIPMB">32.1 What Is an Enterprise Bean?</a>
+<ul>
+<li><a href="ejb-intro001.htm#GIPLK">32.1.1 Benefits of Enterprise Beans</a></li>
+<li><a href="ejb-intro001.htm#GIPKN">32.1.2 When to Use Enterprise Beans</a></li>
+<li><a href="ejb-intro001.htm#GIPNM">32.1.3 Types of Enterprise Beans</a></li>
+</ul></li>
+<li><a href="ejb-intro002.htm#GIPJG">32.2 What Is a Session Bean?</a>
+<ul>
+<li><a href="ejb-intro002.htm#GIPKR">32.2.1 Types of Session Beans</a>
+<ul>
+<li><a href="ejb-intro002.htm#GIPNL">32.2.1.1 Stateful Session Beans</a></li>
+<li><a href="ejb-intro002.htm#GIPIN">32.2.1.2 Stateless Session Beans</a></li>
+<li><a href="ejb-intro002.htm#GIPIM">32.2.1.3 Singleton Session Beans</a></li>
+</ul></li>
+<li><a href="ejb-intro002.htm#GIPMT">32.2.2 When to Use Session Beans</a></li>
+</ul></li>
+<li><a href="ejb-intro003.htm#GIPKO">32.3 What Is a Message-Driven Bean?</a>
+<ul>
+<li><a href="ejb-intro003.htm#GIPMJ">32.3.1 What Makes Message-Driven Beans Different from Session Beans?</a></li>
+<li><a href="ejb-intro003.htm#GIPJX">32.3.2 When to Use Message-Driven Beans</a></li>
+</ul></li>
+<li><a href="ejb-intro004.htm#GIPJF">32.4 Accessing Enterprise Beans</a>
+<ul>
+<li><a href="ejb-intro004.htm#GIRFL">32.4.1 Using Enterprise Beans in Clients</a>
+<ul>
+<li><a href="ejb-intro004.htm#GIRGN">32.4.1.1 Portable JNDI Syntax</a></li>
+</ul></li>
+<li><a href="ejb-intro004.htm#GIPIZ">32.4.2 Deciding on Remote or Local Access</a></li>
+<li><a href="ejb-intro004.htm#GIPMZ">32.4.3 Local Clients</a>
+<ul>
+<li><a href="ejb-intro004.htm#GIPSC">32.4.3.1 Accessing Local Enterprise Beans Using the No-Interface View</a></li>
+<li><a href="ejb-intro004.htm#GIPSE">32.4.3.2 Accessing Local Enterprise Beans That Implement Business Interfaces</a></li>
+</ul></li>
+<li><a href="ejb-intro004.htm#GIPIU">32.4.4 Remote Clients</a></li>
+<li><a href="ejb-intro004.htm#GIPKD">32.4.5 Web Service Clients</a></li>
+<li><a href="ejb-intro004.htm#GIPLY">32.4.6 Method Parameters and Access</a>
+<ul>
+<li><a href="ejb-intro004.htm#GIPLX">32.4.6.1 Isolation</a></li>
+<li><a href="ejb-intro004.htm#GIPKV">32.4.6.2 Granularity of Accessed Data</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-intro005.htm#GIPIO">32.5 The Contents of an Enterprise Bean</a></li>
+<li><a href="ejb-intro006.htm#GIPKS">32.6 Naming Conventions for Enterprise Beans</a></li>
+<li><a href="ejb-intro007.htm#GIPLJ">32.7 The Lifecycles of Enterprise Beans</a>
+<ul>
+<li><a href="ejb-intro007.htm#GIPLN">32.7.1 The Lifecycle of a Stateful Session Bean</a></li>
+<li><a href="ejb-intro007.htm#GIPLM">32.7.2 The Lifecycle of a Stateless Session Bean</a></li>
+<li><a href="ejb-intro007.htm#GIPRX">32.7.3 The Lifecycle of a Singleton Session Bean</a></li>
+<li><a href="ejb-intro007.htm#GIPKW">32.7.4 The Lifecycle of a Message-Driven Bean</a></li>
+</ul></li>
+<li><a href="ejb-intro008.htm#GIPLG">32.8 Further Information about Enterprise Beans</a></li>
+</ul></li>
+<li><a href="ejb-gettingstarted.htm#GIJRE">33 Getting Started with Enterprise Beans</a>
+<ul>
+<li><a href="ejb-gettingstarted001.htm#GIPSS">33.1 Creating the Enterprise Bean</a>
+<ul>
+<li><a href="ejb-gettingstarted001.htm#GIPSX">33.1.1 Coding the Enterprise Bean Class</a></li>
+<li><a href="ejb-gettingstarted001.htm#GIPSI">33.1.2 Creating the converter Web Client</a></li>
+<li><a href="ejb-gettingstarted001.htm#GIPVV">33.1.3 Running the converter Example</a>
+<ul>
+<li><a href="ejb-gettingstarted001.htm#GIPUM">33.1.3.1 To Run the converter Example Using NetBeans IDE</a></li>
+<li><a href="ejb-gettingstarted001.htm#GIPVQ">33.1.3.2 To Run the converter Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-gettingstarted002.htm#GIPTI">33.2 Modifying the Java EE Application</a>
+<ul>
+<li><a href="ejb-gettingstarted002.htm#GIPUK">33.2.1 To Modify a Class File</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-basicexamples.htm#GIJRB">34 Running the Enterprise Bean Examples</a>
+<ul>
+<li><a href="ejb-basicexamples001.htm#BNBOD">34.1 The cart Example</a>
+<ul>
+<li><a href="ejb-basicexamples001.htm#BNBOE">34.1.1 The Business Interface</a></li>
+<li><a href="ejb-basicexamples001.htm#BNBOF">34.1.2 Session Bean Class</a>
+<ul>
+<li><a href="ejb-basicexamples001.htm#BNBOG">34.1.2.1 Lifecycle Callback Methods</a></li>
+<li><a href="ejb-basicexamples001.htm#BNBOH">34.1.2.2 Business Methods</a></li>
+</ul></li>
+<li><a href="ejb-basicexamples001.htm#BNBOI">34.1.3 The @Remove Method</a></li>
+<li><a href="ejb-basicexamples001.htm#BNBOJ">34.1.4 Helper Classes</a></li>
+<li><a href="ejb-basicexamples001.htm#BNBOK">34.1.5 Running the cart Example</a>
+<ul>
+<li><a href="ejb-basicexamples001.htm#BNBOL">34.1.5.1 To Run the cart Example Using NetBeans IDE</a></li>
+<li><a href="ejb-basicexamples001.htm#BNBON">34.1.5.2 To Run the cart Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-basicexamples002.htm#GIPVI">34.2 A Singleton Session Bean Example: counter</a>
+<ul>
+<li><a href="ejb-basicexamples002.htm#GIPVC">34.2.1 Creating a Singleton Session Bean</a>
+<ul>
+<li><a href="ejb-basicexamples002.htm#GIPPQ">34.2.1.1 Initializing Singleton Session Beans</a></li>
+<li><a href="ejb-basicexamples002.htm#GIPSZ">34.2.1.2 Managing Concurrent Access in a Singleton Session Bean</a></li>
+<li><a href="ejb-basicexamples002.htm#GIPVD">34.2.1.3 Handling Errors in a Singleton Session Bean</a></li>
+</ul></li>
+<li><a href="ejb-basicexamples002.htm#GIPXL">34.2.2 The Architecture of the counter Example</a></li>
+<li><a href="ejb-basicexamples002.htm#GIPVL">34.2.3 Running the counter Example</a>
+<ul>
+<li><a href="ejb-basicexamples002.htm#GIPXT">34.2.3.1 To Run the counter Example Using NetBeans IDE</a></li>
+<li><a href="ejb-basicexamples002.htm#GIPZW">34.2.3.2 To Run the counter Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-basicexamples003.htm#BNBOR">34.3 A Web Service Example: helloservice</a>
+<ul>
+<li><a href="ejb-basicexamples003.htm#BNBOS">34.3.1 The Web Service Endpoint Implementation Class</a></li>
+<li><a href="ejb-basicexamples003.htm#BNBOT">34.3.2 Stateless Session Bean Implementation Class</a></li>
+<li><a href="ejb-basicexamples003.htm#BNBOU">34.3.3 Running the helloservice Example</a>
+<ul>
+<li><a href="ejb-basicexamples003.htm#BNBOV">34.3.3.1 To Build, Package, and Deploy the helloservice Example Using NetBeans IDE</a></li>
+<li><a href="ejb-basicexamples003.htm#BNBOW">34.3.3.2 To Build, Package, and Deploy the helloservice Example Using Maven</a></li>
+<li><a href="ejb-basicexamples003.htm#BNBOX">34.3.3.3 To Test the Service without a Client</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-basicexamples004.htm#BNBOY">34.4 Using the Timer Service</a>
+<ul>
+<li><a href="ejb-basicexamples004.htm#GIQLK">34.4.1 Creating Calendar-Based Timer Expressions</a>
+<ul>
+<li><a href="ejb-basicexamples004.htm#GIQMX">34.4.1.1 Specifying Multiple Values in Calendar Expressions</a></li>
+</ul></li>
+<li><a href="ejb-basicexamples004.htm#GIQLT">34.4.2 Programmatic Timers</a>
+<ul>
+<li><a href="ejb-basicexamples004.htm#BNBOZ">34.4.2.1 The @Timeout Method</a></li>
+<li><a href="ejb-basicexamples004.htm#BNBPA">34.4.2.2 Creating Programmatic Timers</a></li>
+</ul></li>
+<li><a href="ejb-basicexamples004.htm#GIQMB">34.4.3 Automatic Timers</a></li>
+<li><a href="ejb-basicexamples004.htm#BNBPB">34.4.4 Canceling and Saving Timers</a></li>
+<li><a href="ejb-basicexamples004.htm#BNBPC">34.4.5 Getting Timer Information</a></li>
+<li><a href="ejb-basicexamples004.htm#BNBPD">34.4.6 Transactions and Timers</a></li>
+<li><a href="ejb-basicexamples004.htm#BNBPE">34.4.7 The timersession Example</a></li>
+<li><a href="ejb-basicexamples004.htm#BNBPF">34.4.8 Running the timersession Example</a>
+<ul>
+<li><a href="ejb-basicexamples004.htm#GIQNI">34.4.8.1 To Run the timersession Example Using NetBeans IDE</a></li>
+<li><a href="ejb-basicexamples004.htm#GIQNQ">34.4.8.2 To Build, Package, and Deploy the timersession Example Using Maven</a></li>
+<li><a href="ejb-basicexamples004.htm#GIQOP">34.4.8.3 To Run the Web Client</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-basicexamples005.htm#BNBPJ">34.5 Handling Exceptions</a></li>
+</ul></li>
+<li><a href="ejb-embedded.htm#GKCQZ">35 Using the Embedded Enterprise Bean Container</a>
+<ul>
+<li><a href="ejb-embedded001.htm#GKFAE">35.1 Overview of the Embedded Enterprise Bean Container</a></li>
+<li><a href="ejb-embedded002.htm#GKCRR">35.2 Developing Embeddable Enterprise Bean Applications</a>
+<ul>
+<li><a href="ejb-embedded002.htm#GKCQI">35.2.1 Running Embedded Applications</a></li>
+<li><a href="ejb-embedded002.htm#GKCOV">35.2.2 Creating the Enterprise Bean Container</a>
+<ul>
+<li><a href="ejb-embedded002.htm#GKCRP">35.2.2.1 Explicitly Specifying Enterprise Bean Modules to Be Initialized</a></li>
+</ul></li>
+<li><a href="ejb-embedded002.htm#GLHUR">35.2.3 Looking Up Session Bean References</a></li>
+<li><a href="ejb-embedded002.htm#GKCRE">35.2.4 Shutting Down the Enterprise Bean Container</a></li>
+</ul></li>
+<li><a href="ejb-embedded003.htm#GKCPV">35.3 The standalone Example Application</a>
+<ul>
+<li><a href="ejb-embedded003.htm#GKCQP">35.3.1 To Run the standalone Example Application Using NetBeans IDE</a></li>
+<li><a href="ejb-embedded003.htm#sthref1812">35.3.2 To Run the standalone Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-async.htm#GKIDZ">36 Using Asynchronous Method Invocation in Session Beans</a>
+<ul>
+<li><a href="ejb-async001.htm#GKKQG">36.1 Asynchronous Method Invocation</a>
+<ul>
+<li><a href="ejb-async001.htm#GKIFJ">36.1.1 Creating an Asynchronous Business Method</a></li>
+<li><a href="ejb-async001.htm#GKIEM">36.1.2 Calling Asynchronous Methods from Enterprise Bean Clients</a>
+<ul>
+<li><a href="ejb-async001.htm#GKICM">36.1.2.1 Retrieving the Final Result from an Asynchronous Method Invocation</a></li>
+<li><a href="ejb-async001.htm#GKIDB">36.1.2.2 Cancelling an Asynchronous Method Invocation</a></li>
+<li><a href="ejb-async001.htm#GKIEV">36.1.2.3 Checking the Status of an Asynchronous Method Invocation</a></li>
+</ul></li>
+</ul></li>
+<li><a href="ejb-async002.htm#GKIEZ">36.2 The async Example Application</a>
+<ul>
+<li><a href="ejb-async002.htm#GKIQJ">36.2.1 Architecture of the async-war Module</a></li>
+<li><a href="ejb-async002.htm#sthref1823">36.2.2 Running the async Example</a>
+<ul>
+<li><a href="ejb-async002.htm#GKINW">36.2.2.1 To Run the async Example Application Using NetBeans IDE</a></li>
+<li><a href="ejb-async002.htm#GKRFB">36.2.2.2 To Run the async Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partpersist.htm#BNBPY">Part VIII Persistence</a>
+<ul>
+<li><a href="persistence-intro.htm#BNBPZ">37 Introduction to the Java Persistence API</a>
+<ul>
+<li><a href="persistence-intro001.htm#BNBQA">37.1 Entities</a>
+<ul>
+<li><a href="persistence-intro001.htm#BNBQB">37.1.1 Requirements for Entity Classes</a></li>
+<li><a href="persistence-intro001.htm#BNBQC">37.1.2 Persistent Fields and Properties in Entity Classes</a>
+<ul>
+<li><a href="persistence-intro001.htm#BNBQD">37.1.2.1 Persistent Fields</a></li>
+<li><a href="persistence-intro001.htm#BNBQE">37.1.2.2 Persistent Properties</a></li>
+<li><a href="persistence-intro001.htm#GIQVN">37.1.2.3 Using Collections in Entity Fields and Properties</a></li>
+<li><a href="persistence-intro001.htm#GKAHQ">37.1.2.4 Validating Persistent Fields and Properties</a></li>
+</ul></li>
+<li><a href="persistence-intro001.htm#BNBQF">37.1.3 Primary Keys in Entities</a></li>
+<li><a href="persistence-intro001.htm#BNBQH">37.1.4 Multiplicity in Entity Relationships</a></li>
+<li><a href="persistence-intro001.htm#BNBQI">37.1.5 Direction in Entity Relationships</a>
+<ul>
+<li><a href="persistence-intro001.htm#BNBQJ">37.1.5.1 Bidirectional Relationships</a></li>
+<li><a href="persistence-intro001.htm#BNBQK">37.1.5.2 Unidirectional Relationships</a></li>
+<li><a href="persistence-intro001.htm#BNBQL">37.1.5.3 Queries and Relationship Direction</a></li>
+<li><a href="persistence-intro001.htm#BNBQM">37.1.5.4 Cascade Operations and Relationships</a></li>
+<li><a href="persistence-intro001.htm#GIQXY">37.1.5.5 Orphan Removal in Relationships</a></li>
+</ul></li>
+<li><a href="persistence-intro001.htm#GJIWZ">37.1.6 Embeddable Classes in Entities</a></li>
+</ul></li>
+<li><a href="persistence-intro002.htm#BNBQN">37.2 Entity Inheritance</a>
+<ul>
+<li><a href="persistence-intro002.htm#BNBQO">37.2.1 Abstract Entities</a></li>
+<li><a href="persistence-intro002.htm#BNBQP">37.2.2 Mapped Superclasses</a></li>
+<li><a href="persistence-intro002.htm#BNBQQ">37.2.3 Non-Entity Superclasses</a></li>
+<li><a href="persistence-intro002.htm#BNBQR">37.2.4 Entity Inheritance Mapping Strategies</a>
+<ul>
+<li><a href="persistence-intro002.htm#BNBQS">37.2.4.1 The Single Table per Class Hierarchy Strategy</a></li>
+<li><a href="persistence-intro002.htm#BNBQU">37.2.4.2 The Table per Concrete Class Strategy</a></li>
+<li><a href="persistence-intro002.htm#BNBQV">37.2.4.3 The Joined Subclass Strategy</a></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-intro003.htm#BNBQW">37.3 Managing Entities</a>
+<ul>
+<li><a href="persistence-intro003.htm#BNBQY">37.3.1 The EntityManager Interface</a>
+<ul>
+<li><a href="persistence-intro003.htm#BNBQZ">37.3.1.1 Container-Managed Entity Managers</a></li>
+<li><a href="persistence-intro003.htm#BNBRA">37.3.1.2 Application-Managed Entity Managers</a></li>
+<li><a href="persistence-intro003.htm#BNBRB">37.3.1.3 Finding Entities Using the EntityManager</a></li>
+<li><a href="persistence-intro003.htm#BNBRC">37.3.1.4 Managing an Entity Instance's Lifecycle</a></li>
+<li><a href="persistence-intro003.htm#BNBRD">37.3.1.5 Persisting Entity Instances</a></li>
+<li><a href="persistence-intro003.htm#BNBRE">37.3.1.6 Removing Entity Instances</a></li>
+<li><a href="persistence-intro003.htm#BNBRF">37.3.1.7 Synchronizing Entity Data to the Database</a></li>
+</ul></li>
+<li><a href="persistence-intro003.htm#BNBRJ">37.3.2 Persistence Units</a></li>
+</ul></li>
+<li><a href="persistence-intro004.htm#GJISE">37.4 Querying Entities</a></li>
+<li><a href="persistence-intro005.htm#CHDBEGIC">37.5 Database Schema Creation</a>
+<ul>
+<li><a href="persistence-intro005.htm#sthref1908">37.5.1 Configuring an Application to Create or Drop Database Tables</a></li>
+<li><a href="persistence-intro005.htm#sthref1919">37.5.2 Loading Data Using SQL Scripts</a></li>
+</ul></li>
+<li><a href="persistence-intro006.htm#GKCLC">37.6 Further Information about Persistence</a></li>
+</ul></li>
+<li><a href="persistence-basicexamples.htm#GIJST">38 Running the Persistence Examples</a>
+<ul>
+<li><a href="persistence-basicexamples001.htm#GIQST">38.1 The order Application</a>
+<ul>
+<li><a href="persistence-basicexamples001.htm#GIQRH">38.1.1 Entity Relationships in the order Application</a>
+<ul>
+<li><a href="persistence-basicexamples001.htm#GIQQR">38.1.1.1 Self-Referential Relationships</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQSR">38.1.1.2 One-to-One Relationships</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQTJ">38.1.1.3 One-to-Many Relationship Mapped to Overlapping Primary and Foreign Keys</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQUD">38.1.1.4 Unidirectional Relationships</a></li>
+</ul></li>
+<li><a href="persistence-basicexamples001.htm#GIQQY">38.1.2 Primary Keys in the order Application</a>
+<ul>
+<li><a href="persistence-basicexamples001.htm#GIQUV">38.1.2.1 Generated Primary Keys</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQUF">38.1.2.2 Compound Primary Keys</a></li>
+</ul></li>
+<li><a href="persistence-basicexamples001.htm#GIQTL">38.1.3 Entity Mapped to More Than One Database Table</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQUE">38.1.4 Cascade Operations in the order Application</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQSC">38.1.5 BLOB and CLOB Database Types in the order Application</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQUM">38.1.6 Temporal Types in the order Application</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQQV">38.1.7 Managing the order Application's Entities</a>
+<ul>
+<li><a href="persistence-basicexamples001.htm#GIQRR">38.1.7.1 Creating Entities</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQQC">38.1.7.2 Finding Entities</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQUK">38.1.7.3 Setting Entity Relationships</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQSV">38.1.7.4 Using Queries</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQTW">38.1.7.5 Removing Entities</a></li>
+</ul></li>
+<li><a href="persistence-basicexamples001.htm#GIQUP">38.1.8 Running the order Example</a>
+<ul>
+<li><a href="persistence-basicexamples001.htm#GIQSG">38.1.8.1 To Run the order Example Using NetBeans IDE</a></li>
+<li><a href="persistence-basicexamples001.htm#GIQTY">38.1.8.2 To Run the order Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-basicexamples002.htm#GIQSQ">38.2 The roster Application</a>
+<ul>
+<li><a href="persistence-basicexamples002.htm#GIQSO">38.2.1 Relationships in the roster Application</a>
+<ul>
+<li><a href="persistence-basicexamples002.htm#GIQQK">38.2.1.1 The Many-To-Many Relationship in roster</a></li>
+</ul></li>
+<li><a href="persistence-basicexamples002.htm#GIQRF">38.2.2 Entity Inheritance in the roster Application</a></li>
+<li><a href="persistence-basicexamples002.htm#GJJFL">38.2.3 Criteria Queries in the roster Application</a>
+<ul>
+<li><a href="persistence-basicexamples002.htm#GJJEX">38.2.3.1 Metamodel Classes in the roster Application</a></li>
+<li><a href="persistence-basicexamples002.htm#GJJFN">38.2.3.2 Obtaining a CriteriaBuilder Instance in RequestBean</a></li>
+<li><a href="persistence-basicexamples002.htm#GJJFF">38.2.3.3 Creating Criteria Queries in RequestBean's Business Methods</a></li>
+</ul></li>
+<li><a href="persistence-basicexamples002.htm#GIQRX">38.2.4 Automatic Table Generation in the roster Application</a></li>
+<li><a href="persistence-basicexamples002.htm#GIQUZ">38.2.5 Running the roster Example</a>
+<ul>
+<li><a href="persistence-basicexamples002.htm#GIQUG">38.2.5.1 To Run the roster Example Using NetBeans IDE</a></li>
+<li><a href="persistence-basicexamples002.htm#GIQSJ">38.2.5.2 To Run the roster Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-basicexamples003.htm#GKANQ">38.3 The address-book Application</a>
+<ul>
+<li><a href="persistence-basicexamples003.htm#GKAOJ">38.3.1 Bean Validation Constraints in address-book</a></li>
+<li><a href="persistence-basicexamples003.htm#GKANL">38.3.2 Specifying Error Messages for Constraints in address-book</a></li>
+<li><a href="persistence-basicexamples003.htm#GKAON">38.3.3 Validating Contact Input from a JavaServer Faces Application</a></li>
+<li><a href="persistence-basicexamples003.htm#GKAOP">38.3.4 Running the address-book Example</a>
+<ul>
+<li><a href="persistence-basicexamples003.htm#GKAOD">38.3.4.1 To Run the address-book Example Using NetBeans IDE</a></li>
+<li><a href="persistence-basicexamples003.htm#GKANZ">38.3.4.2 To Run the address-book Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-querylanguage.htm#BNBTG">39 The Java Persistence Query Language</a>
+<ul>
+<li><a href="persistence-querylanguage001.htm#BNBTH">39.1 Query Language Terminology</a></li>
+<li><a href="persistence-querylanguage002.htm#BNBRG">39.2 Creating Queries Using the Java Persistence Query Language</a>
+<ul>
+<li><a href="persistence-querylanguage002.htm#BNBRH">39.2.1 Named Parameters in Queries</a></li>
+<li><a href="persistence-querylanguage002.htm#BNBRI">39.2.2 Positional Parameters in Queries</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage003.htm#BNBTI">39.3 Simplified Query Language Syntax</a>
+<ul>
+<li><a href="persistence-querylanguage003.htm#BNBTJ">39.3.1 Select Statements</a></li>
+<li><a href="persistence-querylanguage003.htm#BNBTK">39.3.2 Update and Delete Statements</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage004.htm#BNBTL">39.4 Example Queries</a>
+<ul>
+<li><a href="persistence-querylanguage004.htm#BNBTM">39.4.1 Simple Queries</a>
+<ul>
+<li><a href="persistence-querylanguage004.htm#BNBTN">39.4.1.1 A Basic Select Query</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTO">39.4.1.2 Eliminating Duplicate Values</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTP">39.4.1.3 Using Named Parameters</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage004.htm#BNBTQ">39.4.2 Queries That Navigate to Related Entities</a>
+<ul>
+<li><a href="persistence-querylanguage004.htm#BNBTR">39.4.2.1 A Simple Query with Relationships</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTS">39.4.2.2 Navigating to Single-Valued Relationship Fields</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTT">39.4.2.3 Traversing Relationships with an Input Parameter</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTU">39.4.2.4 Traversing Multiple Relationships</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTV">39.4.2.5 Navigating According to Related Fields</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage004.htm#BNBTW">39.4.3 Queries with Other Conditional Expressions</a>
+<ul>
+<li><a href="persistence-querylanguage004.htm#BNBTX">39.4.3.1 The LIKE Expression</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTY">39.4.3.2 The IS NULL Expression</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBTZ">39.4.3.3 The IS EMPTY Expression</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBUA">39.4.3.4 The BETWEEN Expression</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBUB">39.4.3.5 Comparison Operators</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage004.htm#BNBUC">39.4.4 Bulk Updates and Deletes</a>
+<ul>
+<li><a href="persistence-querylanguage004.htm#BNBUD">39.4.4.1 Update Queries</a></li>
+<li><a href="persistence-querylanguage004.htm#BNBUE">39.4.4.2 Delete Queries</a></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-querylanguage005.htm#BNBUF">39.5 Full Query Language Syntax</a>
+<ul>
+<li><a href="persistence-querylanguage005.htm#BNBUG">39.5.1 BNF Symbols</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUI">39.5.2 BNF Grammar of the Java Persistence Query Language</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUJ">39.5.3 FROM Clause</a>
+<ul>
+<li><a href="persistence-querylanguage005.htm#BNBUK">39.5.3.1 Identifiers</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUM">39.5.3.2 Identification Variables</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUN">39.5.3.3 Range Variable Declarations</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUO">39.5.3.4 Collection Member Declarations</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUP">39.5.3.5 Joins</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage005.htm#BNBUQ">39.5.4 Path Expressions</a>
+<ul>
+<li><a href="persistence-querylanguage005.htm#BNBUR">39.5.4.1 Examples of Path Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUS">39.5.4.2 Expression Types</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBUT">39.5.4.3 Navigation</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage005.htm#BNBUU">39.5.5 WHERE Clause</a>
+<ul>
+<li><a href="persistence-querylanguage005.htm#BNBUV">39.5.5.1 Literals</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVA">39.5.5.2 Input Parameters</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVB">39.5.5.3 Conditional Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVC">39.5.5.4 Operators and Their Precedence</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVE">39.5.5.5 BETWEEN Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVF">39.5.5.6 IN Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVG">39.5.5.7 LIKE Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVI">39.5.5.8 NULL Comparison Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVJ">39.5.5.9 Empty Collection Comparison Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVK">39.5.5.10 Collection Member Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVL">39.5.5.11 Subqueries</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVO">39.5.5.12 Functional Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#GJJND">39.5.5.13 Case Expressions</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVR">39.5.5.14 NULL Values</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBVU">39.5.5.15 Equality Semantics</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage005.htm#BNBVX">39.5.6 SELECT Clause</a>
+<ul>
+<li><a href="persistence-querylanguage005.htm#BNBVY">39.5.6.1 Return Types</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBWB">39.5.6.2 The DISTINCT Keyword</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBWC">39.5.6.3 Constructor Expressions</a></li>
+</ul></li>
+<li><a href="persistence-querylanguage005.htm#BNBWD">39.5.7 ORDER BY Clause</a></li>
+<li><a href="persistence-querylanguage005.htm#BNBWE">39.5.8 GROUP BY and HAVING Clauses</a></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-criteria.htm#GJITV">40 Using the Criteria API to Create Queries</a>
+<ul>
+<li><a href="persistence-criteria001.htm#GJRIJ">40.1 Overview of the Criteria and Metamodel APIs</a></li>
+<li><a href="persistence-criteria002.htm#GJIUP">40.2 Using the Metamodel API to Model Entity Classes</a>
+<ul>
+<li><a href="persistence-criteria002.htm#GJIVL">40.2.1 Using Metamodel Classes</a></li>
+</ul></li>
+<li><a href="persistence-criteria003.htm#GJIVM">40.3 Using the Criteria API and Metamodel API to Create Basic Typesafe Queries</a>
+<ul>
+<li><a href="persistence-criteria003.htm#GJIVS">40.3.1 Creating a Criteria Query</a></li>
+<li><a href="persistence-criteria003.htm#GJIVQ">40.3.2 Query Roots</a></li>
+<li><a href="persistence-criteria003.htm#GJIUV">40.3.3 Querying Relationships Using Joins</a></li>
+<li><a href="persistence-criteria003.htm#GJIVE">40.3.4 Path Navigation in Criteria Queries</a></li>
+<li><a href="persistence-criteria003.htm#GJIVI">40.3.5 Restricting Criteria Query Results</a>
+<ul>
+<li><a href="persistence-criteria003.htm#GJIWN">40.3.5.1 The Expression Interface Methods</a></li>
+<li><a href="persistence-criteria003.htm#GJIXA">40.3.5.2 Expression Methods in the CriteriaBuilder Interface</a></li>
+</ul></li>
+<li><a href="persistence-criteria003.htm#GJIXE">40.3.6 Managing Criteria Query Results</a>
+<ul>
+<li><a href="persistence-criteria003.htm#GJIWO">40.3.6.1 Ordering Results</a></li>
+<li><a href="persistence-criteria003.htm#GJIXG">40.3.6.2 Grouping Results</a></li>
+</ul></li>
+<li><a href="persistence-criteria003.htm#GJIVY">40.3.7 Executing Queries</a>
+<ul>
+<li><a href="persistence-criteria003.htm#GJIUR">40.3.7.1 Single-Valued Query Results</a></li>
+<li><a href="persistence-criteria003.htm#GJIVP">40.3.7.2 Collection-Valued Query Results</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-string-queries.htm#GKJIQ">41 Creating and Using String-Based Criteria Queries</a>
+<ul>
+<li><a href="persistence-string-queries001.htm#GKJIV">41.1 Overview of String-Based Criteria API Queries</a></li>
+<li><a href="persistence-string-queries002.htm#GKJBQ">41.2 Creating String-Based Queries</a></li>
+<li><a href="persistence-string-queries003.htm#GKJDB">41.3 Executing String-Based Queries</a></li>
+</ul></li>
+<li><a href="persistence-locking.htm#GKJJF">42 Controlling Concurrent Access to Entity Data with Locking</a>
+<ul>
+<li><a href="persistence-locking001.htm#GKJHZ">42.1 Overview of Entity Locking and Concurrency</a>
+<ul>
+<li><a href="persistence-locking001.htm#GKJJC">42.1.1 Using Optimistic Locking</a></li>
+</ul></li>
+<li><a href="persistence-locking002.htm#GKJIU">42.2 Lock Modes</a>
+<ul>
+<li><a href="persistence-locking002.htm#GKJIK">42.2.1 Setting the Lock Mode</a></li>
+<li><a href="persistence-locking002.htm#GKJIL">42.2.2 Using Pessimistic Locking</a>
+<ul>
+<li><a href="persistence-locking002.htm#GKJLQ">42.2.2.1 Pessimistic Locking Timeouts</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-entitygraphs.htm#BABIJIAC">43 Creating Fetch Plans with Entity Graphs</a>
+<ul>
+<li><a href="persistence-entitygraphs001.htm#BABCJBCG">43.1 Entity Graph Basics</a>
+<ul>
+<li><a href="persistence-entitygraphs001.htm#sthref2176">43.1.1 The Default Entity Graph</a></li>
+<li><a href="persistence-entitygraphs001.htm#sthref2177">43.1.2 Using Entity Graphs in Persistence Operations</a>
+<ul>
+<li><a href="persistence-entitygraphs001.htm#sthref2180">43.1.2.1 Fetch Graphs</a></li>
+<li><a href="persistence-entitygraphs001.htm#sthref2182">43.1.2.2 Load Graphs</a></li>
+</ul></li>
+</ul></li>
+<li><a href="persistence-entitygraphs002.htm#BABFIGEI">43.2 Using Named Entity Graphs</a>
+<ul>
+<li><a href="persistence-entitygraphs002.htm#sthref2186">43.2.1 Applying Named Entity Graph Annotations to Entity Classes</a></li>
+<li><a href="persistence-entitygraphs002.htm#sthref2187">43.2.2 Obtaining EntityGraph Instances from Named Entity Graphs</a></li>
+</ul></li>
+<li><a href="persistence-entitygraphs003.htm#BABGJDAJ">43.3 Using Entity Graphs in Query Operations</a></li>
+</ul></li>
+<li><a href="persistence-cache.htm#GKJIA">44 Using a Second-Level Cache with Java Persistence API Applications</a>
+<ul>
+<li><a href="persistence-cache001.htm#GKJIO">44.1 Overview of the Second-Level Cache</a>
+<ul>
+<li><a href="persistence-cache001.htm#GKJIW">44.1.1 Controlling whether Entities May Be Cached</a></li>
+</ul></li>
+<li><a href="persistence-cache002.htm#GKJJJ">44.2 Specifying the Cache Mode Settings to Improve Performance</a>
+<ul>
+<li><a href="persistence-cache002.htm#GKJDK">44.2.1 Setting the Cache Retrieval and Store Modes</a>
+<ul>
+<li><a href="persistence-cache002.htm#GKJDR">44.2.1.1 Cache Retrieval Mode</a></li>
+<li><a href="persistence-cache002.htm#GKJDD">44.2.1.2 Cache Store Mode</a></li>
+<li><a href="persistence-cache002.htm#GKJDS">44.2.1.3 Setting the Cache Retrieval or Store Mode</a></li>
+</ul></li>
+<li><a href="persistence-cache002.htm#GKJEB">44.2.2 Controlling the Second-Level Cache Programmatically</a>
+<ul>
+<li><a href="persistence-cache002.htm#GKJDZ">44.2.2.1 Checking whether an Entity's Data Is Cached</a></li>
+<li><a href="persistence-cache002.htm#GKJDQ">44.2.2.2 Removing an Entity from the Cache</a></li>
+<li><a href="persistence-cache002.htm#GKJDA">44.2.2.3 Removing All Data from the Cache</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partmessaging.htm#GFIRP3">Part IX Messaging</a>
+<ul>
+<li><a href="jms-concepts.htm#BNCDQ">45 Java Message Service Concepts</a>
+<ul>
+<li><a href="jms-concepts001.htm#BNCDR">45.1 Overview of the JMS API</a>
+<ul>
+<li><a href="jms-concepts001.htm#BNCDS">45.1.1 What Is Messaging?</a></li>
+<li><a href="jms-concepts001.htm#BNCDT">45.1.2 What Is the JMS API?</a></li>
+<li><a href="jms-concepts001.htm#BNCDU">45.1.3 When Can You Use the JMS API?</a></li>
+<li><a href="jms-concepts001.htm#BNCDW">45.1.4 How Does the JMS API Work with the Java EE Platform?</a></li>
+</ul></li>
+<li><a href="jms-concepts002.htm#BNCDX">45.2 Basic JMS API Concepts</a>
+<ul>
+<li><a href="jms-concepts002.htm#BNCDY">45.2.1 JMS API Architecture</a></li>
+<li><a href="jms-concepts002.htm#BNCEA">45.2.2 Messaging Styles</a>
+<ul>
+<li><a href="jms-concepts002.htm#BNCEB">45.2.2.1 Point-to-Point Messaging Style</a></li>
+<li><a href="jms-concepts002.htm#BNCED">45.2.2.2 Publish/Subscribe Messaging Style</a></li>
+</ul></li>
+<li><a href="jms-concepts002.htm#BNCEG">45.2.3 Message Consumption</a></li>
+</ul></li>
+<li><a href="jms-concepts003.htm#BNCEH">45.3 The JMS API Programming Model</a>
+<ul>
+<li><a href="jms-concepts003.htm#BNCEJ">45.3.1 JMS Administered Objects</a>
+<ul>
+<li><a href="jms-concepts003.htm#BNCEK">45.3.1.1 JMS Connection Factories</a></li>
+<li><a href="jms-concepts003.htm#BNCEL">45.3.1.2 JMS Destinations</a></li>
+</ul></li>
+<li><a href="jms-concepts003.htm#BNCEM">45.3.2 Connections</a></li>
+<li><a href="jms-concepts003.htm#BNCEN">45.3.3 Sessions</a></li>
+<li><a href="jms-concepts003.htm#BABGDFEA">45.3.4 JMSContext Objects</a></li>
+<li><a href="jms-concepts003.htm#BNCEO">45.3.5 JMS Message Producers</a></li>
+<li><a href="jms-concepts003.htm#BNCEP">45.3.6 JMS Message Consumers</a>
+<ul>
+<li><a href="jms-concepts003.htm#BNCEQ">45.3.6.1 JMS Message Listeners</a></li>
+<li><a href="jms-concepts003.htm#BNCER">45.3.6.2 JMS Message Selectors</a></li>
+<li><a href="jms-concepts003.htm#BABEEJJJ">45.3.6.3 Consuming Messages from Topics</a></li>
+<li><a href="jms-concepts003.htm#BNCGD">45.3.6.4 Creating Durable Subscriptions</a></li>
+<li><a href="jms-concepts003.htm#BABJCIGJ">45.3.6.5 Creating Shared Subscriptions</a></li>
+</ul></li>
+<li><a href="jms-concepts003.htm#BNCES">45.3.7 JMS Messages</a>
+<ul>
+<li><a href="jms-concepts003.htm#BNCET">45.3.7.1 Message Headers</a></li>
+<li><a href="jms-concepts003.htm#BNCEV">45.3.7.2 Message Properties</a></li>
+<li><a href="jms-concepts003.htm#BNCEW">45.3.7.3 Message Bodies</a></li>
+</ul></li>
+<li><a href="jms-concepts003.htm#BNCEY">45.3.8 JMS Queue Browsers</a></li>
+<li><a href="jms-concepts003.htm#BNCEZ">45.3.9 JMS Exception Handling</a></li>
+</ul></li>
+<li><a href="jms-concepts004.htm#BNCFU">45.4 Using Advanced JMS Features</a>
+<ul>
+<li><a href="jms-concepts004.htm#BNCFW">45.4.1 Controlling Message Acknowledgment</a></li>
+<li><a href="jms-concepts004.htm#BNCFV">45.4.2 Specifying Options for Sending Messages</a>
+<ul>
+<li><a href="jms-concepts004.htm#BNCFY">45.4.2.1 Specifying Message Persistence</a></li>
+<li><a href="jms-concepts004.htm#BNCFZ">45.4.2.2 Setting Message Priority Levels</a></li>
+<li><a href="jms-concepts004.htm#BNCGA">45.4.2.3 Allowing Messages to Expire</a></li>
+<li><a href="jms-concepts004.htm#BABGEADH">45.4.2.4 Specifying a Delivery Delay</a></li>
+<li><a href="jms-concepts004.htm#BABJFIAD">45.4.2.5 Using JMSProducer Method Chaining</a></li>
+</ul></li>
+<li><a href="jms-concepts004.htm#BNCGB">45.4.3 Creating Temporary Destinations</a></li>
+<li><a href="jms-concepts004.htm#BNCGH">45.4.4 Using JMS Local Transactions</a></li>
+<li><a href="jms-concepts004.htm#BABFIFAJ">45.4.5 Sending Messages Asynchronously</a></li>
+</ul></li>
+<li><a href="jms-concepts005.htm#BNCGL">45.5 Using the JMS API in Java EE Applications</a>
+<ul>
+<li><a href="jms-concepts005.htm#BABHFBDH">45.5.1 Creating Resources for Java EE Applications</a></li>
+<li><a href="jms-concepts005.htm#BNCGM">45.5.2 Using Resource Injection in Enterprise Bean or Web Components</a>
+<ul>
+<li><a href="jms-concepts005.htm#sthref2356">45.5.2.1 Injecting a ConnectionFactory, Queue, or Topic</a></li>
+<li><a href="jms-concepts005.htm#BABCJBEE">45.5.2.2 Injecting a JMSContext Object</a></li>
+</ul></li>
+<li><a href="jms-concepts005.htm#BNCGN">45.5.3 Using Java EE Components to Produce and to Synchronously Receive Messages</a>
+<ul>
+<li><a href="jms-concepts005.htm#BNCGO">45.5.3.1 Managing JMS Resources in Web and EJB Components</a></li>
+<li><a href="jms-concepts005.htm#BNCGP">45.5.3.2 Managing Transactions in Session Beans</a></li>
+</ul></li>
+<li><a href="jms-concepts005.htm#BNCGQ">45.5.4 Using Message-Driven Beans to Receive Messages Asynchronously</a></li>
+<li><a href="jms-concepts005.htm#BNCGS">45.5.5 Managing JTA Transactions</a></li>
+</ul></li>
+<li><a href="jms-concepts006.htm#BNCGU">45.6 Further Information about JMS</a></li>
+</ul></li>
+<li><a href="jms-examples.htm#BNCGV">46 Java Message Service Examples</a>
+<ul>
+<li><a href="jms-examples001.htm#BABEFBHJ">46.1 Overview of the JMS Examples</a></li>
+<li><a href="jms-examples002.htm#BNCFA">46.2 Writing Simple JMS Applications</a>
+<ul>
+<li><a href="jms-examples002.htm#BNCFD">46.2.1 Starting the JMS Provider</a></li>
+<li><a href="jms-examples002.htm#GKTJS">46.2.2 Creating JMS Administered Objects</a>
+<ul>
+<li><a href="jms-examples002.htm#BABHEFCB">46.2.2.1 To Create Resources for the Simple Examples</a></li>
+</ul></li>
+<li><a href="jms-examples002.htm#BABEEABE">46.2.3 Building All the Simple Examples</a>
+<ul>
+<li><a href="jms-examples002.htm#sthref2386">46.2.3.1 To Build All the Simple Examples Using NetBeans IDE</a></li>
+<li><a href="jms-examples002.htm#sthref2387">46.2.3.2 To Build All the Simple Examples Using Maven</a></li>
+</ul></li>
+<li><a href="jms-examples002.htm#BABIHCAE">46.2.4 Sending Messages</a>
+<ul>
+<li><a href="jms-examples002.htm#sthref2390">46.2.4.1 The Producer.java Client</a></li>
+<li><a href="jms-examples002.htm#sthref2391">46.2.4.2 To Run the Producer Client</a></li>
+</ul></li>
+<li><a href="jms-examples002.htm#BNCFB">46.2.5 Receiving Messages Synchronously</a>
+<ul>
+<li><a href="jms-examples002.htm#BNCFC">46.2.5.1 The SynchConsumer.java Client</a></li>
+<li><a href="jms-examples002.htm#BNCFG">46.2.5.2 To Run the SynchConsumer and Producer Clients</a></li>
+</ul></li>
+<li><a href="jms-examples002.htm#BNCFH">46.2.6 Using a Message Listener for Asynchronous Message Delivery</a>
+<ul>
+<li><a href="jms-examples002.htm#BNCFI">46.2.6.1 Writing the AsynchConsumer.java and TextListener.java Clients</a></li>
+<li><a href="jms-examples002.htm#BNCFK">46.2.6.2 To Run the AsynchConsumer and Producer Clients</a></li>
+</ul></li>
+<li><a href="jms-examples002.htm#BNCFL">46.2.7 Browsing Messages on a Queue</a>
+<ul>
+<li><a href="jms-examples002.htm#BNCFM">46.2.7.1 The MessageBrowser.java Client</a></li>
+<li><a href="jms-examples002.htm#BNCFN">46.2.7.2 To Run the QueueBrowser Client</a></li>
+</ul></li>
+<li><a href="jms-examples002.htm#BABDDHHC">46.2.8 Running Multiple Consumers on the Same Destination</a></li>
+<li><a href="jms-examples002.htm#BNCFX">46.2.9 Acknowledging Messages</a>
+<ul>
+<li><a href="jms-examples002.htm#GJSCG">46.2.9.1 To Run the ClientAckConsumer Client</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jms-examples003.htm#GIWFH">46.3 Writing More Advanced JMS Applications</a>
+<ul>
+<li><a href="jms-examples003.htm#BNCGG">46.3.1 Using Durable Subscriptions</a>
+<ul>
+<li><a href="jms-examples003.htm#sthref2410">46.3.1.1 To Create Resources for the Durable Subscription Example</a></li>
+<li><a href="jms-examples003.htm#GJSCI">46.3.1.2 To Run the Durable Subscription Example</a></li>
+<li><a href="jms-examples003.htm#sthref2411">46.3.1.3 To Run the unsubscriber Example</a></li>
+</ul></li>
+<li><a href="jms-examples003.htm#BNCGJ">46.3.2 Using Local Transactions</a>
+<ul>
+<li><a href="jms-examples003.htm#sthref2415">46.3.2.1 To Create Resources for the transactedexample Example</a></li>
+<li><a href="jms-examples003.htm#GJSHA">46.3.2.2 To Run the transactedexample Clients</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jms-examples004.htm#BABGEFHC">46.4 Writing High Performance and Scalable JMS Applications</a>
+<ul>
+<li><a href="jms-examples004.htm#BABIBEAC">46.4.1 Using Shared Nondurable Subscriptions</a>
+<ul>
+<li><a href="jms-examples004.htm#sthref2416">46.4.1.1 Writing the Clients for the Shared Consumer Example</a></li>
+<li><a href="jms-examples004.htm#sthref2417">46.4.1.2 To Run the SharedConsumer and Producer Clients</a></li>
+</ul></li>
+<li><a href="jms-examples004.htm#BABEJBHA">46.4.2 Using Shared Durable Subscriptions</a>
+<ul>
+<li><a href="jms-examples004.htm#sthref2420">46.4.2.1 To Run the SharedDurableConsumer and Producer Clients</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jms-examples005.htm#BABBABFC">46.5 Sending and Receiving Messages Using a Simple Web Application</a>
+<ul>
+<li><a href="jms-examples005.htm#sthref2426">46.5.1 The websimplemessage Facelets Pages</a></li>
+<li><a href="jms-examples005.htm#sthref2427">46.5.2 The websimplemessage Managed Beans</a></li>
+<li><a href="jms-examples005.htm#sthref2428">46.5.3 Running the websimplemessage Example</a>
+<ul>
+<li><a href="jms-examples005.htm#sthref2429">46.5.3.1 Creating Resources for the websimplemessage Example</a></li>
+<li><a href="jms-examples005.htm#sthref2430">46.5.3.2 To Package and Deploy websimplemessage Using NetBeans IDE</a></li>
+<li><a href="jms-examples005.htm#sthref2431">46.5.3.3 To Package and Deploy websimplemessage Using Maven</a></li>
+<li><a href="jms-examples005.htm#sthref2432">46.5.3.4 To Run the websimplemessage Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jms-examples006.htm#BNBPK">46.6 Receiving Messages Asynchronously Using a Message-Driven Bean</a>
+<ul>
+<li><a href="jms-examples006.htm#BNBPL">46.6.1 Overview of the simplemessage Example</a></li>
+<li><a href="jms-examples006.htm#BNBPN">46.6.2 The simplemessage Application Client</a></li>
+<li><a href="jms-examples006.htm#BNBPO">46.6.3 The simplemessage Message-Driven Bean Class</a>
+<ul>
+<li><a href="jms-examples006.htm#BNBPP">46.6.3.1 The onMessage Method</a></li>
+</ul></li>
+<li><a href="jms-examples006.htm#BNBPQ">46.6.4 Running the simplemessage Example</a>
+<ul>
+<li><a href="jms-examples006.htm#BNBPR">46.6.4.1 Creating Resources for the simplemessage Example</a></li>
+<li><a href="jms-examples006.htm#sthref2449">46.6.4.2 To Run the simplemessage Example Using NetBeans IDE</a></li>
+<li><a href="jms-examples006.htm#BNBPT">46.6.4.3 To Run the simplemessage Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jms-examples007.htm#BNCGW">46.7 Sending Messages from a Session Bean to an MDB</a>
+<ul>
+<li><a href="jms-examples007.htm#BNCGX">46.7.1 Writing the Application Components for the clientsessionmdb Example</a>
+<ul>
+<li><a href="jms-examples007.htm#BNCGZ">46.7.1.1 Coding the Application Client: MyAppClient.java</a></li>
+<li><a href="jms-examples007.htm#BNCHA">46.7.1.2 Coding the Publisher Session Bean</a></li>
+<li><a href="jms-examples007.htm#BNCHB">46.7.1.3 Coding the Message-Driven Bean: MessageBean.java</a></li>
+</ul></li>
+<li><a href="jms-examples007.htm#sthref2458">46.7.2 Running the clientsessionmdb Example</a>
+<ul>
+<li><a href="jms-examples007.htm#sthref2459">46.7.2.1 To Run clientsessionmdb Using NetBeans IDE</a></li>
+<li><a href="jms-examples007.htm#sthref2460">46.7.2.2 To Run clientsessionmdb Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jms-examples008.htm#BNCHF">46.8 Using an Entity to Join Messages from Two MDBs</a>
+<ul>
+<li><a href="jms-examples008.htm#BNCHG">46.8.1 Overview of the clientmdbentity Example Application</a></li>
+<li><a href="jms-examples008.htm#BNCHI">46.8.2 Writing the Application Components for the clientmdbentity Example</a>
+<ul>
+<li><a href="jms-examples008.htm#BNCHJ">46.8.2.1 Coding the Application Client: HumanResourceClient.java</a></li>
+<li><a href="jms-examples008.htm#BNCHK">46.8.2.2 Coding the Message-Driven Beans for the clientmdbentity Example</a></li>
+<li><a href="jms-examples008.htm#BNCHL">46.8.2.3 Coding the Entity Class for the clientmdbentity Example</a></li>
+</ul></li>
+<li><a href="jms-examples008.htm#sthref2471">46.8.3 Running the clientmdbentity Example</a>
+<ul>
+<li><a href="jms-examples008.htm#sthref2472">46.8.3.1 To Run clientmdbentity Using NetBeans IDE</a></li>
+<li><a href="jms-examples008.htm#sthref2473">46.8.3.2 To Run clientmdbentity Using Maven</a></li>
+<li><a href="jms-examples008.htm#sthref2474">46.8.3.3 Viewing the Application Output</a></li>
+</ul></li>
+</ul></li>
+<li><a href="jms-examples009.htm#BABDFDJC">46.9 Using NetBeans IDE to Create JMS Resources</a>
+<ul>
+<li><a href="jms-examples009.htm#sthref2475">46.9.1 To Create JMS Resources Using NetBeans IDE</a></li>
+<li><a href="jms-examples009.htm#sthref2480">46.9.2 To Delete JMS Resources Using NetBeans IDE</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="partsecurity.htm#GIJRP">Part X Security</a>
+<ul>
+<li><a href="security-intro.htm#BNBWJ">47 Introduction to Security in the Java EE Platform</a>
+<ul>
+<li><a href="security-intro001.htm#BNBWK">47.1 Overview of Java EE Security</a>
+<ul>
+<li><a href="security-intro001.htm#BNBWL">47.1.1 A Simple Application Security Walkthrough</a>
+<ul>
+<li><a href="security-intro001.htm#BNBWM">47.1.1.1 Step 1: Initial Request</a></li>
+<li><a href="security-intro001.htm#BNBWO">47.1.1.2 Step 2: Initial Authentication</a></li>
+<li><a href="security-intro001.htm#BNBWQ">47.1.1.3 Step 3: URL Authorization</a></li>
+<li><a href="security-intro001.htm#BNBWS">47.1.1.4 Step 4: Fulfilling the Original Request</a></li>
+<li><a href="security-intro001.htm#BNBWU">47.1.1.5 Step 5: Invoking Enterprise Bean Business Methods</a></li>
+</ul></li>
+<li><a href="security-intro001.htm#BNBWW">47.1.2 Features of a Security Mechanism</a></li>
+<li><a href="security-intro001.htm#BNBWX">47.1.3 Characteristics of Application Security</a></li>
+</ul></li>
+<li><a href="security-intro002.htm#BNBWY">47.2 Security Mechanisms</a>
+<ul>
+<li><a href="security-intro002.htm#BNBWZ">47.2.1 Java SE Security Mechanisms</a></li>
+<li><a href="security-intro002.htm#BNBXA">47.2.2 Java EE Security Mechanisms</a>
+<ul>
+<li><a href="security-intro002.htm#BNBXB">47.2.2.1 Application-Layer Security</a></li>
+<li><a href="security-intro002.htm#BNBXC">47.2.2.2 Transport-Layer Security</a></li>
+<li><a href="security-intro002.htm#BNBXD">47.2.2.3 Message-Layer Security</a></li>
+</ul></li>
+</ul></li>
+<li><a href="security-intro003.htm#BNBXE">47.3 Securing Containers</a>
+<ul>
+<li><a href="security-intro003.htm#BNBXG">47.3.1 Using Annotations to Specify Security Information</a></li>
+<li><a href="security-intro003.htm#BNBXF">47.3.2 Using Deployment Descriptors for Declarative Security</a></li>
+<li><a href="security-intro003.htm#BNBXH">47.3.3 Using Programmatic Security</a></li>
+</ul></li>
+<li><a href="security-intro004.htm#BNBXI">47.4 Securing GlassFish Server</a></li>
+<li><a href="security-intro005.htm#BNBXJ">47.5 Working with Realms, Users, Groups, and Roles</a>
+<ul>
+<li><a href="security-intro005.htm#BNBXK">47.5.1 What Are Realms, Users, Groups, and Roles?</a>
+<ul>
+<li><a href="security-intro005.htm#BNBXM">47.5.1.1 What Is a Realm?</a></li>
+<li><a href="security-intro005.htm#BNBXN">47.5.1.2 What Is a User?</a></li>
+<li><a href="security-intro005.htm#BNBXO">47.5.1.3 What Is a Group?</a></li>
+<li><a href="security-intro005.htm#BNBXP">47.5.1.4 What Is a Role?</a></li>
+<li><a href="security-intro005.htm#BNBXQ">47.5.1.5 Some Other Terminology</a></li>
+</ul></li>
+<li><a href="security-intro005.htm#BNBXR">47.5.2 Managing Users and Groups in GlassFish Server</a>
+<ul>
+<li><a href="security-intro005.htm#BNBXS">47.5.2.1 To Add Users to GlassFish Server</a></li>
+</ul></li>
+<li><a href="security-intro005.htm#BNBXU">47.5.3 Setting Up Security Roles</a></li>
+<li><a href="security-intro005.htm#BNBXV">47.5.4 Mapping Roles to Users and Groups</a></li>
+</ul></li>
+<li><a href="security-intro006.htm#BNBXW">47.6 Establishing a Secure Connection Using SSL</a>
+<ul>
+<li><a href="security-intro006.htm#BNBXX">47.6.1 Verifying and Configuring SSL Support</a></li>
+</ul></li>
+<li><a href="security-intro007.htm#BNBYJ">47.7 Further Information about Security</a></li>
+</ul></li>
+<li><a href="security-webtier.htm#BNCAS">48 Getting Started Securing Web Applications</a>
+<ul>
+<li><a href="security-webtier001.htm#BNCAT">48.1 Overview of Web Application Security</a></li>
+<li><a href="security-webtier002.htm#GKBAA">48.2 Securing Web Applications</a>
+<ul>
+<li><a href="security-webtier002.htm#BNCBK">48.2.1 Specifying Security Constraints</a>
+<ul>
+<li><a href="security-webtier002.htm#GJJCD">48.2.1.1 Specifying a Web Resource Collection</a></li>
+<li><a href="security-webtier002.htm#GJJCG">48.2.1.2 Specifying an Authorization Constraint</a></li>
+<li><a href="security-webtier002.htm#BNCBM">48.2.1.3 Specifying a Secure Connection</a></li>
+<li><a href="security-webtier002.htm#BNCBL">48.2.1.4 Specifying Security Constraints for Resources</a></li>
+</ul></li>
+<li><a href="security-webtier002.htm#GKBSA">48.2.2 Specifying Authentication Mechanisms</a>
+<ul>
+<li><a href="security-webtier002.htm#BNCBO">48.2.2.1 HTTP Basic Authentication</a></li>
+<li><a href="security-webtier002.htm#BNCBQ">48.2.2.2 Form-Based Authentication</a></li>
+<li><a href="security-webtier002.htm#BNCBW">48.2.2.3 Digest Authentication</a></li>
+</ul></li>
+<li><a href="security-webtier002.htm#BNCBN">48.2.3 Specifying an Authentication Mechanism in the Deployment Descriptor</a></li>
+<li><a href="security-webtier002.htm#BNCAV">48.2.4 Declaring Security Roles</a></li>
+</ul></li>
+<li><a href="security-webtier003.htm#GJIIE">48.3 Using Programmatic Security with Web Applications</a>
+<ul>
+<li><a href="security-webtier003.htm#GIRCJ">48.3.1 Authenticating Users Programmatically</a></li>
+<li><a href="security-webtier003.htm#BNCBA">48.3.2 Checking Caller Identity Programmatically</a></li>
+<li><a href="security-webtier003.htm#GJJLQ">48.3.3 Example Code for Programmatic Security</a></li>
+<li><a href="security-webtier003.htm#BNCBB">48.3.4 Declaring and Linking Role References</a></li>
+</ul></li>
+<li><a href="security-webtier004.htm#BNCBX">48.4 Examples: Securing Web Applications</a>
+<ul>
+<li><a href="security-webtier004.htm#GJJLK">48.4.1 To Set Up Your System for Running the Security Examples</a></li>
+<li><a href="security-webtier004.htm#BNCCK">48.4.2 The hello2-basicauth Example: Basic Authentication with a Servlet</a>
+<ul>
+<li><a href="security-webtier004.htm#GJRMH">48.4.2.1 Specifying Security for Basic Authentication Using Annotations</a></li>
+<li><a href="security-webtier004.htm#GJQYS">48.4.2.2 To Build, Package, and Deploy the hello2-basicauth Example Using NetBeans IDE</a></li>
+<li><a href="security-webtier004.htm#GJQZH">48.4.2.3 To Build, Package, and Deploy the hello2-basicauth Example Using Maven</a></li>
+<li><a href="security-webtier004.htm#GJQZF">48.4.2.4 To Run the hello2-basicauth Example</a></li>
+</ul></li>
+<li><a href="security-webtier004.htm#BNCBY">48.4.3 The hello1-formauth Example: Form-Based Authentication with a JavaServer Faces Application</a>
+<ul>
+<li><a href="security-webtier004.htm#BNCCA">48.4.3.1 Creating the Login Form and the Error Page</a></li>
+<li><a href="security-webtier004.htm#BNCCB">48.4.3.2 Specifying Security for the Form-Based Authentication Example</a></li>
+<li><a href="security-webtier004.htm#GJRBA">48.4.3.3 To Build, Package, and Deploy the hello1-formauth Example Using NetBeans IDE</a></li>
+<li><a href="security-webtier004.htm#GJRAZ">48.4.3.4 To Build, Package, and Deploy the hello1-formauth Example Using Maven and the asadmin Command</a></li>
+<li><a href="security-webtier004.htm#GJRAL">48.4.3.5 To Run the hello1-formauth Example</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="security-javaee.htm#BNBYK">49 Getting Started Securing Enterprise Applications</a>
+<ul>
+<li><a href="security-javaee001.htm#CACGIFHJ">49.1 Basic Security Tasks for Enterprise Applications</a></li>
+<li><a href="security-javaee002.htm#BNBYL">49.2 Securing Enterprise Beans</a>
+<ul>
+<li><a href="security-javaee002.htm#GJGDI">49.2.1 Securing an Enterprise Bean Using Declarative Security</a>
+<ul>
+<li><a href="security-javaee002.htm#GJGCQ">49.2.1.1 Specifying Authorized Users by Declaring Security Roles</a></li>
+<li><a href="security-javaee002.htm#BNBYU">49.2.1.2 Specifying an Authentication Mechanism and Secure Connection</a></li>
+</ul></li>
+<li><a href="security-javaee002.htm#GJGCS">49.2.2 Securing an Enterprise Bean Programmatically</a>
+<ul>
+<li><a href="security-javaee002.htm#GJGCR">49.2.2.1 Accessing an Enterprise Bean Caller's Security Context</a></li>
+</ul></li>
+<li><a href="security-javaee002.htm#BNBYR">49.2.3 Propagating a Security Identity (Run-As)</a>
+<ul>
+<li><a href="security-javaee002.htm#BNBZB">49.2.3.1 Configuring a Component's Propagated Security Identity</a></li>
+<li><a href="security-javaee002.htm#BNBZC">49.2.3.2 Trust between Containers</a></li>
+</ul></li>
+<li><a href="security-javaee002.htm#BNBZG">49.2.4 Deploying Secure Enterprise Beans</a></li>
+</ul></li>
+<li><a href="security-javaee003.htm#GKBSZ">49.3 Examples: Securing Enterprise Beans</a>
+<ul>
+<li><a href="security-javaee003.htm#BNBZK">49.3.1 The cart-secure Example: Securing an Enterprise Bean with Declarative Security</a>
+<ul>
+<li><a href="security-javaee003.htm#BNBZL">49.3.1.1 Annotating the Bean</a></li>
+<li><a href="security-javaee003.htm#BNBZN">49.3.1.2 To Run the cart-secure Example Using NetBeans IDE</a></li>
+<li><a href="security-javaee003.htm#BNBZO">49.3.1.3 To Run the cart-secure Example Using Maven</a></li>
+</ul></li>
+<li><a href="security-javaee003.htm#BNCAA">49.3.2 The converter-secure Example: Securing an Enterprise Bean with Programmatic Security</a>
+<ul>
+<li><a href="security-javaee003.htm#BNCAB">49.3.2.1 Modifying ConverterBean</a></li>
+<li><a href="security-javaee003.htm#GKBSI">49.3.2.2 Modifying ConverterServlet</a></li>
+<li><a href="security-javaee003.htm#BNCAD">49.3.2.3 To Run the converter-secure Example Using NetBeans IDE</a></li>
+<li><a href="security-javaee003.htm#BNCAE">49.3.2.4 To Run the converter-secure Example Using Maven</a></li>
+<li><a href="security-javaee003.htm#GJTDP">49.3.2.5 To Run the converter-secure Example</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="security-advanced.htm#GJJWX">50 Java EE Security: Advanced Topics</a>
+<ul>
+<li><a href="security-advanced001.htm#BNBYB">50.1 Working with Digital Certificates</a>
+<ul>
+<li><a href="security-advanced001.htm#BNBYC">50.1.1 Creating a Server Certificate</a>
+<ul>
+<li><a href="security-advanced001.htm#GJRGY">50.1.1.1 To Use keytool to Create a Server Certificate</a></li>
+</ul></li>
+<li><a href="security-advanced001.htm#GLIFW">50.1.2 Adding Users to the Certificate Realm</a></li>
+<li><a href="security-advanced001.htm#BNBYF">50.1.3 Using a Different Server Certificate with GlassFish Server</a>
+<ul>
+<li><a href="security-advanced001.htm#sthref2752">50.1.3.1 To Specify a Different Server Certificate</a></li>
+</ul></li>
+</ul></li>
+<li><a href="security-advanced002.htm#GLIEN">50.2 Authentication Mechanisms</a>
+<ul>
+<li><a href="security-advanced002.htm#GLIEQ">50.2.1 Client Authentication</a></li>
+<li><a href="security-advanced002.htm#GLIEL">50.2.2 Mutual Authentication</a>
+<ul>
+<li><a href="security-advanced002.htm#BNBYH">50.2.2.1 Enabling Mutual Authentication over SSL</a></li>
+<li><a href="security-advanced002.htm#BNBYI">50.2.2.2 Creating a Client Certificate for Mutual Authentication</a></li>
+</ul></li>
+</ul></li>
+<li><a href="security-advanced003.htm#BABEJJDE">50.3 Using the JDBC Realm for User Authentication</a>
+<ul>
+<li><a href="security-advanced003.htm#sthref2774">50.3.1 To Configure a JDBC Authentication Realm</a></li>
+</ul></li>
+<li><a href="security-advanced004.htm#BABGEJJJ">50.4 Securing HTTP Resources</a></li>
+<li><a href="security-advanced005.htm#GLIGC">50.5 Securing Application Clients</a>
+<ul>
+<li><a href="security-advanced005.htm#GLIDW">50.5.1 Using Login Modules</a></li>
+<li><a href="security-advanced005.htm#GLIHQ">50.5.2 Using Programmatic Login</a></li>
+</ul></li>
+<li><a href="security-advanced006.htm#GLIFD">50.6 Securing Enterprise Information Systems Applications</a>
+<ul>
+<li><a href="security-advanced006.htm#GLIHL">50.6.1 Container-Managed Sign-On</a></li>
+<li><a href="security-advanced006.htm#GLIDP">50.6.2 Component-Managed Sign-On</a></li>
+<li><a href="security-advanced006.htm#GLIGS">50.6.3 Configuring Resource Adapter Security</a></li>
+<li><a href="security-advanced006.htm#GLIGW">50.6.4 Mapping an Application Principal to EIS Principals</a></li>
+</ul></li>
+<li><a href="security-advanced007.htm#GKHRL">50.7 Configuring Security Using Deployment Descriptors</a>
+<ul>
+<li><a href="security-advanced007.htm#BNCCM">50.7.1 Specifying Security for Basic Authentication in the Deployment Descriptor</a></li>
+<li><a href="security-advanced007.htm#GKAFQ">50.7.2 Specifying Non-Default Principal-to-Role Mapping in the Deployment Descriptor</a></li>
+</ul></li>
+<li><a href="security-advanced008.htm#BABBGBBF">50.8 Further Information about Advanced Security Topics</a></li>
+</ul></li>
+</ul></li>
+<li><a href="partsupporttechs.htm#GIJUE">Part XI Java EE Supporting Technologies</a>
+<ul>
+<li><a href="transactions.htm#BNCIH">51 Transactions</a>
+<ul>
+<li><a href="transactions001.htm#GIJRG">51.1 Transactions in Java EE Applications</a></li>
+<li><a href="transactions002.htm#BNCII">51.2 What Is a Transaction?</a></li>
+<li><a href="transactions003.htm#BNCIJ">51.3 Container-Managed Transactions</a>
+<ul>
+<li><a href="transactions003.htm#BNCIK">51.3.1 Transaction Attributes</a>
+<ul>
+<li><a href="transactions003.htm#BNCIM">51.3.1.1 Required Attribute</a></li>
+<li><a href="transactions003.htm#BNCIN">51.3.1.2 RequiresNew Attribute</a></li>
+<li><a href="transactions003.htm#BNCIO">51.3.1.3 Mandatory Attribute</a></li>
+<li><a href="transactions003.htm#BNCIP">51.3.1.4 NotSupported Attribute</a></li>
+<li><a href="transactions003.htm#BNCIQ">51.3.1.5 Supports Attribute</a></li>
+<li><a href="transactions003.htm#BNCIR">51.3.1.6 Never Attribute</a></li>
+<li><a href="transactions003.htm#BNCIS">51.3.1.7 Summary of Transaction Attributes</a></li>
+<li><a href="transactions003.htm#BNCIU">51.3.1.8 Setting Transaction Attributes</a></li>
+</ul></li>
+<li><a href="transactions003.htm#BNCIV">51.3.2 Rolling Back a Container-Managed Transaction</a></li>
+<li><a href="transactions003.htm#BNCIW">51.3.3 Synchronizing a Session Bean's Instance Variables</a></li>
+<li><a href="transactions003.htm#BNCIX">51.3.4 Methods Not Allowed in Container-Managed Transactions</a></li>
+</ul></li>
+<li><a href="transactions004.htm#BNCIY">51.4 Bean-Managed Transactions</a>
+<ul>
+<li><a href="transactions004.htm#BNCIZ">51.4.1 JTA Transactions</a></li>
+<li><a href="transactions004.htm#BNCJA">51.4.2 Returning without Committing</a></li>
+<li><a href="transactions004.htm#BNCJB">51.4.3 Methods Not Allowed in Bean-Managed Transactions</a></li>
+</ul></li>
+<li><a href="transactions005.htm#BNCJC">51.5 Transaction Timeouts</a>
+<ul>
+<li><a href="transactions005.htm#sthref2874">51.5.1 To Set a Transaction Timeout</a></li>
+</ul></li>
+<li><a href="transactions006.htm#BNCJD">51.6 Updating Multiple Databases</a></li>
+<li><a href="transactions007.htm#BNCJG">51.7 Transactions in Web Components</a></li>
+<li><a href="transactions008.htm#GKCMI">51.8 Further Information about Transactions</a></li>
+</ul></li>
+<li><a href="resources.htm#BNCJH">52 Resource Adapters and Contracts</a>
+<ul>
+<li><a href="resources001.htm#GIPGL">52.1 What Is a Resource Adapter?</a>
+<ul>
+<li><a href="resources001.htm#GIPGY">52.1.1 Management Contracts</a>
+<ul>
+<li><a href="resources001.htm#GIPHT">52.1.1.1 Lifecycle Management</a></li>
+<li><a href="resources001.htm#GIPIG">52.1.1.2 Work Management Contract</a></li>
+</ul></li>
+<li><a href="resources001.htm#GIPMK">52.1.2 Generic Work Context Contract</a></li>
+<li><a href="resources001.htm#GKCKI">52.1.3 Outbound and Inbound Contracts</a></li>
+</ul></li>
+<li><a href="resources002.htm#GIRDD">52.2 Metadata Annotations</a></li>
+<li><a href="resources003.htm#GIPJU">52.3 Common Client Interface</a></li>
+<li><a href="resources004.htm#CHDJFIGB">52.4 Using Resource Adapters with Contexts and Dependency Injection for Java EE (CDI)</a></li>
+<li><a href="resources005.htm#BNCJW">52.5 Further Information about Resource Adapters</a></li>
+</ul></li>
+<li><a href="connectorexample.htm#GLODB">53 The Resource Adapter Examples</a>
+<ul>
+<li><a href="connectorexample001.htm#CHDFHAID">53.1 The trading Example</a>
+<ul>
+<li><a href="connectorexample001.htm#CHDFADJD">53.1.1 Using the Outbound Resource Adapter</a></li>
+<li><a href="connectorexample001.htm#sthref2899">53.1.2 Implementing the Outbound Resource Adapter</a></li>
+<li><a href="connectorexample001.htm#sthref2902">53.1.3 Running the trading Example</a>
+<ul>
+<li><a href="connectorexample001.htm#sthref2903">53.1.3.1 To Run the trading Example Using NetBeans IDE</a></li>
+<li><a href="connectorexample001.htm#sthref2904">53.1.3.2 To Run the trading Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="connectorexample002.htm#CHDJEADB">53.2 The traffic Example</a>
+<ul>
+<li><a href="connectorexample002.htm#sthref2906">53.2.1 Using the Inbound Resource Adapter</a></li>
+<li><a href="connectorexample002.htm#sthref2907">53.2.2 Implementing the Inbound Resource Adapter</a></li>
+<li><a href="connectorexample002.htm#sthref2910">53.2.3 Running the traffic Example</a>
+<ul>
+<li><a href="connectorexample002.htm#sthref2911">53.2.3.1 To Run the traffic Example Using NetBeans IDE</a></li>
+<li><a href="connectorexample002.htm#sthref2912">53.2.3.2 To Run the traffic Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="interceptors.htm#GKEED">54 Using Java EE Interceptors</a>
+<ul>
+<li><a href="interceptors001.htm#GKIGQ">54.1 Overview of Interceptors</a>
+<ul>
+<li><a href="interceptors001.htm#GKECK">54.1.1 Interceptor Classes</a></li>
+<li><a href="interceptors001.htm#GKEDY">54.1.2 Interceptor Lifecycle</a></li>
+<li><a href="interceptors001.htm#GKHSN">54.1.3 Interceptors and CDI</a></li>
+</ul></li>
+<li><a href="interceptors002.htm#GKEDM">54.2 Using Interceptors</a>
+<ul>
+<li><a href="interceptors002.htm#GKECY">54.2.1 Intercepting Method Invocations</a>
+<ul>
+<li><a href="interceptors002.htm#GKHMH">54.2.1.1 Using Multiple Method Interceptors</a></li>
+<li><a href="interceptors002.htm#GKHOV">54.2.1.2 Accessing Target Method Parameters from an Interceptor Class</a></li>
+</ul></li>
+<li><a href="interceptors002.htm#GKECR">54.2.2 Intercepting Lifecycle Callback Events</a>
+<ul>
+<li><a href="interceptors002.htm#sthref2927">54.2.2.1 Using AroundConstruct Interceptor Methods</a></li>
+<li><a href="interceptors002.htm#GKHNI">54.2.2.2 Using Multiple Lifecycle Callback Interceptors</a></li>
+</ul></li>
+<li><a href="interceptors002.htm#GKEDU">54.2.3 Intercepting Timeout Events</a>
+<ul>
+<li><a href="interceptors002.htm#GKHLA">54.2.3.1 Using Multiple Timeout Interceptors</a></li>
+</ul></li>
+<li><a href="interceptors002.htm#sthref2928">54.2.4 Binding Interceptors to Components</a>
+<ul>
+<li><a href="interceptors002.htm#sthref2929">54.2.4.1 Declaring the Interceptor Bindings on an Interceptor Class</a></li>
+<li><a href="interceptors002.htm#sthref2930">54.2.4.2 Binding a Component to an Interceptor</a></li>
+</ul></li>
+<li><a href="interceptors002.htm#sthref2931">54.2.5 Ordering Interceptors</a></li>
+</ul></li>
+<li><a href="interceptors003.htm#GKECI">54.3 The interceptor Example Application</a>
+<ul>
+<li><a href="interceptors003.htm#sthref2938">54.3.1 Running the interceptor Example</a>
+<ul>
+<li><a href="interceptors003.htm#GKEDF">54.3.1.1 To Run the interceptor Example Using NetBeans IDE</a></li>
+<li><a href="interceptors003.htm#GKECT">54.3.1.2 To Run the interceptor Example Using Maven</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="batch-processing.htm#GKJIQ6">55 Batch Processing</a>
+<ul>
+<li><a href="batch-processing001.htm#BCGJDEEH">55.1 Introduction to Batch Processing</a>
+<ul>
+<li><a href="batch-processing001.htm#sthref2943">55.1.1 Steps in Batch Jobs</a></li>
+<li><a href="batch-processing001.htm#sthref2946">55.1.2 Parallel Processing</a></li>
+<li><a href="batch-processing001.htm#sthref2947">55.1.3 Status and Decision Elements</a></li>
+<li><a href="batch-processing001.htm#sthref2950">55.1.4 Batch Framework Functionality</a></li>
+</ul></li>
+<li><a href="batch-processing002.htm#BCGGIBHA">55.2 Batch Processing in Java EE</a>
+<ul>
+<li><a href="batch-processing002.htm#sthref2952">55.2.1 The Batch Processing Framework</a></li>
+<li><a href="batch-processing002.htm#sthref2954">55.2.2 Creating Batch Applications</a></li>
+<li><a href="batch-processing002.htm#sthref2956">55.2.3 Elements of a Batch Job</a></li>
+<li><a href="batch-processing002.htm#sthref2958">55.2.4 Properties and Parameters</a></li>
+<li><a href="batch-processing002.htm#sthref2960">55.2.5 Job Instances and Job Executions</a></li>
+<li><a href="batch-processing002.htm#sthref2962">55.2.6 Batch and Exit Status</a></li>
+</ul></li>
+<li><a href="batch-processing003.htm#BCGHBJIG">55.3 Simple Use Case</a>
+<ul>
+<li><a href="batch-processing003.htm#sthref2967">55.3.1 Chunk Step</a></li>
+<li><a href="batch-processing003.htm#sthref2969">55.3.2 Task Step</a></li>
+</ul></li>
+<li><a href="batch-processing004.htm#BCGDDBBG">55.4 Using the Job Specification Language</a>
+<ul>
+<li><a href="batch-processing004.htm#sthref2973">55.4.1 The job Element</a></li>
+<li><a href="batch-processing004.htm#sthref2975">55.4.2 The step Element</a>
+<ul>
+<li><a href="batch-processing004.htm#sthref2977">55.4.2.1 The chunk Element</a></li>
+<li><a href="batch-processing004.htm#sthref2980">55.4.2.2 The batchlet Element</a></li>
+<li><a href="batch-processing004.htm#sthref2982">55.4.2.3 The partition Element</a></li>
+</ul></li>
+<li><a href="batch-processing004.htm#sthref2984">55.4.3 The flow Element</a></li>
+<li><a href="batch-processing004.htm#sthref2986">55.4.4 The split Element</a></li>
+<li><a href="batch-processing004.htm#sthref2988">55.4.5 The decision Element</a></li>
+</ul></li>
+<li><a href="batch-processing005.htm#BCGHDHGH">55.5 Creating Batch Artifacts</a>
+<ul>
+<li><a href="batch-processing005.htm#sthref2991">55.5.1 Batch Artifact Interfaces</a></li>
+<li><a href="batch-processing005.htm#BCGIFJBB">55.5.2 Dependency Injection in Batch Artifacts</a></li>
+<li><a href="batch-processing005.htm#BCGCJEEF">55.5.3 Using the Context Objects from the Batch Runtime</a></li>
+</ul></li>
+<li><a href="batch-processing006.htm#BCGCAHCB">55.6 Submitting Jobs to the Batch Runtime</a>
+<ul>
+<li><a href="batch-processing006.htm#sthref2998">55.6.1 Starting a Job</a></li>
+<li><a href="batch-processing006.htm#BCGIBGFC">55.6.2 Checking the Status of a Job</a></li>
+<li><a href="batch-processing006.htm#sthref3001">55.6.3 Invoking the Batch Runtime in Your Application</a></li>
+</ul></li>
+<li><a href="batch-processing007.htm#BCGBBGJI">55.7 Packaging Batch Applications</a></li>
+<li><a href="batch-processing008.htm#BCGJHEHJ">55.8 The webserverlog Example Application</a>
+<ul>
+<li><a href="batch-processing008.htm#sthref3005">55.8.1 Architecture of the webserverlog Example Application</a>
+<ul>
+<li><a href="batch-processing008.htm#sthref3006">55.8.1.1 The Job Definition File</a></li>
+<li><a href="batch-processing008.htm#sthref3007">55.8.1.2 The LogLine and LogFilteredLine Items</a></li>
+<li><a href="batch-processing008.htm#sthref3008">55.8.1.3 The Chunk Step Batch Artifacts</a></li>
+<li><a href="batch-processing008.htm#BCGCCFAC">55.8.1.4 The Listener Batch Artifacts</a></li>
+<li><a href="batch-processing008.htm#sthref3009">55.8.1.5 The Task Step Batch Artifact</a></li>
+<li><a href="batch-processing008.htm#sthref3010">55.8.1.6 The JavaServer Faces Pages</a></li>
+<li><a href="batch-processing008.htm#sthref3011">55.8.1.7 The Managed Bean</a></li>
+</ul></li>
+<li><a href="batch-processing008.htm#sthref3012">55.8.2 Running the webserverlog Example Application</a>
+<ul>
+<li><a href="batch-processing008.htm#sthref3013">55.8.2.1 To Run the webserverlog Example Application Using NetBeans IDE</a></li>
+<li><a href="batch-processing008.htm#sthref3014">55.8.2.2 To Run the webserverlog Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="batch-processing009.htm#BCGFCACD">55.9 The phonebilling Example Application</a>
+<ul>
+<li><a href="batch-processing009.htm#sthref3017">55.9.1 Architecture of the phonebilling Example Application</a>
+<ul>
+<li><a href="batch-processing009.htm#sthref3018">55.9.1.1 The Job Definition File</a></li>
+<li><a href="batch-processing009.htm#sthref3019">55.9.1.2 The CallRecord and PhoneBill Entities</a></li>
+<li><a href="batch-processing009.htm#sthref3020">55.9.1.3 The Call Records Chunk Step</a></li>
+<li><a href="batch-processing009.htm#BCGGGAHB">55.9.1.4 The Phone Billing Chunk Step</a></li>
+<li><a href="batch-processing009.htm#sthref3021">55.9.1.5 The JavaServer Faces Pages</a></li>
+<li><a href="batch-processing009.htm#sthref3022">55.9.1.6 The Managed Bean</a></li>
+</ul></li>
+<li><a href="batch-processing009.htm#sthref3023">55.9.2 Running the phonebilling Example Application</a>
+<ul>
+<li><a href="batch-processing009.htm#sthref3024">55.9.2.1 To Run the phonebilling Example Application Using NetBeans IDE</a></li>
+<li><a href="batch-processing009.htm#sthref3025">55.9.2.2 To Run the phonebilling Example Application Using Maven</a></li>
+</ul></li>
+</ul></li>
+<li><a href="batch-processing010.htm#BCGHCHAJ">55.10 Further Information about Batch Processing</a></li>
+</ul></li>
+<li><a href="concurrency-utilities.htm#GKJIQ8">56 Concurrency Utilities for Java EE</a>
+<ul>
+<li><a href="concurrency-utilities001.htm#CIHDFGGG">56.1 Concurrency Basics</a>
+<ul>
+<li><a href="concurrency-utilities001.htm#sthref3028">56.1.1 Threads and Processes</a></li>
+</ul></li>
+<li><a href="concurrency-utilities002.htm#CIHFBCFH">56.2 Main Components of the Concurrency Utilities</a></li>
+<li><a href="concurrency-utilities003.htm#CIHIDBDG">56.3 Concurrency and Transactions</a></li>
+<li><a href="concurrency-utilities004.htm#CIHCACAA">56.4 Concurrency and Security</a></li>
+<li><a href="concurrency-utilities005.htm#CIHCGGEG">56.5 The jobs Concurrency Example</a>
+<ul>
+<li><a href="concurrency-utilities005.htm#sthref3040">56.5.1 Running the jobs Example</a>
+<ul>
+<li><a href="concurrency-utilities005.htm#sthref3041">56.5.1.1 To Configure GlassFish Server for the Basic Concurrency Example</a></li>
+<li><a href="concurrency-utilities005.htm#sthref3042">56.5.1.2 To Build, Package, and Deploy the jobs Example Using NetBeans IDE</a></li>
+<li><a href="concurrency-utilities005.htm#sthref3043">56.5.1.3 To Build, Package, and Deploy the jobs Example Using Maven</a></li>
+<li><a href="concurrency-utilities005.htm#sthref3044">56.5.1.4 To Run the jobs Example and Submit Jobs with Low Priority</a></li>
+<li><a href="concurrency-utilities005.htm#sthref3045">56.5.1.5 To Run the jobs Example and Submit Jobs with High Priority</a></li>
+</ul></li>
+</ul></li>
+<li><a href="concurrency-utilities006.htm#CIHBFEAE">56.6 The taskcreator Concurrency Example</a>
+<ul>
+<li><a href="concurrency-utilities006.htm#sthref3049">56.6.1 Running the taskcreator Example</a>
+<ul>
+<li><a href="concurrency-utilities006.htm#sthref3050">56.6.1.1 To Build, Package, and Deploy the taskcreator Example Using NetBeans IDE</a></li>
+<li><a href="concurrency-utilities006.htm#sthref3051">56.6.1.2 To Build, Package, and Deploy the taskcreator Example Using Maven</a></li>
+<li><a href="concurrency-utilities006.htm#sthref3052">56.6.1.3 To Run the taskcreator Example</a></li>
+</ul></li>
+</ul></li>
+<li><a href="concurrency-utilities007.htm#CHDBIHAA">56.7 Further Information about the Concurrency Utilities</a></li>
+</ul></li>
+</ul></li>
+<li><a href="partcasestudies.htm#GKGJW">Part XII Case Studies</a>
+<ul>
+<li><a href="dukes-bookstore.htm#GLNVI">57 Duke's Bookstore Case Study Example</a>
+<ul>
+<li><a href="dukes-bookstore001.htm#GLOAW">57.1 Design and Architecture of Duke's Bookstore</a></li>
+<li><a href="dukes-bookstore002.htm#GLQFD">57.2 The Duke's Bookstore Interface</a>
+<ul>
+<li><a href="dukes-bookstore002.htm#GLQER">57.2.1 The Book Java Persistence API Entity</a></li>
+<li><a href="dukes-bookstore002.htm#GLQEU">57.2.2 Enterprise Beans Used in Duke's Bookstore</a></li>
+<li><a href="dukes-bookstore002.htm#GLQDP">57.2.3 Facelets Pages and Managed Beans Used in Duke's Bookstore</a></li>
+<li><a href="dukes-bookstore002.htm#GLQDX">57.2.4 Custom Components and Other Custom Objects Used in Duke's Bookstore</a></li>
+<li><a href="dukes-bookstore002.htm#GLQDG">57.2.5 Properties Files Used in Duke's Bookstore</a></li>
+<li><a href="dukes-bookstore002.htm#GLQED">57.2.6 Deployment Descriptors Used in Duke's Bookstore</a></li>
+</ul></li>
+<li><a href="dukes-bookstore003.htm#GLPPQ">57.3 Running the Duke's Bookstore Case Study Application</a>
+<ul>
+<li><a href="dukes-bookstore003.htm#GLPQG">57.3.1 To Build and Deploy Duke's Bookstore Using NetBeans IDE</a></li>
+<li><a href="dukes-bookstore003.htm#GLPQN">57.3.2 To Build and Deploy Duke's Bookstore Using Maven</a></li>
+<li><a href="dukes-bookstore003.htm#sthref3054">57.3.3 To Run Duke's Bookstore</a></li>
+</ul></li>
+</ul></li>
+<li><a href="dukes-tutoring.htm#GKAEE">58 Duke's Tutoring Case Study Example</a>
+<ul>
+<li><a href="dukes-tutoring001.htm#GKAEI">58.1 Design and Architecture of Duke's Tutoring</a></li>
+<li><a href="dukes-tutoring002.htm#GKAFH">58.2 Main Interface</a>
+<ul>
+<li><a href="dukes-tutoring002.htm#GKAFJ">58.2.1 Java Persistence API Entities Used in the Main Interface</a></li>
+<li><a href="dukes-tutoring002.htm#GKAFC">58.2.2 Enterprise Beans Used in the Main Interface</a></li>
+<li><a href="dukes-tutoring002.htm#sthref3063">58.2.3 WebSocket Endpoint Used in the Main Interface</a></li>
+<li><a href="dukes-tutoring002.htm#GKAET">58.2.4 Facelets Files Used in the Main Interface</a></li>
+<li><a href="dukes-tutoring002.htm#GKADH">58.2.5 Helper Classes Used in the Main Interface</a></li>
+<li><a href="dukes-tutoring002.htm#GKADA">58.2.6 Properties Files</a></li>
+<li><a href="dukes-tutoring002.htm#GKAEV">58.2.7 Deployment Descriptors Used in Duke's Tutoring</a></li>
+</ul></li>
+<li><a href="dukes-tutoring003.htm#GKAFW">58.3 Administration Interface</a>
+<ul>
+<li><a href="dukes-tutoring003.htm#GKAEN">58.3.1 Enterprise Beans Used in the Administration Interface</a></li>
+<li><a href="dukes-tutoring003.htm#GKACB">58.3.2 Facelets Files Used in the Administration Interface</a></li>
+<li><a href="dukes-tutoring003.htm#sthref3067">58.3.3 CDI Managed Beans Used in the Administration Interface</a></li>
+<li><a href="dukes-tutoring003.htm#sthref3068">58.3.4 Helper Classes Used in the Administration Interface</a></li>
+</ul></li>
+<li><a href="dukes-tutoring004.htm#GKJNN">58.4 Running the Duke's Tutoring Case Study Application</a>
+<ul>
+<li><a href="dukes-tutoring004.htm#GKJOA">58.4.1 Running Duke's Tutoring</a>
+<ul>
+<li><a href="dukes-tutoring004.htm#GKJNR">58.4.1.1 To Build and Deploy Duke's Tutoring Using NetBeans IDE</a></li>
+<li><a href="dukes-tutoring004.htm#GKJOG">58.4.1.2 To Build and Deploy Duke's Tutoring Using Maven</a></li>
+<li><a href="dukes-tutoring004.htm#GKJOC">58.4.1.3 Using Duke's Tutoring</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="dukes-forest.htm#GLNPW">59 Duke's Forest Case Study Example</a>
+<ul>
+<li><a href="dukes-forest001.htm#GLNRJ">59.1 Design and Architecture of Duke's Forest</a>
+<ul>
+<li><a href="dukes-forest001.htm#CIHHJEGA">59.1.1 The events Project</a></li>
+<li><a href="dukes-forest001.htm#CIHFCIAC">59.1.2 The entities Project</a></li>
+<li><a href="dukes-forest001.htm#sthref3074">59.1.3 The dukes-payment Project</a></li>
+<li><a href="dukes-forest001.htm#sthref3075">59.1.4 The dukes-resources Project</a></li>
+<li><a href="dukes-forest001.htm#sthref3076">59.1.5 The Duke's Store Project</a>
+<ul>
+<li><a href="dukes-forest001.htm#sthref3077">59.1.5.1 Enterprise Beans Used in Duke's Store</a></li>
+<li><a href="dukes-forest001.htm#sthref3078">59.1.5.2 Facelets Files Used in the Main Interface of Duke's Store</a></li>
+<li><a href="dukes-forest001.htm#CIHHDHIH">59.1.5.3 Facelets Files Used in the Administration Interface of Duke's Store</a></li>
+<li><a href="dukes-forest001.htm#sthref3079">59.1.5.4 Managed Beans Used in Duke's Store</a></li>
+<li><a href="dukes-forest001.htm#sthref3080">59.1.5.5 Helper Classes Used in Duke's Store</a></li>
+<li><a href="dukes-forest001.htm#CIHEBAFD">59.1.5.6 Qualifiers Used in Duke's Store</a></li>
+<li><a href="dukes-forest001.htm#sthref3081">59.1.5.7 Event Handlers Used in Duke's Store</a></li>
+<li><a href="dukes-forest001.htm#sthref3082">59.1.5.8 Deployment Descriptors Used in Duke's Store</a></li>
+</ul></li>
+<li><a href="dukes-forest001.htm#sthref3083">59.1.6 The Duke's Shipment Project</a>
+<ul>
+<li><a href="dukes-forest001.htm#sthref3084">59.1.6.1 Enterprise Beans Used in Duke's Shipment</a></li>
+<li><a href="dukes-forest001.htm#sthref3085">59.1.6.2 Facelets Files Used in Duke's Shipment</a></li>
+<li><a href="dukes-forest001.htm#sthref3086">59.1.6.3 Managed Beans Used in Duke's Shipment</a></li>
+<li><a href="dukes-forest001.htm#sthref3087">59.1.6.4 Helper Class Used in Duke's Shipment</a></li>
+<li><a href="dukes-forest001.htm#sthref3088">59.1.6.5 Qualifier Used in Duke's Shipment</a></li>
+<li><a href="dukes-forest001.htm#sthref3089">59.1.6.6 Deployment Descriptors Used in Duke's Shipment</a></li>
+</ul></li>
+</ul></li>
+<li><a href="dukes-forest002.htm#GLNQP">59.2 Building and Deploying the Duke's Forest Case Study Application</a>
+<ul>
+<li><a href="dukes-forest002.htm#sthref3090">59.2.1 To Build and Deploy the Duke's Forest Application Using NetBeans IDE</a></li>
+<li><a href="dukes-forest002.htm#sthref3091">59.2.2 To Build and Deploy the Duke's Forest Application Using Maven</a></li>
+</ul></li>
+<li><a href="dukes-forest003.htm#GLNSX">59.3 Running the Duke's Forest Application</a>
+<ul>
+<li><a href="dukes-forest003.htm#sthref3092">59.3.1 To Register as a Duke's Store Customer</a></li>
+<li><a href="dukes-forest003.htm#sthref3093">59.3.2 To Purchase Products</a></li>
+<li><a href="dukes-forest003.htm#sthref3094">59.3.3 To Approve Shipment of a Product</a></li>
+<li><a href="dukes-forest003.htm#sthref3095">59.3.4 To Create a New Product</a></li>
+</ul></li>
+</ul></li></li>
+</ul></li>
+</ul>
+
+
+<script type="text/javascript">
+
+//ddtreemenu.createTree(treeid, enablepersist, opt_persist_in_days (default is 1))
+
+ddtreemenu.createTree("treemenu1", true)
+//ddtreemenu.createTree("treemenu2", false)
+
+</script>
+</div>
+<div style="clear:both;"></div>
+</div>
+
+
+<!--/*///////////////////////////////////////////////////////////////////////
+TABS 
+///////////////////////////////////////////////////////////////////////*/-->
+
+<a class="trig1 trigger shadow" alt="Table of Contents" title="Contents" href="#"></a>
+
+</div>
+
+<div id="pagenav2"><a class="button" title="Previous Page" href="jsf-facelets009.htm">Previous Page</a><a href="#top"  class="button" title="Top of Page" target="_self">Top of Page</a><a class="button" title="Next Page" href="jsf-el001.htm">Next Page</a></div>
+
+<br class="clearfloat" />
+<span class="clearfloat"></span>
+</div> <!-- .contentarea -->
+</div> <!-- .main -->
+</div> <!-- #main-container --><!-- content -->
+
+<div class="main wrapper">
+
+<div class="socialicons">
+
+
+
+
+
+
+
+<!--
+<a href="" target="_blank"><img src="../assets/img-common/f_spacer.gif" alt="Facebook" class="socialIcon facebook" /></a> 
+
+<a href="" target="_blank"><img src="../assets/img-common/f_spacer.gif" alt="Twitter" class="socialIcon twitter" /></a> 
+
+<a href="" target="_blank"><img src="../assets/img-common/f_spacer.gif" alt="RSS Feeds" class="socialIcon rss" /></a>
+-->
+</div>
+<div class="SocialBar">
+
+
+<div id="tw-like">
+<!-- from:twitter:https://twitter.com/about/resources/buttons#tweet -->
+<a target="_blank" href="https://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+
+
+
+<div id="go-like">
+<!-- https://developers.google.com/+/web/+1button/ -->
+
+<!-- Place this tag where you want the +1 button to render. -->
+<div class="g-plusone" data-size="medium" data-annotation="none"></div>
+
+<!-- Place this tag after the last +1 button tag. -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+</div>
+
+
+
+
+<!--<div id="fb-like">
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class="fb-like" data-href="https://www.facebook.com/OracleCloudComputing" data-width="450" data-layout="button_count" data-show-faces="false" data-send="true"></div>
+</div>-->
+
+
+</div>
+</div>
+
+
+<div class="footer-containerbook ">
+ <footer>
+	<span style="display:block;">Copyright &copy; 2014, Oracle and/or its affiliates. All rights reserved. <a href="../assets/cpyr.htm">Legal Notices</a></span>
+ </footer>
+</div>
+        
+        <br />
+        
+        <!--<script src="../assets/js/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../assets/js/jquery-1.8.0.min.js"><\/script>')</script>-->
+
+<!-- Start SiteCatalyst code -->
+<script type="application/javascript" src="https://www.oracleimg.com/us/assets/metrics/ora_docs.js"></script>
+<!-- End SiteCatalyst code -->
+
+
+</body>
+</html>

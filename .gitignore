@@ -17,6 +17,7 @@ data_out/cve_descriptions.json
 ./data_out/CVE-2023-39520/raw/github.com_9c2a2837_20250111_021934.html
 ./data_out/CVE-2023-44487/refined/combined.md
 ./data_out/CVE-2023-46116/text/user-images.githubusercontent.com_d16674e8_20250111_061926.html
+./data_out/CVE-2023-46116/refined/combined.md
 ./data_out/CVE-2023-46116/raw/user-images.githubusercontent.com_d16674e8_20250111_061925.html
 ./data_out/CVE-2023-38290/raw/media.defcon.org_2c81c5d2_20250111_002753.pdf
 ./data_out/CVE-2023-38291/raw/media.defcon.org_2c81c5d2_20250111_030654.pdf
@@ -40,6 +41,7 @@ data_out/cve_descriptions.json
 ./data_out/CVE-2024-4395/refined/combined.md
 ./data_out/CVE-2024-4395/raw/github.com_dc74805f_20250110_140810.html
 ./data_out/CVE-2023-52340/text/cdn.kernel.org_582f898f_20250111_044318.html
+./data_out/CVE-2023-52340/refined/combined.md
 ./data_out/CVE-2023-52340/raw/cdn.kernel.org_582f898f_20250111_044251.html
 ./data_out/CVE-2024-40412/text/static.tenda.com.cn_b3683e89_20250110_155219.html
 ./data_out/CVE-2024-40412/refined/combined.md
