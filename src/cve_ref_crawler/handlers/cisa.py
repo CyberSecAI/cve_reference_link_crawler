@@ -34,3 +34,15 @@ def handle_cisa_url(url: str) -> Optional[str]:
         return f"https://www.cisa.gov/news-events/{category}/{advisory_id}"
     
     return url
+
+def parse_cisa_response(html_content: str) -> str:
+    """
+    Return raw HTML content without parsing
+    
+    Args:
+        html_content: Raw HTML content from CISA webpage
+        
+    Returns:
+        Raw HTML content as-is
+    """
+    return html_content

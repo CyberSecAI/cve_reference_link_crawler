@@ -7,6 +7,7 @@ _data_out
 __data_out
 data_out/cve_descriptions.json 
 
+
 #BIG files via: find ./data_out -type f -size +10M
 ./data_out/cve_descriptions.json
 ./data_out/CVE-2022-45544/text/www.schlix.com_2835c3c5_20250111_020105.html
@@ -46,6 +47,8 @@ data_out/cve_descriptions.json
 ./data_out/CVE-2024-40412/text/static.tenda.com.cn_b3683e89_20250110_155219.html
 ./data_out/CVE-2024-40412/refined/combined.md
 ./data_out/CVE-2024-40412/raw/static.tenda.com.cn_b3683e89_20250110_155216.html
+./data_out/CVE-2023-44487/refined/combined.md
+
 
 
 # Byte-compiled / optimized / DLL files

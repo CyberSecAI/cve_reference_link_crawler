@@ -18,6 +18,7 @@ from .utils.file_utils import ensure_directory
 from .utils.logging_utils import setup_logging
 from .handlers.googlesource import is_googlesource_url, handle_googlesource_url, parse_googlesource_response
 from .handlers.cisa import is_cisa_url, handle_cisa_url, parse_cisa_response
+from .handlers.youtube import is_youtube_url, handle_youtube_url  
 from config import LOG_CONFIG, CRAWLER_SETTINGS, IGNORED_URLS, DEAD_DOMAINS_CSV
 from .utils.domain_stats import DomainStatsCollector  
 from .tracking import ProcessingTracker, URLStatus 
@@ -329,6 +330,10 @@ class ContentCrawler:
         raw_dir = self.output_dir / cve_id / "raw"
         ensure_directory(raw_dir)
         
+        if is_youtube_url(url):
+            # For YouTube URLs, use .txt extension since we're saving transcript
+            content_type = "txt"
+        
         filename = self._generate_filename(url, content_type)
         filepath = raw_dir / filename
         
@@ -344,21 +349,45 @@ class ContentCrawler:
             self.logger.error(f"Error saving raw content: {str(e)}")
             return None
 
- 
-
-    def _fetch_url(self, url: str) -> Optional[Dict]:
-        """Fetch content from URL"""
+    def _save_converted_content(self, content: str, url: str, cve_id: str) -> Optional[Path]:
+        """Save the converted text content"""
+        text_dir = self.output_dir / cve_id / "text"
+        ensure_directory(text_dir)
+        
+        # For YouTube URLs, we want to save as .txt
+        content_type = "txt" if is_youtube_url(url) else "txt"
+        
+        filename = self._generate_filename(url, content_type)
+        filepath = text_dir / filename
+        
         try:
-            self.logger.debug(f"Starting URL fetch: {url}")
-            
-            # Handle special cases
+            with open(filepath, "w", encoding="utf-8") as f:
+                f.write(content)
+            self.logger.info(f"Converted content saved to {filepath}")
+            return filepath
+        except Exception as e:
+            self.logger.error(f"Error saving converted content: {str(e)}")
+            return None
+
+         
     
     def _fetch_url(self, url: str) -> Optional[Dict]:
         """Fetch content from URL"""
         try:
             self.logger.debug(f"Starting URL fetch: {url}")
             
-            # Handle special cases
+            # Handle YouTube URLs
+            if is_youtube_url(url):
+                self.logger.debug("Processing as YouTube URL")
+                content = handle_youtube_url(url)
+                if content:
+                    self.logger.info(f"Successfully extracted transcript from YouTube video: {url}")
+                    return {'content': content, 'type': 'txt'}  # Changed type to txt
+                else:
+                    self.logger.warning(f"No transcript available for YouTube video: {url}")
+                    return None
+            
+            # Handle special cases for other sources
             if is_googlesource_url(url):
                 self.logger.debug("Processing as googlesource URL")
                 modified_url = handle_googlesource_url(url)
@@ -370,10 +399,7 @@ class ContentCrawler:
                 self.logger.debug(f"Got response from {modified_url}")
                 response.raise_for_status()
                 
-                content = parse_googlesource_response(response.text)
-                if content:
-                    return {'content': content, 'type': 'text'}
-                return None
+                return {'content': response.text, 'type': 'html'}
                 
             elif is_cisa_url(url):
                 self.logger.debug("Processing as CISA URL")
@@ -386,21 +412,7 @@ class ContentCrawler:
                 self.logger.debug(f"Got response from {modified_url}")
                 response.raise_for_status()
                 
-                content = parse_cisa_response(response.text)
-                if content:
-                    return {'content': content, 'type': 'text'}
-                return None
-
-            elif is_youtube_url(url):
-                self.logger.debug("Processing as YouTube URL")
-                content = handle_youtube_url(url)
-                
-                if content:
-                    self.logger.info(f"Successfully extracted transcript from YouTube video: {url}")
-                    return {'content': content, 'type': 'text'}
-                else:
-                    self.logger.warning(f"No transcript available for YouTube video: {url}")
-                    return None
+                return {'content': response.text, 'type': 'html'}
             
             # Normal URL handling
             self.logger.debug(f"Sending GET request to {url}")
