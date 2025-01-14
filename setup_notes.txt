@@ -30,3 +30,7 @@ find ./data_out -path "./data_out/CVE*/refined/refined.md" -type f | wc -l
 
 # list big files
 find ./data_out -type f -size +10M
+
+
+# Find all links.txt files in CVE directories and search for YouTube links
+find ./data_out/CVE-* -name "links.txt" -type f -exec sh -c 'if grep -l "youtube" "$1" >/dev/null; then dirname "$1"; fi' sh {} \;
